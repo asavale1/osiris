@@ -1,6 +1,7 @@
 package com.osiris;
 
 import android.support.v4.media.MediaDescriptionCompat;
+import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 
@@ -45,20 +46,22 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
     @Override
     public void onPrepare(){
+        Log.i(TAG, "In onPrepare");
         if(queueIndex < 0 && playlist.isEmpty()){
             return;
         }
 
-        /*MediaMetadataCompat metadataWithoutBitmap = playlist.get(mediaId);
+        MediaSessionCompat.QueueItem queueItem = playlist.get(queueIndex);
+
+        if(queueItem.getDescription().getMediaId() == null){
+            Log.i(TAG, "media id is null");
+        }
 
         MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
-        for (String key :
-                new String[]{
-                        MediaMetadataCompat.METADATA_KEY_MEDIA_ID,
-                        MediaMetadataCompat.METADATA_KEY_TITLE
-                }) {
-            builder.putString(key, metadataWithoutBitmap.getString(key));
-        }*/
+        builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, queueItem.getDescription().getMediaId());
+        builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, queueItem.getDescription().getTitle().toString());
+
+        mediaSession.setMetadata(builder.build());
     }
 
 }

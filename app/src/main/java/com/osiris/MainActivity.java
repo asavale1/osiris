@@ -82,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
                 getOsirisMediaController().addQueueItem(mediaItem.getDescription());
             }
 
+            getTransportControls().prepare();
+
             //MediaBrowserHelper.this.onChildrenLoaded(parentId, children);
         }
     }
@@ -174,6 +176,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "metadata is null");
                 return;
             }
+            Log.i(TAG, metadata.getDescription().getTitle().toString());
+            if(metadata.getDescription().getMediaId() == null){
+                Log.i(TAG, "Metadata media id is null");
+            }
+            Log.i(TAG, metadata.getDescription().getMediaId());
         }
 
         @Override
