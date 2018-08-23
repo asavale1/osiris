@@ -40,7 +40,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
         mediaPlayerAdapter = new MediaPlayerAdapter(new MediaPlaybackListener());
         mediaSession.setPlaybackState(stateBuilder.build());
-        mediaSession.setCallback(new MediaSessionCallback(mediaSession, mediaPlayerAdapter));
+        mediaSession.setCallback(new MediaSessionCallback(MediaPlaybackService.this, mediaSession, mediaPlayerAdapter));
         setSessionToken(mediaSession.getSessionToken());
 
     }

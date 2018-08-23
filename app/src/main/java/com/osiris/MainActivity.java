@@ -14,13 +14,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private MediaBrowserCompat mediaBrowser;
-    private Button playButton, pauseButton;
+    private Button playButton, pauseButton, previousButton, nextButton, refreshButton;
+    private TextView songTitle;
     private MediaBrowserSubscriptionCallback mediaBrowserSubscriptionCallback;
 
     private final static String TAG = MainActivity.class.getName();
@@ -38,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
 
         playButton = findViewById(R.id.play_button);
         pauseButton = findViewById(R.id.pause_button);
+        previousButton = findViewById(R.id.previous_button);
+        nextButton = findViewById(R.id.next_button);
+        refreshButton = findViewById(R.id.refresh_button);
+
+        songTitle = findViewById(R.id.song_title);
 
     }
 
@@ -83,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             getTransportControls().prepare();
+
 
             //MediaBrowserHelper.this.onChildrenLoaded(parentId, children);
         }
@@ -142,30 +150,44 @@ public class MainActivity extends AppCompatActivity {
     public void buildTransportControls(){
         Log.i(TAG, "In buildTransportControls");
 
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "Play song? " + Boolean.toString(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING));
-                if(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING){
-                    getTransportControls().play();
-                }
-            }
-        });
-
-        pauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "Pause song? " + Boolean.toString(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING));
-
-                if(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING){
-                    getTransportControls().pause();
-                }
-            }
-        });
-
-
+        playButton.setOnClickListener(controlsClickListener);
+        pauseButton.setOnClickListener(controlsClickListener);
+        previousButton.setOnClickListener(controlsClickListener);
+        nextButton.setOnClickListener(controlsClickListener);
+        refreshButton.setOnClickListener(controlsClickListener);
 
     }
+
+    View.OnClickListener controlsClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Log.i(TAG, "In onClick");
+            switch (v.getId()){
+                case R.id.play_button:
+                    Log.i(TAG, "Play song? " + Boolean.toString(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING));
+                    if(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING){
+                        getTransportControls().play();
+                    }
+                    break;
+                case R.id.pause_button:
+                    Log.i(TAG, "Pause song? " + Boolean.toString(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING));
+                    if(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING){
+                        getTransportControls().pause();
+                    }
+                    break;
+                case R.id.previous_button:
+                    Log.i(TAG, "Play previous");
+                    break;
+                case R.id.next_button:
+                    Log.i(TAG, "Play next");
+                    break;
+                case R.id.refresh_button:
+                    getOsirisMediaController().sendCommand("TestCommand", null, null);
+                    break;
+            }
+
+        }
+    };
 
     MediaControllerCompat.Callback controllerCallback = new MediaControllerCompat.Callback() {
 
@@ -176,11 +198,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "metadata is null");
                 return;
             }
-            Log.i(TAG, metadata.getDescription().getTitle().toString());
-            if(metadata.getDescription().getMediaId() == null){
-                Log.i(TAG, "Metadata media id is null");
-            }
-            Log.i(TAG, metadata.getDescription().getMediaId());
+
+
+            songTitle.setText(metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
+
         }
 
         @Override

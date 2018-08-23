@@ -1,5 +1,8 @@
 package com.osiris;
 
+import android.os.Bundle;
+import android.os.ResultReceiver;
+import android.support.v4.media.MediaBrowserServiceCompat;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -14,12 +17,14 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
     private MediaSessionCompat mediaSession;
     private final List<MediaSessionCompat.QueueItem> playlist = new ArrayList<>();
     private int queueIndex = -1;
+    private MediaBrowserServiceCompat mediaBrowserService;
 
     private static final String TAG = MediaSessionCallback.class.getName();
 
-    public MediaSessionCallback(MediaSessionCompat mediaSession, MediaPlayerAdapter mediaPlayerAdapter){
+    public MediaSessionCallback(MediaBrowserServiceCompat mediaBrowserService, MediaSessionCompat mediaSession, MediaPlayerAdapter mediaPlayerAdapter){
         this.mediaSession = mediaSession;
         this.mediaPlayerAdapter = mediaPlayerAdapter;
+        this.mediaBrowserService = mediaBrowserService;
     }
 
     @Override
@@ -62,6 +67,14 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
         builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, queueItem.getDescription().getTitle().toString());
 
         mediaSession.setMetadata(builder.build());
+    }
+
+    @Override
+    public void onCommand(String command, Bundle extras, ResultReceiver cb){
+
+        Log.i(TAG, "In onCommand");
+        mediaBrowserService.notifyChildrenChanged("OsirisSimple");
+
     }
 
 }
