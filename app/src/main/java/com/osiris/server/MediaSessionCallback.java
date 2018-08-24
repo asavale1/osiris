@@ -73,7 +73,7 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
     public void onCommand(String command, Bundle extras, ResultReceiver cb){
 
         Log.i(TAG, "In onCommand");
-        mediaBrowserService.notifyChildrenChanged("OsirisSimple");
+        mediaBrowserService.notifyChildrenChanged("Osiris");
 
     }
 
