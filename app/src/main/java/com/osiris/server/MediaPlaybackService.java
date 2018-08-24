@@ -1,4 +1,4 @@
-package com.osiris;
+package com.osiris.server;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -60,26 +60,26 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
         result.detach();
 
-        final List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
-        MediaMetadataCompat song1 = new MediaMetadataCompat.Builder()
-                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, "1")
-                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Song1")
-                .build();
-        MediaMetadataCompat song2 = new MediaMetadataCompat.Builder()
-                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, "2")
-                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Song2")
-                .build();
-
-        mediaItems.add(new MediaBrowserCompat.MediaItem(
-                song1.getDescription(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE));
-        mediaItems.add(new MediaBrowserCompat.MediaItem(
-                song2.getDescription(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE));
-
         new GetSongsAsync(new GetSongsAsyncListener() {
             @Override
             public void gotSongs(String songs) {
                 Log.i(TAG, "Songs result");
                 Log.i(TAG, songs);
+                List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
+                MediaMetadataCompat song1 = new MediaMetadataCompat.Builder()
+                        .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, "1")
+                        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Song1")
+                        .build();
+                MediaMetadataCompat song2 = new MediaMetadataCompat.Builder()
+                        .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, "2")
+                        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Song2")
+                        .build();
+
+                mediaItems.add(new MediaBrowserCompat.MediaItem(
+                        song1.getDescription(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE));
+                mediaItems.add(new MediaBrowserCompat.MediaItem(
+                        song2.getDescription(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE));
+
                 result.sendResult(mediaItems);
             }
         }).execute();

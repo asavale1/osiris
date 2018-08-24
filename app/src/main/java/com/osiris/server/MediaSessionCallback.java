@@ -1,4 +1,4 @@
-package com.osiris;
+package com.osiris.server;
 
 import android.os.Bundle;
 import android.os.ResultReceiver;

@@ -1,4 +1,4 @@
-package com.osiris;
+package com.osiris.server;
 
 import android.media.MediaPlayer;
 import android.os.SystemClock;

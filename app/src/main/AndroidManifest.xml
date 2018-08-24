@@ -13,7 +13,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme">
 
-        <service android:name="com.osiris.MediaPlaybackService">
+        <service android:name="com.osiris.server.MediaPlaybackService">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>

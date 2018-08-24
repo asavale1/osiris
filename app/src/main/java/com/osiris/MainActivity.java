@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.osiris.server.MediaPlaybackService;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -90,9 +92,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             getTransportControls().prepare();
-
-
-            //MediaBrowserHelper.this.onChildrenLoaded(parentId, children);
         }
     }
 
