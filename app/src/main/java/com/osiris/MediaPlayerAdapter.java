@@ -57,7 +57,7 @@ public class MediaPlayerAdapter {
         currentSongId = song;
 
         try {
-            mediaPlayer.setDataSource("http://192.168.0.6:3000/file/5b73a046dbdab53644f95faa.mp3");
+            mediaPlayer.setDataSource("http://172.31.98.249:3000/file/5b73a046dbdab53644f95faa.mp3");
             mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();

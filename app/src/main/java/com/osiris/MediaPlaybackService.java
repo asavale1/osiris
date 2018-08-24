@@ -10,6 +10,9 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
+import com.osiris.api.GetSongsAsync;
+import com.osiris.api.listeners.GetSongsAsyncListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +57,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     @Override
     public void onLoadChildren(@NonNull final String parentMediaId, @NonNull final Result<List<MediaBrowserCompat.MediaItem>> result){
         Log.i(TAG, "In onLoadChildren");
-        List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
+
+        result.detach();
+
+        final List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
         MediaMetadataCompat song1 = new MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, "1")
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Song1")
@@ -69,7 +75,17 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         mediaItems.add(new MediaBrowserCompat.MediaItem(
                 song2.getDescription(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE));
 
-        result.sendResult(mediaItems);
+        new GetSongsAsync(new GetSongsAsyncListener() {
+            @Override
+            public void gotSongs(String songs) {
+                Log.i(TAG, "Songs result");
+                Log.i(TAG, songs);
+                result.sendResult(mediaItems);
+            }
+        }).execute();
+
+
+
     }
 
     @Override
