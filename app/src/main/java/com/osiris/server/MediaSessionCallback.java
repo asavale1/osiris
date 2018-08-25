@@ -15,16 +15,24 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
     private MediaPlayerAdapter mediaPlayerAdapter;
     private MediaSessionCompat mediaSession;
+    private MediaBrowserServiceCompat mediaBrowserService;
+    private MusicLibrary musicLibrary;
+
     private final List<MediaSessionCompat.QueueItem> playlist = new ArrayList<>();
     private int queueIndex = -1;
-    private MediaBrowserServiceCompat mediaBrowserService;
+    private MediaMetadataCompat preparedMedia;
+
 
     private static final String TAG = MediaSessionCallback.class.getName();
 
-    public MediaSessionCallback(MediaBrowserServiceCompat mediaBrowserService, MediaSessionCompat mediaSession, MediaPlayerAdapter mediaPlayerAdapter){
+    public MediaSessionCallback(MediaBrowserServiceCompat mediaBrowserService,
+                                MediaSessionCompat mediaSession,
+                                MediaPlayerAdapter mediaPlayerAdapter,
+                                MusicLibrary musicLibrary){
         this.mediaSession = mediaSession;
         this.mediaPlayerAdapter = mediaPlayerAdapter;
         this.mediaBrowserService = mediaBrowserService;
+        this.musicLibrary = musicLibrary;
     }
 
     @Override
@@ -32,7 +40,18 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
         Log.i(TAG, "In onPlay");
 
 
-        mediaPlayerAdapter.playSong("1");
+        if(!isReadyToPlay()){
+            Log.i(TAG, "Playlist is empty, nothing to play");
+            return;
+        }
+
+        if(preparedMedia == null){
+            onPrepare();
+        }
+
+        //mediaPlayerAdapter.playSong("1");
+
+        mediaPlayerAdapter.playFromMedia(preparedMedia);
     }
 
     @Override
@@ -62,11 +81,19 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
             Log.i(TAG, "media id is null");
         }
 
-        MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
+        /*MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
         builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, queueItem.getDescription().getMediaId());
         builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, queueItem.getDescription().getTitle().toString());
 
-        mediaSession.setMetadata(builder.build());
+        mediaSession.setMetadata(builder.build());*/
+
+        String mediaId = queueItem.getDescription().getMediaId();
+        preparedMedia = musicLibrary.getMetadata(mediaId);
+        mediaSession.setMetadata(preparedMedia);
+
+        if(!mediaSession.isActive()){
+            mediaSession.setActive(true);
+        }
     }
 
     @Override
@@ -75,6 +102,10 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
         Log.i(TAG, "In onCommand");
         mediaBrowserService.notifyChildrenChanged("Osiris");
 
+    }
+
+    private boolean isReadyToPlay() {
+        return (!playlist.isEmpty());
     }
 
 }

@@ -30,6 +30,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
         Log.i(TAG, "In onCreate");
 
+        musicLibrary = new MusicLibrary();
+
+
         mediaSession = new MediaSessionCompat(this, MediaPlaybackService.class.getSimpleName());
         mediaSession.setFlags(
                 MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
@@ -41,11 +44,11 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                         PlaybackStateCompat.ACTION_PLAY_PAUSE);
 
         MediaPlayerAdapter mediaPlayerAdapter = new MediaPlayerAdapter(new MediaPlaybackListener());
+
         mediaSession.setPlaybackState(stateBuilder.build());
-        mediaSession.setCallback(new MediaSessionCallback(MediaPlaybackService.this, mediaSession, mediaPlayerAdapter));
+        mediaSession.setCallback(new MediaSessionCallback(MediaPlaybackService.this, mediaSession, mediaPlayerAdapter, musicLibrary));
         setSessionToken(mediaSession.getSessionToken());
 
-        musicLibrary = new MusicLibrary();
 
     }
 
@@ -67,21 +70,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                 Log.i(TAG, songs);
 
                 musicLibrary.buildLibrary(songs);
-
-                /*List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
-                MediaMetadataCompat song1 = new MediaMetadataCompat.Builder()
-                        .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, "1")
-                        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Song1")
-                        .build();
-                MediaMetadataCompat song2 = new MediaMetadataCompat.Builder()
-                        .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, "2")
-                        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Song2")
-                        .build();
-
-                mediaItems.add(new MediaBrowserCompat.MediaItem(
-                        song1.getDescription(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE));
-                mediaItems.add(new MediaBrowserCompat.MediaItem(
-                        song2.getDescription(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE));*/
 
                 result.sendResult(musicLibrary.getMediaItems());
             }

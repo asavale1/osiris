@@ -2,6 +2,7 @@ package com.osiris.server;
 
 import android.media.MediaPlayer;
 import android.os.SystemClock;
+import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
@@ -33,6 +34,39 @@ public class MediaPlayerAdapter {
                 }
             });
         }
+    }
+
+    public void playFromMedia(MediaMetadataCompat mediaMetadata){
+        Log.i(TAG, "In playFromMedia");
+        Log.i(TAG, mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI));
+
+        String mediaId = mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
+
+        boolean mediaChanged = (currentSongId == null || !currentSongId.equals(mediaId));
+
+        if(!mediaChanged){
+            if(!isPlaying()){
+                onPlay();
+                return;
+            }
+        }else{
+            if(mediaPlayer != null){
+                mediaPlayer.release();
+                mediaPlayer = null;
+            }
+        }
+
+        initMediaPlayer();
+
+        currentSongId = mediaId;
+
+        try {
+            mediaPlayer.setDataSource(mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI));
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        onPlay();
     }
 
     public void playSong(String song){
@@ -91,5 +125,7 @@ public class MediaPlayerAdapter {
                 SystemClock.elapsedRealtime());
         mediaPlaybackListener.onPlaybackStateChanged(stateBuilder.build());
     }
+
+    private boolean isPlaying(){ return mediaPlayer != null && mediaPlayer.isPlaying(); }
 
 }
