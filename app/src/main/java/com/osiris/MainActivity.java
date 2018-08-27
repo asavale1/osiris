@@ -176,9 +176,11 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.previous_button:
                     Log.i(TAG, "Play previous");
+                    getTransportControls().skipToPrevious();
                     break;
                 case R.id.next_button:
                     Log.i(TAG, "Play next");
+                    getTransportControls().skipToNext();
                     break;
                 case R.id.refresh_button:
                     getOsirisMediaController().sendCommand("TestCommand", null, null);

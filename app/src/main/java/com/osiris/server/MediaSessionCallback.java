@@ -49,8 +49,6 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
             onPrepare();
         }
 
-        //mediaPlayerAdapter.playSong("1");
-
         mediaPlayerAdapter.playFromMedia(preparedMedia);
     }
 
@@ -81,18 +79,50 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
             Log.i(TAG, "media id is null");
         }
 
-        /*MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
-        builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, queueItem.getDescription().getMediaId());
-        builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, queueItem.getDescription().getTitle().toString());
-
-        mediaSession.setMetadata(builder.build());*/
-
         String mediaId = queueItem.getDescription().getMediaId();
         preparedMedia = musicLibrary.getMetadata(mediaId);
         mediaSession.setMetadata(preparedMedia);
 
         if(!mediaSession.isActive()){
             mediaSession.setActive(true);
+        }
+    }
+
+    @Override
+    public void onSkipToNext() {
+        Log.i(TAG, "In onSkipToNext");
+        queueIndex = (++queueIndex % playlist.size());
+        preparedMedia = null;
+
+        if(mediaPlayerAdapter.isPlaying()){
+            onPlay();
+        }else{
+            if(!isReadyToPlay()){
+                return;
+            }
+
+            onPrepare();
+            onPause();
+        }
+    }
+
+    @Override
+    public void onSkipToPrevious() {
+        Log.i(TAG, "In onSkipToPrevious");
+
+        queueIndex = queueIndex > 0 ? queueIndex - 1 : playlist.size() - 1;
+        Log.i(TAG, "Queue index : " + queueIndex);
+        preparedMedia = null;
+
+        if(mediaPlayerAdapter.isPlaying()){
+            onPlay();
+        }else{
+            if(!isReadyToPlay()){
+                return;
+            }
+
+            onPrepare();
+            onPause();
         }
     }
 

@@ -69,36 +69,6 @@ public class MediaPlayerAdapter {
         onPlay();
     }
 
-    public void playSong(String song){
-        Log.i(TAG, "In playSong");
-
-        boolean mediaChanged = (currentSongId == null || currentSongId != song);
-
-        if(!mediaChanged){
-            if(!mediaPlayer.isPlaying()){
-                onPlay();
-                return;
-            }
-        } else{
-            if (mediaPlayer != null) {
-                mediaPlayer.release();
-                mediaPlayer = null;
-            }
-        }
-
-        initMediaPlayer();
-
-        currentSongId = song;
-
-        try {
-            mediaPlayer.setDataSource("http://172.31.98.249:3000/file/5b73a046dbdab53644f95faa.mp3");
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        onPlay();
-    }
-
     private void onPlay(){
         Log.i(TAG, "In onPlay");
         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
@@ -126,6 +96,6 @@ public class MediaPlayerAdapter {
         mediaPlaybackListener.onPlaybackStateChanged(stateBuilder.build());
     }
 
-    private boolean isPlaying(){ return mediaPlayer != null && mediaPlayer.isPlaying(); }
+    public boolean isPlaying(){ return mediaPlayer != null && mediaPlayer.isPlaying(); }
 
 }
