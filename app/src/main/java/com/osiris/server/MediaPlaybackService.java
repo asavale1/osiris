@@ -20,6 +20,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
     private MediaSessionCompat mediaSession;
     private MusicLibrary musicLibrary;
+    private MediaPlayerAdapter mediaPlayerAdapter;
     private final static String MY_MEDIA_ROOT_ID = "Osiris";
 
     private static final String TAG = MediaPlaybackService.class.getName();
@@ -43,7 +44,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                 PlaybackStateCompat.ACTION_PLAY |
                         PlaybackStateCompat.ACTION_PLAY_PAUSE);
 
-        MediaPlayerAdapter mediaPlayerAdapter = new MediaPlayerAdapter(new MediaPlaybackListener());
+        mediaPlayerAdapter = new MediaPlayerAdapter(new MediaPlaybackListener());
 
         mediaSession.setPlaybackState(stateBuilder.build());
         mediaSession.setCallback(new MediaSessionCallback(MediaPlaybackService.this, mediaSession, mediaPlayerAdapter, musicLibrary));
@@ -85,7 +86,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
     @Override
     public void onDestroy(){
+
+        mediaPlayerAdapter.onStop();
         mediaSession.release();
+
     }
 
     public class MediaPlaybackListener {

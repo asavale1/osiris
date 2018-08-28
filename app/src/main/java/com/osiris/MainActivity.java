@@ -23,7 +23,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private MediaBrowserCompat mediaBrowser;
-    private Button playButton, pauseButton, previousButton, nextButton, refreshButton;
+    private Button playButton, pauseButton, previousButton, nextButton, refreshButton, stopButton;
     private TextView songTitle;
     private MediaBrowserSubscriptionCallback mediaBrowserSubscriptionCallback;
 
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         previousButton = findViewById(R.id.previous_button);
         nextButton = findViewById(R.id.next_button);
         refreshButton = findViewById(R.id.refresh_button);
+        stopButton = findViewById(R.id.stop_button);
 
         songTitle = findViewById(R.id.song_title);
 
@@ -83,15 +84,17 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "In onChildrenloaded");
             Log.i(TAG, parentId);
 
-            Log.i(TAG, "Size " + children.size());
-            Log.i(TAG, children.get(0).getDescription().getTitle().toString());
+            if(!children.isEmpty()){
+                Log.i(TAG, "Size " + children.size());
+                Log.i(TAG, children.get(0).getDescription().getTitle().toString());
 
 
-            for (final MediaBrowserCompat.MediaItem mediaItem : children) {
-                getOsirisMediaController().addQueueItem(mediaItem.getDescription());
+                for (final MediaBrowserCompat.MediaItem mediaItem : children) {
+                    getOsirisMediaController().addQueueItem(mediaItem.getDescription());
+                }
+
+                getTransportControls().prepare();
             }
-
-            getTransportControls().prepare();
         }
     }
 
@@ -154,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
         previousButton.setOnClickListener(controlsClickListener);
         nextButton.setOnClickListener(controlsClickListener);
         refreshButton.setOnClickListener(controlsClickListener);
+        stopButton.setOnClickListener(controlsClickListener);
 
     }
 
@@ -182,6 +186,10 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG, "Play next");
                     getTransportControls().skipToNext();
                     break;
+                case R.id.stop_button:
+                    Log.i(TAG, "Stop song");
+                    getTransportControls().stop();
+                    break;
                 case R.id.refresh_button:
                     getOsirisMediaController().sendCommand("TestCommand", null, null);
                     break;
@@ -208,6 +216,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
             Log.i(TAG, "In onPlaybackStateChanged");
+        }
+
+        @Override
+        public void onSessionDestroyed() {
+            super.onSessionDestroyed();
+
+            Log.i(TAG, "In onSessionDestroyed");
         }
 
     };

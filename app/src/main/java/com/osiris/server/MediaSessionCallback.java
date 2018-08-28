@@ -127,6 +127,13 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
     }
 
     @Override
+    public void onStop() {
+        Log.i(TAG, "In onStop");
+        mediaPlayerAdapter.onStop();
+        mediaSession.setActive(false);
+    }
+
+    @Override
     public void onCommand(String command, Bundle extras, ResultReceiver cb){
 
         Log.i(TAG, "In onCommand");

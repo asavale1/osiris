@@ -84,13 +84,29 @@ public class MediaPlayerAdapter {
         }
     }
 
+
+    public void onStop(){
+        setNewState(PlaybackStateCompat.STATE_STOPPED);
+        release();
+    }
+
+    private void release() {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
     private void setNewState(@PlaybackStateCompat.State int newPlayerState){
         Log.i(TAG, "In setNewState");
+
+        final long playbackPosition = mediaPlayer == null ? 0 : mediaPlayer.getCurrentPosition();
+
         final PlaybackStateCompat.Builder stateBuilder = new PlaybackStateCompat.Builder();
         stateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY |
                 PlaybackStateCompat.ACTION_PLAY_PAUSE);
         stateBuilder.setState(newPlayerState,
-                mediaPlayer.getCurrentPosition(),
+                playbackPosition,
                 1.0f,
                 SystemClock.elapsedRealtime());
         mediaPlaybackListener.onPlaybackStateChanged(stateBuilder.build());
