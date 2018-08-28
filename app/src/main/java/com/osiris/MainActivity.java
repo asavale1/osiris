@@ -4,6 +4,8 @@ import android.content.ComponentName;
 import android.media.AudioManager;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
@@ -12,19 +14,17 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.osiris.server.MediaPlaybackService;
+import com.osiris.ui.PlayerControllerListener;
+import com.osiris.ui.PlayerFragment;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PlayerControllerListener {
 
     private MediaBrowserCompat mediaBrowser;
-    private Button playButton, pauseButton, previousButton, nextButton, refreshButton, stopButton;
-    private TextView songTitle;
+    private FragmentManager fragmentManager;
     private MediaBrowserSubscriptionCallback mediaBrowserSubscriptionCallback;
 
     private final static String TAG = MainActivity.class.getName();
@@ -40,15 +40,22 @@ public class MainActivity extends AppCompatActivity {
                 new ComponentName(this, MediaPlaybackService.class), connectionCallback, null);
         mediaBrowserSubscriptionCallback = new MediaBrowserSubscriptionCallback();
 
-        playButton = findViewById(R.id.play_button);
-        pauseButton = findViewById(R.id.pause_button);
-        previousButton = findViewById(R.id.previous_button);
-        nextButton = findViewById(R.id.next_button);
-        refreshButton = findViewById(R.id.refresh_button);
-        stopButton = findViewById(R.id.stop_button);
+        fragmentManager = getSupportFragmentManager();
 
-        songTitle = findViewById(R.id.song_title);
 
+    }
+
+    public void replaceFragment(){
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        if(fragmentManager.getFragments().size() == 0){
+            fragmentTransaction.add(R.id.fragment_container, new PlayerFragment());
+        }
+
+        fragmentTransaction.commit();
+
+        Log.i(TAG, "In replaceFragment");
+        Log.i(TAG, "Size: " + fragmentManager.getFragments().size());
     }
 
     @Override
@@ -72,6 +79,22 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         Log.i(TAG, "In onResume");
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    }
+
+    @Override
+    public void onPlaySong() {
+        Log.i(TAG, "Play song? " + Boolean.toString(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING));
+        if(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING){
+            getTransportControls().play();
+        }
+    }
+
+    @Override
+    public void onPauseSong(){
+        Log.i(TAG, "Pause song? " + Boolean.toString(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING));
+        if(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING){
+            getTransportControls().pause();
+        }
     }
 
     public class MediaBrowserSubscriptionCallback extends MediaBrowserCompat.SubscriptionCallback {
@@ -120,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
 
                 buildTransportControls();
 
+                replaceFragment();
+
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -137,31 +162,31 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
-    private MediaControllerCompat.TransportControls getTransportControls(){
+    public MediaControllerCompat.TransportControls getTransportControls(){
         return getOsirisMediaController().getTransportControls();
     }
 
-    private int getPlaybackState(){
+    public int getPlaybackState(){
         return getOsirisMediaController().getPlaybackState().getState();
     }
 
-    private MediaControllerCompat getOsirisMediaController(){
+    public MediaControllerCompat getOsirisMediaController(){
         return MediaControllerCompat.getMediaController(MainActivity.this);
     }
 
     public void buildTransportControls(){
         Log.i(TAG, "In buildTransportControls");
 
-        playButton.setOnClickListener(controlsClickListener);
+        /*playButton.setOnClickListener(controlsClickListener);
         pauseButton.setOnClickListener(controlsClickListener);
         previousButton.setOnClickListener(controlsClickListener);
         nextButton.setOnClickListener(controlsClickListener);
         refreshButton.setOnClickListener(controlsClickListener);
-        stopButton.setOnClickListener(controlsClickListener);
+        stopButton.setOnClickListener(controlsClickListener);*/
 
     }
 
-    View.OnClickListener controlsClickListener = new View.OnClickListener() {
+    /*View.OnClickListener controlsClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Log.i(TAG, "In onClick");
@@ -196,7 +221,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-    };
+    };*/
+
+
+
 
     MediaControllerCompat.Callback controllerCallback = new MediaControllerCompat.Callback() {
 
@@ -209,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-            songTitle.setText(metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
+            //songTitle.setText(metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
 
         }
 

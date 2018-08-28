@@ -31,6 +31,7 @@ public class MediaPlayerAdapter {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     Log.i(TAG, "In onCompletion");
+                    setNewState(PlaybackStateCompat.STATE_PAUSED);
                 }
             });
         }
