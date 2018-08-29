@@ -3,12 +3,14 @@ package com.osiris.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.widget.AppCompatImageButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.osiris.MainActivity;
 import com.osiris.R;
@@ -17,28 +19,33 @@ public class PlayerFragment extends Fragment {
 
     private final static String TAG = PlayerFragment.class.getName();
 
-    private AppCompatImageButton playPauseButton, skipToNextButton, skipToPreviousButton;
     private PlayerControllerListener playerControllerListener;
+    private TextView songTitle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_player,
+        return inflater.inflate(R.layout.fragment_player,
                 container, false);
+    }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         buildUI(view);
-        return view;
     }
 
     private void buildUI(View view){
-        playPauseButton = view.findViewById(R.id.button_play_pause);
+        AppCompatImageButton playPauseButton = view.findViewById(R.id.button_play_pause);
         playPauseButton.setOnClickListener(controllerClickListener);
 
-        skipToNextButton = view.findViewById(R.id.button_next);
+        AppCompatImageButton skipToNextButton = view.findViewById(R.id.button_next);
         skipToNextButton.setOnClickListener(controllerClickListener);
 
-        skipToPreviousButton = view.findViewById(R.id.button_previous);
+        AppCompatImageButton skipToPreviousButton = view.findViewById(R.id.button_previous);
         skipToPreviousButton.setOnClickListener(controllerClickListener);
+
+        songTitle = view.findViewById(R.id.song_title);
 
     }
 
@@ -78,8 +85,8 @@ public class PlayerFragment extends Fragment {
         }
     };
 
-    public void updateUI(String songTitle){
-
+    public void updateUI(MediaMetadataCompat metadata){
+        songTitle.setText(metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
     }
 
 }

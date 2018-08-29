@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.media.AudioManager;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.media.MediaBrowserCompat;
@@ -127,8 +128,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
                 mediaBrowser.subscribe(mediaBrowser.getRoot(), mediaBrowserSubscriptionCallback);
 
-                buildTransportControls();
-
                 replaceFragment();
 
             } catch (RemoteException e) {
@@ -160,17 +159,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         return MediaControllerCompat.getMediaController(MainActivity.this);
     }
 
-    public void buildTransportControls(){
-        Log.i(TAG, "In buildTransportControls");
-
-        /*playButton.setOnClickListener(controlsClickListener);
-        pauseButton.setOnClickListener(controlsClickListener);
-        previousButton.setOnClickListener(controlsClickListener);
-        nextButton.setOnClickListener(controlsClickListener);
-        refreshButton.setOnClickListener(controlsClickListener);
-        stopButton.setOnClickListener(controlsClickListener);*/
-
-    }
 
     /*View.OnClickListener controlsClickListener = new View.OnClickListener() {
         @Override
@@ -210,6 +198,14 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     };*/
 
 
+    private PlayerFragment isPlayerFragmentVisible(){
+        Fragment displayFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        if(displayFragment instanceof PlayerFragment){
+            return (PlayerFragment) displayFragment;
+        }
+        return null;
+    }
+
 
 
     MediaControllerCompat.Callback controllerCallback = new MediaControllerCompat.Callback() {
@@ -223,15 +219,16 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
             }
 
 
-            //songTitle.setText(metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
+            PlayerFragment playerFragment = isPlayerFragmentVisible();
+            if(playerFragment != null){
+                playerFragment.updateUI(metadata);
+            }
 
         }
 
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
             Log.i(TAG, "In onPlaybackStateChanged");
-            songIsPlaying = state != null &&
-                    state.getState() == PlaybackStateCompat.STATE_PLAYING;
         }
 
         @Override
