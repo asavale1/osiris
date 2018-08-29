@@ -81,21 +81,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
-    @Override
-    public void onPlaySong() {
-        Log.i(TAG, "Play song? " + Boolean.toString(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING));
-        if(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING){
-            getTransportControls().play();
-        }
-    }
-
-    @Override
-    public void onPauseSong(){
-        Log.i(TAG, "Pause song? " + Boolean.toString(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING));
-        if(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING){
-            getTransportControls().pause();
-        }
-    }
 
     public class MediaBrowserSubscriptionCallback extends MediaBrowserCompat.SubscriptionCallback {
 
@@ -162,15 +147,15 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
     };
 
-    public MediaControllerCompat.TransportControls getTransportControls(){
+    private MediaControllerCompat.TransportControls getTransportControls(){
         return getOsirisMediaController().getTransportControls();
     }
 
-    public int getPlaybackState(){
+    private int getPlaybackState(){
         return getOsirisMediaController().getPlaybackState().getState();
     }
 
-    public MediaControllerCompat getOsirisMediaController(){
+    private MediaControllerCompat getOsirisMediaController(){
         return MediaControllerCompat.getMediaController(MainActivity.this);
     }
 
@@ -254,4 +239,42 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         }
 
     };
+
+    /**
+     * PlayerFragment callbacks for handling the media player
+     */
+
+    @Override
+    public void onPlaySong() {
+        Log.i(TAG, "Play song? " + Boolean.toString(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING));
+        if(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING){
+            getTransportControls().play();
+        }
+    }
+
+    @Override
+    public void onPauseSong(){
+        Log.i(TAG, "Pause song? " + Boolean.toString(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING));
+        if(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING){
+            getTransportControls().pause();
+        }
+    }
+
+    @Override
+    public void onStopSong(){
+        if(getPlaybackState() != PlaybackStateCompat.STATE_STOPPED){
+            getTransportControls().stop();
+        }
+    }
+
+    @Override
+    public void onSkipToNextSong(){
+        getTransportControls().skipToNext();
+    }
+
+    @Override
+    public void onSkipToPreviousSong(){
+        getTransportControls().skipToPrevious();
+    }
+
 }

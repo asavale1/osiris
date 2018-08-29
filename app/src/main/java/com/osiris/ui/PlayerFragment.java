@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.support.v7.widget.AppCompatImageButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ public class PlayerFragment extends Fragment {
 
     private final static String TAG = PlayerFragment.class.getName();
 
-    private Button playButton, pauseButton;
+    private AppCompatImageButton playButton, pauseButton;
     private PlayerControllerListener playerControllerListener;
 
     @Override
@@ -30,11 +31,9 @@ public class PlayerFragment extends Fragment {
     }
 
     private void buildUI(View view){
-        playButton = view.findViewById(R.id.play_button);
+        playButton = view.findViewById(R.id.button_play_pause);
         playButton.setOnClickListener(controllerClickListener);
 
-        pauseButton = view.findViewById(R.id.pause_button);
-        pauseButton.setOnClickListener(controllerClickListener);
 
     }
 
@@ -61,11 +60,8 @@ public class PlayerFragment extends Fragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-                case R.id.play_button:
+                case R.id.button_play_pause:
                     playerControllerListener.onPlaySong();
-                    break;
-                case R.id.pause_button:
-                    playerControllerListener.onPauseSong();
                     break;
             }
         }
