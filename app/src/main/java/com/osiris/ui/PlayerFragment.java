@@ -20,6 +20,7 @@ public class PlayerFragment extends Fragment {
     private final static String TAG = PlayerFragment.class.getName();
 
     private PlayerControllerListener playerControllerListener;
+    private AppCompatImageButton playPauseButton;
     private TextView songTitle;
 
     @Override
@@ -36,7 +37,7 @@ public class PlayerFragment extends Fragment {
     }
 
     private void buildUI(View view){
-        AppCompatImageButton playPauseButton = view.findViewById(R.id.button_play_pause);
+        playPauseButton = view.findViewById(R.id.button_play_pause);
         playPauseButton.setOnClickListener(controllerClickListener);
 
         AppCompatImageButton skipToNextButton = view.findViewById(R.id.button_next);
@@ -87,6 +88,10 @@ public class PlayerFragment extends Fragment {
 
     public void updateUI(MediaMetadataCompat metadata){
         songTitle.setText(metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
+    }
+
+    public void updatePlayPauseButton(boolean showPlay){
+        playPauseButton.setPressed(showPlay);
     }
 
 }

@@ -229,6 +229,14 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
             Log.i(TAG, "In onPlaybackStateChanged");
+
+            boolean showPause = (state != null && state.getState() == PlaybackStateCompat.STATE_PLAYING);
+
+            PlayerFragment playerFragment = isPlayerFragmentVisible();
+            if(playerFragment != null){
+                playerFragment.updatePlayPauseButton(showPause);
+            }
+
         }
 
         @Override
