@@ -52,7 +52,7 @@
             android:layout_centerHorizontal="true"
             android:layout_margin="5dp"
             android:background="@drawable/circle_background_light"
-            app:srcCompat="@android:drawable/ic_media_play" />
+            app:srcCompat="@drawable/button_play_pause" />
 
         <ImageButton
             android:id="@+id/button_next"

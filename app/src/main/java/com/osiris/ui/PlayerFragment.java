@@ -17,7 +17,7 @@ public class PlayerFragment extends Fragment {
 
     private final static String TAG = PlayerFragment.class.getName();
 
-    private AppCompatImageButton playButton, pauseButton;
+    private AppCompatImageButton playPauseButton, skipToNextButton, skipToPreviousButton;
     private PlayerControllerListener playerControllerListener;
 
     @Override
@@ -31,9 +31,14 @@ public class PlayerFragment extends Fragment {
     }
 
     private void buildUI(View view){
-        playButton = view.findViewById(R.id.button_play_pause);
-        playButton.setOnClickListener(controllerClickListener);
+        playPauseButton = view.findViewById(R.id.button_play_pause);
+        playPauseButton.setOnClickListener(controllerClickListener);
 
+        skipToNextButton = view.findViewById(R.id.button_next);
+        skipToNextButton.setOnClickListener(controllerClickListener);
+
+        skipToPreviousButton = view.findViewById(R.id.button_previous);
+        skipToPreviousButton.setOnClickListener(controllerClickListener);
 
     }
 
@@ -61,7 +66,13 @@ public class PlayerFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.button_play_pause:
-                    playerControllerListener.onPlaySong();
+                    playerControllerListener.onPlayPauseSong();
+                    break;
+                case R.id.button_next:
+                    playerControllerListener.onSkipToNextSong();
+                    break;
+                case R.id.button_previous:
+                    playerControllerListener.onSkipToPreviousSong();
                     break;
             }
         }

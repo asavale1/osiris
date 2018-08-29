@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     private MediaBrowserCompat mediaBrowser;
     private FragmentManager fragmentManager;
     private MediaBrowserSubscriptionCallback mediaBrowserSubscriptionCallback;
+    private boolean songIsPlaying;
 
     private final static String TAG = MainActivity.class.getName();
 
@@ -229,6 +230,8 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
             Log.i(TAG, "In onPlaybackStateChanged");
+            songIsPlaying = state != null &&
+                    state.getState() == PlaybackStateCompat.STATE_PLAYING;
         }
 
         @Override
@@ -245,17 +248,12 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
      */
 
     @Override
-    public void onPlaySong() {
+    public void onPlayPauseSong() {
         Log.i(TAG, "Play song? " + Boolean.toString(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING));
+        Log.i(TAG, "Pause song? " + Boolean.toString(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING));
         if(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING){
             getTransportControls().play();
-        }
-    }
-
-    @Override
-    public void onPauseSong(){
-        Log.i(TAG, "Pause song? " + Boolean.toString(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING));
-        if(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING){
+        }else{
             getTransportControls().pause();
         }
     }
