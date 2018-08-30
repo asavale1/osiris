@@ -17,17 +17,20 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.osiris.server.MediaPlaybackService;
+import com.osiris.ui.FragmentConstants;
+import com.osiris.ui.LibraryFragment;
+import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.PlayerControllerListener;
 import com.osiris.ui.PlayerFragment;
 
 import java.util.List;
+import java.util.Queue;
 
-public class MainActivity extends AppCompatActivity implements PlayerControllerListener {
+public class MainActivity extends AppCompatActivity implements PlayerControllerListener, LibraryFragmentListener {
 
     private MediaBrowserCompat mediaBrowser;
     private FragmentManager fragmentManager;
     private MediaBrowserSubscriptionCallback mediaBrowserSubscriptionCallback;
-    private boolean songIsPlaying;
 
     private final static String TAG = MainActivity.class.getName();
 
@@ -47,11 +50,30 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
     }
 
-    public void replaceFragment(){
+    public void replaceFragment(int fragmentType){
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        if(fragmentManager.getFragments().size() == 0){
-            fragmentTransaction.add(R.id.fragment_container, new PlayerFragment());
+        Fragment fragment;
+
+        switch (fragmentType){
+            case FragmentConstants.FRAGMENT_LIBRARY:
+                fragment = new LibraryFragment();
+                Log.i(TAG, "In library fragment");
+                break;
+            case FragmentConstants.FRAGMENT_PLAYER:
+                fragment = new PlayerFragment();
+                break;
+            default:
+                fragment = null;
+                break;
+        }
+
+        if(fragment != null){
+            if(fragmentManager.getFragments().size() == 0){
+                fragmentTransaction.add(R.id.fragment_container, fragment);
+            }else{
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+            }
         }
 
         fragmentTransaction.commit();
@@ -100,10 +122,13 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
 
                 for (final MediaBrowserCompat.MediaItem mediaItem : children) {
+
                     getOsirisMediaController().addQueueItem(mediaItem.getDescription());
                 }
 
                 getTransportControls().prepare();
+
+                replaceFragment(FragmentConstants.FRAGMENT_LIBRARY);
             }
         }
     }
@@ -128,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
                 mediaBrowser.subscribe(mediaBrowser.getRoot(), mediaBrowserSubscriptionCallback);
 
-                replaceFragment();
+
 
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -247,6 +272,14 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         }
 
     };
+
+    /**
+     * LibraryFragment callbacks for handling the library view
+     */
+    @Override
+    public List<MediaSessionCompat.QueueItem> getMediaItems(){
+        return getOsirisMediaController().getQueue();
+    }
 
     /**
      * PlayerFragment callbacks for handling the media player
