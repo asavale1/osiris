@@ -289,8 +289,11 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     @Override
     public void buildQueue(String apiRequestUrl, int queueIndex){
         Log.i(TAG, "In buildQueueNow");
+
         Bundle bundle = new Bundle();
         bundle.putString("apiRequestUrl", apiRequestUrl);
+        bundle.putInt("queueIndex", queueIndex);
+
         getOsirisMediaController().sendCommand("buildQueue", bundle, null);
         replaceFragment(FragmentConstants.FRAGMENT_PLAYER);
     }

@@ -146,10 +146,14 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
             case "buildQueue":
                 Log.i(TAG, "In onCommand: buildQueue");
                 String apiRequestUrl = extras.getString("apiRequestUrl");
+                int queueIndex = extras.getInt("queueIndex");
 
                 if(apiRequestUrl != null){
                     mediaPlaybackService.setApiRequestUrl(apiRequestUrl);
+                    this.queueIndex = queueIndex;
+
                     mediaPlaybackService.notifyChildrenChanged("Osiris");
+
                 }
 
                 break;
