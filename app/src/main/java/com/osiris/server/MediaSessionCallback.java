@@ -107,6 +107,11 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
     }
 
     @Override
+    public void onSkipToQueueItem (long queueIndex){
+        Log.i(TAG, "In onSkipToQueueItem");
+    }
+
+    @Override
     public void onSkipToPrevious() {
         Log.i(TAG, "In onSkipToPrevious");
 

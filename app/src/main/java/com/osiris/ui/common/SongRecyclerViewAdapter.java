@@ -15,11 +15,13 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongViewHolder
 
     private LayoutInflater layoutInflater;
     private List<SongModel> songs;
+    private ItemClickListener itemClickListener;
 
     // data is passed into the constructor
-    public SongRecyclerViewAdapter(Context context, List<SongModel> songs) {
+    public SongRecyclerViewAdapter(Context context, List<SongModel> songs, ItemClickListener itemClickListener) {
         this.layoutInflater = LayoutInflater.from(context);
         this.songs = songs;
+        this.itemClickListener = itemClickListener;
     }
 
 
@@ -27,7 +29,7 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongViewHolder
     @Override
     public SongViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = layoutInflater.inflate(R.layout.recyclerview_item_song, viewGroup, false);
-        return new SongViewHolder(view);
+        return new SongViewHolder(view, itemClickListener);
     }
 
     @Override
@@ -39,4 +41,10 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongViewHolder
     public int getItemCount() {
         return songs.size();
     }
+
+    public interface ItemClickListener{
+        void onItemClick(View view, int position);
+    }
+
+
 }

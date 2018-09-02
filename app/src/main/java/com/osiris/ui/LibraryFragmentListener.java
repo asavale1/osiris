@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface LibraryFragmentListener {
     List<MediaSessionCompat.QueueItem> getMediaItems();
+    void playSongAt(int position);
 }

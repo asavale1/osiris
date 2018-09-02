@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.MediaMetadataCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -88,8 +89,16 @@ public class LibraryFragment extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.songs_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), songs);
+        SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), songs, itemClickListener);
         recyclerView.setAdapter(adapter);
-
     }
+
+    private SongRecyclerViewAdapter.ItemClickListener itemClickListener = new SongRecyclerViewAdapter.ItemClickListener() {
+        @Override
+        public void onItemClick(View view, int position) {
+            Log.i(TAG, "On item clicked");
+            Log.i(TAG, songs.get(position).getTitle());
+            libraryFragmentListener.playSongAt(position);
+        }
+    };
 }

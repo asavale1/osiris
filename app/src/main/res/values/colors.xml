@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#70290b</color>
+    <color name="colorPrimaryOpacity50">#8070290b</color>
     <color name="colorPrimaryDark">#2f0d04</color>
+    <color name="colorPrimaryDarkOpacity50">#802f0d04</color>
+
+    <color name="colorBlackOpacity50">#80111111</color>
+
     <color name="colorAccent">#f27a19</color>
 
     <color name="background">#e64d17</color>
-    <color name="lightBackground">#f7d6c1</color>
-    <color name="lightBackgroundOpacity50">#80f7d6c1</color>
+    <color name="colorPrimaryLight">#f7d6c1</color>
+    <color name="colorPrimaryLightOpacity50">#80f7d6c1</color>
 
 </resources>

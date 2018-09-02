@@ -281,6 +281,11 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         return getOsirisMediaController().getQueue();
     }
 
+    @Override
+    public void playSongAt(int position){
+        getTransportControls().skipToQueueItem((long) position);
+    }
+
     /**
      * PlayerFragment callbacks for handling the media player
      */
