@@ -22,6 +22,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     private MusicLibrary musicLibrary;
     private MediaPlayerAdapter mediaPlayerAdapter;
     private final static String MY_MEDIA_ROOT_ID = "Osiris";
+    private String apiRequestUrl;
 
     private static final String TAG = MediaPlaybackService.class.getName();
 
@@ -63,18 +64,22 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     public void onLoadChildren(@NonNull final String parentMediaId, @NonNull final Result<List<MediaBrowserCompat.MediaItem>> result){
         Log.i(TAG, "In onLoadChildren");
 
-        result.detach();
+        if(apiRequestUrl != null){
+            result.detach();
 
-        new GetSongsAsync(new GetSongsAsyncListener() {
-            @Override
-            public void gotSongs(String songs) {
-                Log.i(TAG, songs);
+            new GetSongsAsync(apiRequestUrl, new GetSongsAsyncListener() {
+                @Override
+                public void gotSongs(String songs) {
+                    Log.i(TAG, songs);
 
-                musicLibrary.buildLibrary(songs);
+                    musicLibrary.buildLibrary(songs);
 
-                result.sendResult(musicLibrary.getMediaItems());
-            }
-        }).execute();
+                    result.sendResult(musicLibrary.getMediaItems());
+                }
+            }).execute();
+        }else{
+            result.sendResult(null);
+        }
 
     }
 
@@ -90,6 +95,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         mediaPlayerAdapter.onStop();
         mediaSession.release();
 
+    }
+
+    public void setApiRequestUrl(String apiRequestUrl){
+        this.apiRequestUrl = apiRequestUrl;
     }
 
     public class MediaPlaybackListener {

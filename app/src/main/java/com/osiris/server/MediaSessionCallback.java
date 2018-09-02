@@ -15,7 +15,7 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
     private MediaPlayerAdapter mediaPlayerAdapter;
     private MediaSessionCompat mediaSession;
-    private MediaBrowserServiceCompat mediaBrowserService;
+    private MediaPlaybackService mediaPlaybackService;
     private MusicLibrary musicLibrary;
 
     private final List<MediaSessionCompat.QueueItem> playlist = new ArrayList<>();
@@ -25,13 +25,13 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
     private static final String TAG = MediaSessionCallback.class.getName();
 
-    public MediaSessionCallback(MediaBrowserServiceCompat mediaBrowserService,
+    public MediaSessionCallback(MediaPlaybackService mediaPlaybackService,
                                 MediaSessionCompat mediaSession,
                                 MediaPlayerAdapter mediaPlayerAdapter,
                                 MusicLibrary musicLibrary){
         this.mediaSession = mediaSession;
         this.mediaPlayerAdapter = mediaPlayerAdapter;
-        this.mediaBrowserService = mediaBrowserService;
+        this.mediaPlaybackService = mediaPlaybackService;
         this.musicLibrary = musicLibrary;
     }
 
@@ -142,7 +142,19 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
     public void onCommand(String command, Bundle extras, ResultReceiver cb){
 
         Log.i(TAG, "In onCommand");
-        mediaBrowserService.notifyChildrenChanged("Osiris");
+        switch(command){
+            case "buildQueue":
+                Log.i(TAG, "In onCommand: buildQueue");
+                String apiRequestUrl = extras.getString("apiRequestUrl");
+
+                if(apiRequestUrl != null){
+                    mediaPlaybackService.setApiRequestUrl(apiRequestUrl);
+                    mediaPlaybackService.notifyChildrenChanged("Osiris");
+                }
+
+                break;
+        }
+
 
     }
 

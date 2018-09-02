@@ -15,9 +15,11 @@ import java.net.URL;
 public class GetSongsAsync extends AsyncTask<Void, Void, String> {
 
     GetSongsAsyncListener callbackListener;
+    private String apiRequestUrl;
 
-    public GetSongsAsync(GetSongsAsyncListener callbackListener) {
+    public GetSongsAsync(String apiRequestUrl, GetSongsAsyncListener callbackListener) {
         this.callbackListener = callbackListener;
+        this.apiRequestUrl = apiRequestUrl;
     }
 
     @Override
@@ -26,7 +28,7 @@ public class GetSongsAsync extends AsyncTask<Void, Void, String> {
 
 
         try{
-            URL url = new URL(ApiConstants.GET_ALL_SONGS);
+            URL url = new URL(apiRequestUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(ApiConstants.METHOD_GET);
             connection.setInstanceFollowRedirects(false);

@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
         fragmentManager = getSupportFragmentManager();
 
-
+        replaceFragment(FragmentConstants.FRAGMENT_LIBRARY);
     }
 
     public void replaceFragment(int fragmentType){
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
                 getTransportControls().prepare();
 
-                replaceFragment(FragmentConstants.FRAGMENT_LIBRARY);
+
             }
         }
     }
@@ -283,8 +283,19 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
     @Override
     public void playSongAt(int position){
-        getTransportControls().skipToQueueItem((long) position);
+        //getTransportControls().skipToQueueItem((long) position);
     }
+
+    @Override
+    public void buildQueue(String apiRequestUrl, int queueIndex){
+        Log.i(TAG, "In buildQueueNow");
+        Bundle bundle = new Bundle();
+        bundle.putString("apiRequestUrl", apiRequestUrl);
+        getOsirisMediaController().sendCommand("buildQueue", bundle, null);
+        replaceFragment(FragmentConstants.FRAGMENT_PLAYER);
+    }
+
+
 
     /**
      * PlayerFragment callbacks for handling the media player

@@ -98,6 +98,7 @@ public class MediaPlayerAdapter {
         }
     }
 
+
     private void setNewState(@PlaybackStateCompat.State int newPlayerState){
         Log.i(TAG, "In setNewState");
 

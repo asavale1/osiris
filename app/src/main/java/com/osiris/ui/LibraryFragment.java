@@ -32,6 +32,7 @@ public class LibraryFragment extends Fragment {
     private LibraryFragmentListener libraryFragmentListener;
     private List<SongModel> songs = new ArrayList<>();
     private View view;
+    private String apiRequestUrl;
 
     private static final String TAG = LibraryFragment.class.getName();
 
@@ -40,13 +41,15 @@ public class LibraryFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_library,
                 container, false);
+        Log.i(TAG, "In onCreateView");
         return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        new GetSongsAsync(new GetSongsAsyncListener() {
+        apiRequestUrl = ApiConstants.GET_ALL_SONGS;
+        new GetSongsAsync(apiRequestUrl, new GetSongsAsyncListener() {
             @Override
             public void gotSongs(String songsString) {
                 try {
@@ -98,7 +101,8 @@ public class LibraryFragment extends Fragment {
         public void onItemClick(View view, int position) {
             Log.i(TAG, "On item clicked");
             Log.i(TAG, songs.get(position).getTitle());
-            libraryFragmentListener.playSongAt(position);
+            //libraryFragmentListener.playSongAt(position);
+            libraryFragmentListener.buildQueue(apiRequestUrl, position);
         }
     };
 }
