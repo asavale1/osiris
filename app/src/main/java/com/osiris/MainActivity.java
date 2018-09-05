@@ -17,14 +17,13 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.osiris.server.MediaPlaybackService;
-import com.osiris.ui.FragmentConstants;
+import com.osiris.constants.FragmentConstants;
 import com.osiris.ui.LibraryFragment;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.PlayerControllerListener;
 import com.osiris.ui.PlayerFragment;
 
 import java.util.List;
-import java.util.Queue;
 
 public class MainActivity extends AppCompatActivity implements PlayerControllerListener, LibraryFragmentListener {
 
@@ -69,9 +68,16 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         }
 
         if(fragment != null){
+
+
+
             if(fragmentManager.getFragments().size() == 0){
                 fragmentTransaction.add(R.id.fragment_container, fragment);
             }else{
+                Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+                if(currentFragment instanceof  LibraryFragment){
+                    fragmentTransaction.addToBackStack("LibraryToPlayer");
+                }
                 fragmentTransaction.replace(R.id.fragment_container, fragment);
             }
         }
@@ -80,6 +86,14 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
         Log.i(TAG, "In replaceFragment");
         Log.i(TAG, "Size: " + fragmentManager.getFragments().size());
+    }
+
+    private PlayerFragment isPlayerFragmentVisible(){
+        Fragment displayFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        if(displayFragment instanceof PlayerFragment){
+            return (PlayerFragment) displayFragment;
+        }
+        return null;
     }
 
     @Override
@@ -185,51 +199,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     }
 
 
-    /*View.OnClickListener controlsClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Log.i(TAG, "In onClick");
-            switch (v.getId()){
-                case R.id.play_button:
-                    Log.i(TAG, "Play song? " + Boolean.toString(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING));
-                    if(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING){
-                        getTransportControls().play();
-                    }
-                    break;
-                case R.id.pause_button:
-                    Log.i(TAG, "Pause song? " + Boolean.toString(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING));
-                    if(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING){
-                        getTransportControls().pause();
-                    }
-                    break;
-                case R.id.previous_button:
-                    Log.i(TAG, "Play previous");
-                    getTransportControls().skipToPrevious();
-                    break;
-                case R.id.next_button:
-                    Log.i(TAG, "Play next");
-                    getTransportControls().skipToNext();
-                    break;
-                case R.id.stop_button:
-                    Log.i(TAG, "Stop song");
-                    getTransportControls().stop();
-                    break;
-                case R.id.refresh_button:
-                    getOsirisMediaController().sendCommand("TestCommand", null, null);
-                    break;
-            }
-
-        }
-    };*/
-
-
-    private PlayerFragment isPlayerFragmentVisible(){
-        Fragment displayFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-        if(displayFragment instanceof PlayerFragment){
-            return (PlayerFragment) displayFragment;
-        }
-        return null;
-    }
 
 
 
@@ -276,16 +245,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     /**
      * LibraryFragment callbacks for handling the library view
      */
-    @Override
-    public List<MediaSessionCompat.QueueItem> getMediaItems(){
-        return getOsirisMediaController().getQueue();
-    }
-
-    @Override
-    public void playSongAt(int position){
-        //getTransportControls().skipToQueueItem((long) position);
-    }
-
     @Override
     public void buildQueue(String apiRequestUrl, int queueIndex){
         Log.i(TAG, "In buildQueueNow");
