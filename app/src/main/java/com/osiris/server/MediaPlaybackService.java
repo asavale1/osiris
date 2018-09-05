@@ -64,7 +64,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     public void onLoadChildren(@NonNull final String parentMediaId, @NonNull final Result<List<MediaBrowserCompat.MediaItem>> result){
         Log.i(TAG, "In onLoadChildren");
 
-        if(apiRequestUrl != null){
+        /*if(apiRequestUrl != null){
             result.detach();
 
             new GetSongsAsync(apiRequestUrl, new GetSongsAsyncListener() {
@@ -79,7 +79,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
             }).execute();
         }else{
             result.sendResult(null);
-        }
+        }*/
+
+        result.sendResult(musicLibrary.getMediaItems());
 
     }
 
@@ -97,9 +99,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
     }
 
-    public void setApiRequestUrl(String apiRequestUrl){
+    /*public void setApiRequestUrl(String apiRequestUrl){
         this.apiRequestUrl = apiRequestUrl;
-    }
+    }*/
 
     public class MediaPlaybackListener {
         public void onPlaybackStateChanged(PlaybackStateCompat state){

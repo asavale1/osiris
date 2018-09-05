@@ -5,12 +5,8 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
 
 import com.osiris.api.ApiConstants;
+import com.osiris.ui.common.SongModel;
 
-import org.json.JSONException;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +16,21 @@ public class MusicLibrary {
     private static final String TAG = MusicLibrary.class.getName();
     private TreeMap<String, MediaMetadataCompat> mediaItems = new TreeMap<>();
 
-    public void buildLibrary(String songsString){
+    public boolean addSongToMediaItems(SongModel songModel){
+        if(mediaItems.get(songModel.getId()) == null){
+            MediaMetadataCompat song = new MediaMetadataCompat.Builder()
+                    .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, songModel.getId())
+                    .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songModel.getTitle())
+                    .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, ApiConstants.GET_SONG_URL(songModel.getFileUrl())).build();
+
+            mediaItems.put(songModel.getId(), song);
+            return true;
+        }
+
+        return false;
+    }
+
+    /*public void buildLibrary(String songsString){
         try {
             JSONParser parser = new JSONParser();
             JSONArray songsJson = (JSONArray) parser.parse(songsString);
@@ -40,7 +50,7 @@ public class MusicLibrary {
         }catch (ParseException e){
             e.printStackTrace();
         }
-    }
+    }*/
 
     public List<MediaBrowserCompat.MediaItem> getMediaItems(){
         List<MediaBrowserCompat.MediaItem> result = new ArrayList<>();

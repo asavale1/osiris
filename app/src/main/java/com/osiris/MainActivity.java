@@ -16,12 +16,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.osiris.server.MediaPlaybackService;
 import com.osiris.constants.FragmentConstants;
 import com.osiris.ui.LibraryFragment;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.PlayerControllerListener;
 import com.osiris.ui.PlayerFragment;
+import com.osiris.ui.common.SongModel;
 
 import java.util.List;
 
@@ -57,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         switch (fragmentType){
             case FragmentConstants.FRAGMENT_LIBRARY:
                 fragment = new LibraryFragment();
-                Log.i(TAG, "In library fragment");
                 break;
             case FragmentConstants.FRAGMENT_PLAYER:
                 fragment = new PlayerFragment();
@@ -249,13 +250,26 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     public void buildQueue(String apiRequestUrl, int queueIndex){
         Log.i(TAG, "In buildQueueNow");
 
-        Bundle bundle = new Bundle();
+
+        /*Bundle bundle = new Bundle();
         bundle.putString("apiRequestUrl", apiRequestUrl);
         bundle.putInt("queueIndex", queueIndex);
 
         getOsirisMediaController().sendCommand("buildQueue", bundle, null);
-        replaceFragment(FragmentConstants.FRAGMENT_PLAYER);
+        replaceFragment(FragmentConstants.FRAGMENT_PLAYER);*/
     }
+
+    @Override
+    public void addSongToQueue(SongModel songModel){
+        Log.i(TAG, "In addSongToQueue");
+        Bundle bundle = new Bundle();
+        bundle.putString("songModel", new Gson().toJson(songModel));
+
+        getOsirisMediaController().sendCommand("addSongToQueue", bundle, null);
+
+    }
+
+
 
 
 
