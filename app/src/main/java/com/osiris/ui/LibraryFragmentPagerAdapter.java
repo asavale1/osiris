@@ -6,6 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
+import com.osiris.ui.library.BrowseFragment;
+import com.osiris.ui.library.QueueFragment;
+
 public class LibraryFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private Context context;

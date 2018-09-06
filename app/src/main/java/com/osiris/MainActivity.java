@@ -267,6 +267,12 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
         getOsirisMediaController().sendCommand("addSongToQueue", bundle, null);
 
+
+    }
+
+    @Override
+    public List<MediaSessionCompat.QueueItem> getQueue(){
+        return getOsirisMediaController().getQueue();
     }
 
 

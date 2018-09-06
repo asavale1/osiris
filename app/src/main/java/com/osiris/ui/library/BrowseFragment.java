@@ -1,4 +1,4 @@
-package com.osiris.ui;
+package com.osiris.ui.library;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,14 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import com.osiris.R;
 import com.osiris.api.ApiConstants;
 import com.osiris.api.GetSongsAsync;
 import com.osiris.api.listeners.GetSongsAsyncListener;
+import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.common.SongModel;
 import com.osiris.ui.common.SongRecyclerViewAdapter;
 
@@ -48,18 +47,23 @@ public class BrowseFragment extends Fragment {
             @Override
             public void gotSongs(String songsString) {
 
-                JsonParser parser = new JsonParser();
-                JsonArray jsonArray = parser.parse(songsString).getAsJsonArray();
+                try{
+                    JsonParser parser = new JsonParser();
+                    JsonArray jsonArray = parser.parse(songsString).getAsJsonArray();
 
-                for(int i = 0; i < jsonArray.size(); i++){
-                    SongModel song = new SongModel();
-                    song.setTitle(jsonArray.get(i).getAsJsonObject().get("name").getAsString());
-                    song.setId(jsonArray.get(i).getAsJsonObject().get("_id").getAsString());
-                    song.setFileUrl(jsonArray.get(i).getAsJsonObject().get("fileUrl").getAsString());
-                    songs.add(song);
+                    for(int i = 0; i < jsonArray.size(); i++){
+                        SongModel song = new SongModel();
+                        song.setTitle(jsonArray.get(i).getAsJsonObject().get("name").getAsString());
+                        song.setId(jsonArray.get(i).getAsJsonObject().get("_id").getAsString());
+                        song.setFileUrl(jsonArray.get(i).getAsJsonObject().get("fileUrl").getAsString());
+                        songs.add(song);
+                    }
+
+                    buildUI();
+                }catch (IllegalStateException e){
+                    e.printStackTrace();
                 }
 
-                buildUI();
             }
         }).execute();
     }
