@@ -248,13 +248,19 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         Log.i(TAG, "In buildQueueNow");
 
 
+        getTransportControls().prepare();
+
         /*Bundle bundle = new Bundle();
         bundle.putString("apiRequestUrl", apiRequestUrl);
         bundle.putInt("queueIndex", queueIndex);
 
         getOsirisMediaController().sendCommand("buildQueue", bundle, null);
         replaceFragment(FragmentConstants.FRAGMENT_PLAYER);*/
+
+        replaceFragment(FragmentConstants.FRAGMENT_PLAYER);
     }
+
+
 
     @Override
     public void addSongToQueue(SongModel songModel){

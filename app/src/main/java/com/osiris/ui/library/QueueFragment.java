@@ -82,6 +82,8 @@ public class QueueFragment extends Fragment {
             //libraryFragmentListener.playSongAt(position);
             //libraryFragmentListener.addSongToQueue(songs.get(position));
 
+            libraryFragmentListener.buildQueue("", position);
+
         }
     };
 }
