@@ -2,6 +2,7 @@ package com.osiris.server;
 
 import android.os.Bundle;
 import android.os.ResultReceiver;
+import android.support.annotation.NonNull;
 import android.support.v4.media.MediaBrowserServiceCompat;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
@@ -13,6 +14,7 @@ import com.google.gson.Gson;
 import com.osiris.ui.common.SongModel;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class MediaSessionCallback extends MediaSessionCompat.Callback {
@@ -65,10 +67,10 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
     @Override
     public void onAddQueueItem(MediaDescriptionCompat mediaDescription){
         Log.i(TAG, "In onAddQueueItem");
+
         queueIndex = (queueIndex == -1) ? 0 : queueIndex;
         playlist.add(new MediaSessionCompat.QueueItem(mediaDescription, mediaDescription.hashCode()));
         mediaSession.setQueue(playlist);
-
     }
 
     @Override
@@ -164,13 +166,10 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
                 break;
             case "addSongToQueue":
-                Log.i(TAG, "In onCommand: addSongToQueue");
                 String songModelJson = extras.getString("songModel");
-
-                Log.i(TAG, songModelJson);
                 SongModel songModel = new Gson().fromJson(songModelJson, SongModel.class);
-                musicLibrary.addSongToMediaItems(songModel);
-                mediaPlaybackService.notifyChildrenChanged("Osiris");
+                if(musicLibrary.addSongToMediaItems(songModel))
+                    onAddQueueItem(musicLibrary.getMediaItem(songModel.getId()).getDescription());
                 break;
         }
 

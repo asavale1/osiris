@@ -129,14 +129,11 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
             super.onChildrenLoaded(parentId, children);
 
             Log.i(TAG, "In onChildrenloaded");
-            Log.i(TAG, parentId);
 
             if(!children.isEmpty()){
-                Log.i(TAG, "Size " + children.size());
-                Log.i(TAG, children.get(0).getDescription().getTitle().toString());
-
 
                 for (final MediaBrowserCompat.MediaItem mediaItem : children) {
+                    //Log.i(TAG, "Hash: " + mediaItem.getDescription().hashCode() + " : " +mediaItem.getDescription().getTitle().toString());
 
                     getOsirisMediaController().addQueueItem(mediaItem.getDescription());
                 }

@@ -1,6 +1,7 @@
 package com.osiris.server;
 
 import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaBrowserServiceCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
 
@@ -18,6 +19,7 @@ public class MusicLibrary {
 
     public boolean addSongToMediaItems(SongModel songModel){
         if(mediaItems.get(songModel.getId()) == null){
+
             MediaMetadataCompat song = new MediaMetadataCompat.Builder()
                     .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, songModel.getId())
                     .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songModel.getTitle())
@@ -52,7 +54,13 @@ public class MusicLibrary {
         }
     }*/
 
+    public MediaBrowserCompat.MediaItem getMediaItem(String id){
+        return new MediaBrowserCompat.MediaItem(
+                mediaItems.get(id).getDescription(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE);
+    }
+
     public List<MediaBrowserCompat.MediaItem> getMediaItems(){
+        Log.i(TAG, "In getMediaItems Size: " + mediaItems.size());
         List<MediaBrowserCompat.MediaItem> result = new ArrayList<>();
         for(MediaMetadataCompat metadata : mediaItems.values()){
             result.add(
