@@ -3,16 +3,21 @@ package com.osiris.ui.library;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.osiris.R;
 import com.osiris.ui.LibraryFragmentListener;
+import com.osiris.ui.PlayerControllerListener;
 import com.osiris.ui.common.QueueRecyclerViewAdapter;
 import com.osiris.ui.common.SongRecyclerViewAdapter;
 
@@ -23,6 +28,10 @@ public class QueueFragment extends Fragment {
     private static final String TAG = QueueFragment.class.getName();
     private LibraryFragmentListener libraryFragmentListener;
     private List<MediaSessionCompat.QueueItem> songs;
+    private AppCompatImageButton playPauseButton;
+    private PlayerControllerListener playerControllerListener;
+    private TextView songTitle;
+
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -53,6 +62,8 @@ public class QueueFragment extends Fragment {
     }
 
     private void buildUI(){
+
+        view.findViewById(R.id.linear_layout).setVisibility(View.VISIBLE);
         RecyclerView recyclerView = view.findViewById(R.id.songs_recycler_view);
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -60,6 +71,12 @@ public class QueueFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         view.findViewById(R.id.placeholder).setVisibility(View.GONE);
+
+        playPauseButton = view.findViewById(R.id.button_play_pause);
+        playPauseButton.setOnClickListener(controllerClickListener);
+
+
+        songTitle = view.findViewById(R.id.song_title);
     }
 
 
@@ -71,6 +88,13 @@ public class QueueFragment extends Fragment {
         } else {
             throw new ClassCastException(context.toString()
                     + " must implemenet LibraryFragmentListener");
+        }
+
+        if (context instanceof PlayerControllerListener) {
+            playerControllerListener = (PlayerControllerListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implemenet PlayerControllerListener");
         }
     }
 
@@ -86,4 +110,33 @@ public class QueueFragment extends Fragment {
 
         }
     };
+
+    View.OnClickListener controllerClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.button_play_pause:
+                    playerControllerListener.onPlayPauseSong();
+                    break;
+                case R.id.button_next:
+                    playerControllerListener.onSkipToNextSong();
+                    break;
+                case R.id.button_previous:
+                    playerControllerListener.onSkipToPreviousSong();
+                    break;
+            }
+        }
+    };
+
+    public void onMetadataChanged(MediaMetadataCompat metadata){
+        Log.i(TAG, "In onMetadataChanged");
+        songTitle.setText(metadata.getDescription().getTitle());
+    }
+
+    public void onPlaybackStateChanged(PlaybackStateCompat state){
+        if(state == null)
+            return;
+
+        playPauseButton.setPressed((state.getState() == PlaybackStateCompat.STATE_PLAYING));
+    }
 }

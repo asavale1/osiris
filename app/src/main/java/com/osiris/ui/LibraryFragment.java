@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.osiris.R;
+import com.osiris.ui.library.BrowseFragment;
+import com.osiris.ui.library.QueueFragment;
 
 public class LibraryFragment extends Fragment {
 
@@ -18,6 +22,7 @@ public class LibraryFragment extends Fragment {
     //private List<SongModel> songs = new ArrayList<>();
     private View view;
     private String apiRequestUrl;
+    private ViewPager viewPager;
 
     private static final String TAG = LibraryFragment.class.getName();
 
@@ -35,39 +40,12 @@ public class LibraryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         LibraryFragmentPagerAdapter adapter = new LibraryFragmentPagerAdapter(getActivity(), getChildFragmentManager());
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        /*apiRequestUrl = ApiConstants.GET_ALL_SONGS;
-        new GetSongsAsync(apiRequestUrl, new GetSongsAsyncListener() {
-            @Override
-            public void gotSongs(String songsString) {
-                try {
-                    JSONParser parser = new JSONParser();
-                    JSONArray songsJson = (JSONArray) parser.parse(songsString);
-
-
-                    for(Object obj : songsJson){
-                        JSONObject jsonObj = (JSONObject) obj;
-
-                        SongModel song = new SongModel();
-                        song.setTitle((String) jsonObj.get("name"));
-                        song.setId((String) jsonObj.get("_id"));
-                        songs.add(song);
-
-                    }
-
-                    buildUI();
-
-
-                }catch (ParseException e){
-                    e.printStackTrace();
-                }
-            }
-        }).execute();*/
     }
 
     @Override
@@ -78,6 +56,38 @@ public class LibraryFragment extends Fragment {
         } else {
             throw new ClassCastException(context.toString()
                     + " must implemenet LibraryFragmentListener");
+        }
+    }
+
+
+    public void onMetadataChanged(MediaMetadataCompat metadata){
+        Log.i(TAG, "In onSongMetadataChanged");
+        int itemId = viewPager.getCurrentItem();
+        switch (itemId){
+            case 0:
+                BrowseFragment browseFragment = (BrowseFragment) getChildFragmentManager().findFragmentById(R.id.viewpager);
+                break;
+            case 1:
+                QueueFragment queueFragment = (QueueFragment) getChildFragmentManager().findFragmentById(R.id.viewpager);
+                queueFragment.onMetadataChanged(metadata);
+                break;
+
+        }
+
+    }
+
+    public void onPlaybackStateChanged(PlaybackStateCompat state){
+
+        int itemId = viewPager.getCurrentItem();
+        switch (itemId){
+            case 0:
+                BrowseFragment browseFragment = (BrowseFragment) getChildFragmentManager().findFragmentById(R.id.viewpager);
+                break;
+            case 1:
+                QueueFragment queueFragment = (QueueFragment) getChildFragmentManager().findFragmentById(R.id.viewpager);
+                queueFragment.onPlaybackStateChanged(state);
+                break;
+
         }
     }
 

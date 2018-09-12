@@ -89,13 +89,7 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         Log.i(TAG, "Size: " + fragmentManager.getFragments().size());
     }
 
-    private PlayerFragment isPlayerFragmentVisible(){
-        Fragment displayFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-        if(displayFragment instanceof PlayerFragment){
-            return (PlayerFragment) displayFragment;
-        }
-        return null;
-    }
+
 
     @Override
     public void onStart(){
@@ -198,6 +192,21 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
 
 
+    private PlayerFragment isPlayerFragmentVisible(){
+        Fragment displayFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        if(displayFragment instanceof PlayerFragment){
+            return (PlayerFragment) displayFragment;
+        }
+        return null;
+    }
+
+    private LibraryFragment isLibraryFragmentVisible(){
+        Fragment displayFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        if(displayFragment instanceof LibraryFragment){
+            return (LibraryFragment) displayFragment;
+        }
+        return null;
+    }
 
 
     MediaControllerCompat.Callback controllerCallback = new MediaControllerCompat.Callback() {
@@ -210,11 +219,16 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
                 return;
             }
 
+            LibraryFragment libraryFragment = isLibraryFragmentVisible();
+            if(libraryFragment != null){
+                Log.i(TAG, "Library Fragment is not null");
+                libraryFragment.onMetadataChanged(metadata);
+            }
 
-            PlayerFragment playerFragment = isPlayerFragmentVisible();
+            /*PlayerFragment playerFragment = isPlayerFragmentVisible();
             if(playerFragment != null){
                 playerFragment.updateUI(metadata);
-            }
+            }*/
 
         }
 
@@ -224,10 +238,15 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
             boolean showPause = (state != null && state.getState() == PlaybackStateCompat.STATE_PLAYING);
 
-            PlayerFragment playerFragment = isPlayerFragmentVisible();
+            LibraryFragment libraryFragment = isLibraryFragmentVisible();
+            if(libraryFragment != null){
+                Log.i(TAG, "Library Fragment is not null");
+                libraryFragment.onPlaybackStateChanged(state);
+            }
+            /*PlayerFragment playerFragment = isPlayerFragmentVisible();
             if(playerFragment != null){
                 playerFragment.updatePlayPauseButton(showPause);
-            }
+            }*/
 
         }
 
