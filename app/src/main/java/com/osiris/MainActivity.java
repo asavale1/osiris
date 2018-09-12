@@ -251,11 +251,19 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         replaceFragment(FragmentConstants.FRAGMENT_PLAYER);
     }
 
+    @Override
+    public void playSongAt(int queueIndex){
+        Bundle bundle = new Bundle();
+        bundle.putInt("queueIndex", queueIndex);
+        getOsirisMediaController().sendCommand("playSongAt", bundle, null);
+    }
+
 
 
     @Override
     public void addSongToQueue(SongModel songModel){
         Log.i(TAG, "In addSongToQueue");
+
         Bundle bundle = new Bundle();
         bundle.putString("songModel", new Gson().toJson(songModel));
 

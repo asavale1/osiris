@@ -150,19 +150,13 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
         Log.i(TAG, "In onCommand");
         switch(command){
-            case "buildQueue":
-                Log.i(TAG, "In onCommand: buildQueue");
+            case "playSongAt":
+                Log.i(TAG, "In onCommand: playSongAt");
 
-                /*String apiRequestUrl = extras.getString("apiRequestUrl");
-                int queueIndex = extras.getInt("queueIndex");
+                this.queueIndex = extras.getInt("queueIndex");
 
-                if(apiRequestUrl != null){
-                    mediaPlaybackService.setApiRequestUrl(apiRequestUrl);
-                    this.queueIndex = queueIndex;
-
-                    mediaPlaybackService.notifyChildrenChanged("Osiris");
-
-                }*/
+                preparedMedia = null;
+                onPlay();
 
                 break;
             case "addSongToQueue":

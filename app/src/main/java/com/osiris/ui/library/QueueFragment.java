@@ -103,13 +103,7 @@ public class QueueFragment extends Fragment {
     private QueueRecyclerViewAdapter.ItemClickListener itemClickListener = new QueueRecyclerViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            Log.i(TAG, "On item clicked");
-            Log.i(TAG, songs.get(position).getDescription().getTitle().toString());
-            //libraryFragmentListener.playSongAt(position);
-            //libraryFragmentListener.addSongToQueue(songs.get(position));
-
-            libraryFragmentListener.buildQueue("", position);
-
+            libraryFragmentListener.playSongAt(position);
         }
     };
 
@@ -131,7 +125,6 @@ public class QueueFragment extends Fragment {
     };
 
     public void onMetadataChanged(MediaMetadataCompat metadata){
-        Log.i(TAG, "In onMetadataChanged");
         songTitle.setText(metadata.getDescription().getTitle());
     }
 

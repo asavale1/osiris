@@ -90,9 +90,6 @@ public class BrowseFragment extends Fragment {
     private SongRecyclerViewAdapter.ItemClickListener itemClickListener = new SongRecyclerViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            Log.i(TAG, "On item clicked");
-            Log.i(TAG, songs.get(position).getTitle());
-            //libraryFragmentListener.playSongAt(position);
             libraryFragmentListener.addSongToQueue(songs.get(position));
         }
     };
