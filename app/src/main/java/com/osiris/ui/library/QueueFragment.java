@@ -75,6 +75,8 @@ public class QueueFragment extends Fragment {
         playPauseButton = view.findViewById(R.id.button_play_pause);
         playPauseButton.setOnClickListener(controllerClickListener);
 
+        view.findViewById(R.id.button_previous).setOnClickListener(controllerClickListener);
+        view.findViewById(R.id.button_next).setOnClickListener(controllerClickListener);
 
         songTitle = view.findViewById(R.id.song_title);
     }

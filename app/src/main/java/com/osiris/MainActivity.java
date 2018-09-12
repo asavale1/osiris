@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
             if(!children.isEmpty()){
 
                 for (final MediaBrowserCompat.MediaItem mediaItem : children) {
-                    //Log.i(TAG, "Hash: " + mediaItem.getDescription().hashCode() + " : " +mediaItem.getDescription().getTitle().toString());
 
                     getOsirisMediaController().addQueueItem(mediaItem.getDescription());
                 }
@@ -190,16 +189,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         return MediaControllerCompat.getMediaController(MainActivity.this);
     }
 
-
-
-    private PlayerFragment isPlayerFragmentVisible(){
-        Fragment displayFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-        if(displayFragment instanceof PlayerFragment){
-            return (PlayerFragment) displayFragment;
-        }
-        return null;
-    }
-
     private LibraryFragment isLibraryFragmentVisible(){
         Fragment displayFragment = fragmentManager.findFragmentById(R.id.fragment_container);
         if(displayFragment instanceof LibraryFragment){
@@ -225,10 +214,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
                 libraryFragment.onMetadataChanged(metadata);
             }
 
-            /*PlayerFragment playerFragment = isPlayerFragmentVisible();
-            if(playerFragment != null){
-                playerFragment.updateUI(metadata);
-            }*/
 
         }
 
@@ -236,17 +221,11 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
             Log.i(TAG, "In onPlaybackStateChanged");
 
-            boolean showPause = (state != null && state.getState() == PlaybackStateCompat.STATE_PLAYING);
-
             LibraryFragment libraryFragment = isLibraryFragmentVisible();
             if(libraryFragment != null){
                 Log.i(TAG, "Library Fragment is not null");
                 libraryFragment.onPlaybackStateChanged(state);
             }
-            /*PlayerFragment playerFragment = isPlayerFragmentVisible();
-            if(playerFragment != null){
-                playerFragment.updatePlayPauseButton(showPause);
-            }*/
 
         }
 
@@ -268,13 +247,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
 
         getTransportControls().prepare();
-
-        /*Bundle bundle = new Bundle();
-        bundle.putString("apiRequestUrl", apiRequestUrl);
-        bundle.putInt("queueIndex", queueIndex);
-
-        getOsirisMediaController().sendCommand("buildQueue", bundle, null);
-        replaceFragment(FragmentConstants.FRAGMENT_PLAYER);*/
 
         replaceFragment(FragmentConstants.FRAGMENT_PLAYER);
     }
@@ -298,17 +270,12 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     }
 
 
-
-
-
     /**
      * PlayerFragment callbacks for handling the media player
      */
 
     @Override
     public void onPlayPauseSong() {
-        Log.i(TAG, "Play song? " + Boolean.toString(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING));
-        Log.i(TAG, "Pause song? " + Boolean.toString(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING));
         if(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING){
             getTransportControls().play();
         }else{
@@ -325,11 +292,13 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
     @Override
     public void onSkipToNextSong(){
+        Log.i(TAG, "In onSkipToNextSong");
         getTransportControls().skipToNext();
     }
 
     @Override
     public void onSkipToPreviousSong(){
+        Log.i(TAG, "In onSkipToPreviousSong");
         getTransportControls().skipToPrevious();
     }
 
