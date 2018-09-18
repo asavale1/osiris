@@ -16,6 +16,7 @@ public class MediaPlayerAdapter {
     private MediaPlaybackService.MediaPlaybackListener mediaPlaybackListener;
 
     private String currentSongId;
+    private MediaMetadataCompat currentMediaMetadata;
 
     public MediaPlayerAdapter(MediaPlaybackService.MediaPlaybackListener mediaPlaybackListener){
         this.mediaPlaybackListener = mediaPlaybackListener;
@@ -60,6 +61,7 @@ public class MediaPlayerAdapter {
         initMediaPlayer();
 
         currentSongId = mediaId;
+        currentMediaMetadata = mediaMetadata;
 
         try {
             mediaPlayer.setDataSource(mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI));
@@ -98,6 +100,13 @@ public class MediaPlayerAdapter {
         }
     }
 
+    public MediaMetadataCompat getCurrentMediaMetadata() {
+        return currentMediaMetadata;
+    }
+
+    /*public MediaMetadataCompat getCurrentMedia(){
+        return;
+    }*/
 
     private void setNewState(@PlaybackStateCompat.State int newPlayerState){
         Log.i(TAG, "In setNewState");

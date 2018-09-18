@@ -1,8 +1,10 @@
 package com.osiris.server;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaBrowserServiceCompat;
 import android.support.v4.media.MediaMetadataCompat;
@@ -23,8 +25,11 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     private MediaPlayerAdapter mediaPlayerAdapter;
     private final static String MY_MEDIA_ROOT_ID = "Osiris";
     private String apiRequestUrl;
+    private boolean mServiceInStartedState;
 
     private static final String TAG = MediaPlaybackService.class.getName();
+
+    private MediaNotificationManager mediaNotificationManager;
 
     @Override
     public void onCreate(){
@@ -47,6 +52,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
         mediaPlayerAdapter = new MediaPlayerAdapter(new MediaPlaybackListener());
 
+        mediaNotificationManager = new MediaNotificationManager(this);
+
         mediaSession.setPlaybackState(stateBuilder.build());
         mediaSession.setCallback(new MediaSessionCallback(MediaPlaybackService.this, mediaSession, mediaPlayerAdapter, musicLibrary));
         setSessionToken(mediaSession.getSessionToken());
@@ -63,23 +70,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     @Override
     public void onLoadChildren(@NonNull final String parentMediaId, @NonNull final Result<List<MediaBrowserCompat.MediaItem>> result){
         Log.i(TAG, "In onLoadChildren");
-
-        /*if(apiRequestUrl != null){
-            result.detach();
-
-            new GetSongsAsync(apiRequestUrl, new GetSongsAsyncListener() {
-                @Override
-                public void gotSongs(String songs) {
-                    Log.i(TAG, songs);
-
-                    musicLibrary.buildLibrary(songs);
-
-                    result.sendResult(musicLibrary.getMediaItems());
-                }
-            }).execute();
-        }else{
-            result.sendResult(null);
-        }*/
 
         result.sendResult(musicLibrary.getMediaItems());
 
@@ -104,9 +94,68 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     }*/
 
     public class MediaPlaybackListener {
+        private final ServiceManager serviceManager;
+
+        MediaPlaybackListener() {
+            serviceManager = new ServiceManager();
+        }
+
         public void onPlaybackStateChanged(PlaybackStateCompat state){
             Log.i(TAG, "In onPlaybackStateChanged");
             mediaSession.setPlaybackState(state);
+
+            // Manage the started state of this service.
+            Log.i(TAG, "In onPlaybackStateChanged: " + state.getState());
+            switch (state.getState()) {
+                case PlaybackStateCompat.STATE_PLAYING:
+                    Log.i(TAG, "In statePlaying");
+                    serviceManager.moveServiceToStartedState(state);
+                    break;
+                case PlaybackStateCompat.STATE_PAUSED:
+                    Log.i(TAG, "In statePaused");
+                    serviceManager.updateNotificationForPause(state);
+                    break;
+                case PlaybackStateCompat.STATE_STOPPED:
+                    Log.i(TAG, "In stateStopped");
+                    serviceManager.moveServiceOutOfStartedState(state);
+                    break;
+            }
+        }
+
+        class ServiceManager {
+
+            private void moveServiceToStartedState(PlaybackStateCompat state) {
+                Log.i(TAG, "In moveServiceToStartedState");
+                Notification notification =
+                        mediaNotificationManager.getNotification(
+                                mediaPlayerAdapter.getCurrentMediaMetadata(), state, getSessionToken());
+
+                if (!mServiceInStartedState) {
+                    ContextCompat.startForegroundService(
+                            MediaPlaybackService.this,
+                            new Intent(MediaPlaybackService.this, MediaPlaybackService.class));
+                    mServiceInStartedState = true;
+                }
+
+                startForeground(MediaNotificationManager.NOTIFICATION_ID, notification);
+            }
+
+            private void updateNotificationForPause(PlaybackStateCompat state) {
+                Log.i(TAG, "In updateNotificationForPause");
+                stopForeground(false);
+                Notification notification =
+                        mediaNotificationManager.getNotification(
+                                mediaPlayerAdapter.getCurrentMediaMetadata(), state, getSessionToken());
+                mediaNotificationManager.getNotificationManager()
+                        .notify(MediaNotificationManager.NOTIFICATION_ID, notification);
+            }
+
+            private void moveServiceOutOfStartedState(PlaybackStateCompat state) {
+                Log.i(TAG, "In moveServiceOutOfStartedState");
+                stopForeground(true);
+                stopSelf();
+                mServiceInStartedState = false;
+            }
         }
     }
 }

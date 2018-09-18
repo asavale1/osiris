@@ -100,11 +100,16 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
     @Override
     public void onStop(){
+        Log.i(TAG, "In onStop");
         super.onStop();
         if(MediaControllerCompat.getMediaController(MainActivity.this) != null){
+            Log.i(TAG, "Disconnect media controller");
             MediaControllerCompat.getMediaController(MainActivity.this).unregisterCallback(controllerCallback);
         }
-        mediaBrowser.disconnect();
+        if(mediaBrowser != null && mediaBrowser.isConnected()) {
+            Log.i(TAG, "Disconnect media browser");
+            mediaBrowser.disconnect();
+        }
     }
 
     @Override
