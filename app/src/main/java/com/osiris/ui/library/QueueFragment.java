@@ -129,8 +129,11 @@ public class QueueFragment extends Fragment {
     }
 
     public void onPlaybackStateChanged(PlaybackStateCompat state){
+        Log.i(TAG, "In onPlaybackStateChanged");
         if(state == null)
             return;
+
+        Log.i(TAG, "playbackState is not null");
 
         playPauseButton.setPressed((state.getState() == PlaybackStateCompat.STATE_PLAYING));
     }

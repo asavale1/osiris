@@ -105,10 +105,6 @@ public class MediaPlayerAdapter {
         return currentMediaMetadata;
     }
 
-    /*public MediaMetadataCompat getCurrentMedia(){
-        return;
-    }*/
-
     private void setNewState(@PlaybackStateCompat.State int newPlayerState){
         Log.i(TAG, "In setNewState");
 

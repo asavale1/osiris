@@ -90,10 +90,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
     }
 
-    /*public void setApiRequestUrl(String apiRequestUrl){
-        this.apiRequestUrl = apiRequestUrl;
-    }*/
-
     public class MediaPlaybackListener {
         private final ServiceManager serviceManager;
 
