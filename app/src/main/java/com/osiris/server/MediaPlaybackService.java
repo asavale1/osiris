@@ -12,10 +12,6 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
-import com.osiris.api.GetSongsAsync;
-import com.osiris.api.listeners.GetSongsAsyncListener;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class MediaPlaybackService extends MediaBrowserServiceCompat {
@@ -24,7 +20,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     private MusicLibrary musicLibrary;
     private MediaPlayerAdapter mediaPlayerAdapter;
     private final static String MY_MEDIA_ROOT_ID = "Osiris";
-    private String apiRequestUrl;
     private boolean mServiceInStartedState;
 
     private static final String TAG = MediaPlaybackService.class.getName();
@@ -38,6 +33,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         Log.i(TAG, "In onCreate");
 
         musicLibrary = new MusicLibrary();
+        mediaPlayerAdapter = new MediaPlayerAdapter(new MediaPlaybackListener());
 
 
         mediaSession = new MediaSessionCompat(this, MediaPlaybackService.class.getSimpleName());
@@ -46,17 +42,22 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                         MediaSessionCompat.FLAG_HANDLES_QUEUE_COMMANDS |
                         MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
-        PlaybackStateCompat.Builder stateBuilder = new PlaybackStateCompat.Builder().setActions(
-                PlaybackStateCompat.ACTION_PLAY |
-                        PlaybackStateCompat.ACTION_PLAY_PAUSE);
+        mediaSession.setCallback(new MediaSessionCallback(MediaPlaybackService.this, mediaSession, mediaPlayerAdapter, musicLibrary));
+        setSessionToken(mediaSession.getSessionToken());
 
-        mediaPlayerAdapter = new MediaPlayerAdapter(new MediaPlaybackListener());
+        /*PlaybackStateCompat.Builder stateBuilder = new PlaybackStateCompat.Builder();
+        stateBuilder.setActions(PlaybackStateCompat.ACTION_SKIP_TO_NEXT);
+
+
+
+        mediaSession.setPlaybackState(stateBuilder.build());*/
+
+
+
+        Log.i(TAG, "Session Token: " + mediaSession.getSessionToken().describeContents());
 
         mediaNotificationManager = new MediaNotificationManager(this);
 
-        mediaSession.setPlaybackState(stateBuilder.build());
-        mediaSession.setCallback(new MediaSessionCallback(MediaPlaybackService.this, mediaSession, mediaPlayerAdapter, musicLibrary));
-        setSessionToken(mediaSession.getSessionToken());
 
 
     }
@@ -126,6 +127,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
             private void moveServiceToStartedState(PlaybackStateCompat state) {
                 Log.i(TAG, "In moveServiceToStartedState");
+                Log.i(TAG, "Session Token: " + getSessionToken().describeContents());
+
                 Notification notification =
                         mediaNotificationManager.getNotification(
                                 mediaPlayerAdapter.getCurrentMediaMetadata(), state, getSessionToken());

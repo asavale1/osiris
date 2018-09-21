@@ -101,16 +101,7 @@ public class MediaNotificationManager {
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mediaPlaybackService, CHANNEL_ID);
-        builder.setStyle(
-                new MediaStyle()
-                        .setMediaSession(token)
-                        .setShowActionsInCompactView(0, 1, 2)
-                        .setShowCancelButton(true)
-                        .setCancelButtonIntent(
-                                MediaButtonReceiver.buildMediaButtonPendingIntent(
-                                        mediaPlaybackService,
-                                        PlaybackStateCompat.ACTION_STOP)))
-                .setColor(ContextCompat.getColor(mediaPlaybackService, R.color.colorPrimaryDark))
+        builder.setColor(ContextCompat.getColor(mediaPlaybackService, R.color.colorPrimaryDark))
                 .setSmallIcon(android.R.drawable.alert_dark_frame)
                 .setContentIntent(createContentIntent())
                 .setContentTitle(mediaDescription.getTitle())
@@ -124,6 +115,12 @@ public class MediaNotificationManager {
             builder.addAction(mPrevAction);
         }*/
 
+        Log.i(TAG, "Get Actions: " + state.getActions());
+        Log.i(TAG, "PlaybackStateCompat.SKIP_NEXT: " + (PlaybackStateCompat.ACTION_SKIP_TO_NEXT));
+        Log.i(TAG, "" + (state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_NEXT));
+        Log.i(TAG, "PlaybackStateCompat.SKIP_PREVIOUS: " + PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS);
+        Log.i(TAG, "" + (state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS));
+
         builder.addAction(mPrevAction);
 
         builder.addAction(isPlaying ? mPauseAction : mPlayAction);
@@ -133,6 +130,16 @@ public class MediaNotificationManager {
             Log.i(TAG, "Add next action");
             builder.addAction(mNextAction);
         }*/
+
+        builder.setStyle(
+                new MediaStyle()
+                        .setMediaSession(token)
+                        .setShowActionsInCompactView(0, 1, 2)
+                        .setShowCancelButton(true)
+                        .setCancelButtonIntent(
+                                MediaButtonReceiver.buildMediaButtonPendingIntent(
+                                        mediaPlaybackService,
+                                        PlaybackStateCompat.ACTION_STOP)));
 
         return builder;
     }

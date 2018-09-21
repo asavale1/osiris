@@ -187,7 +187,9 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     }
 
     private int getPlaybackState(){
-        return getOsirisMediaController().getPlaybackState().getState();
+        if(getOsirisMediaController().getPlaybackState() != null)
+            return getOsirisMediaController().getPlaybackState().getState();
+        return -1;
     }
 
     private MediaControllerCompat getOsirisMediaController(){
@@ -291,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     public void onPlayPauseSong() {
         if(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING){
             getTransportControls().play();
-        }else{
+        }else if(getPlaybackState() != -1){
             getTransportControls().pause();
         }
     }

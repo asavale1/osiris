@@ -17,6 +17,7 @@ public class MediaPlayerAdapter {
 
     private String currentSongId;
     private MediaMetadataCompat currentMediaMetadata;
+    private int currentState;
 
     public MediaPlayerAdapter(MediaPlaybackService.MediaPlaybackListener mediaPlaybackListener){
         this.mediaPlaybackListener = mediaPlaybackListener;
@@ -111,16 +112,46 @@ public class MediaPlayerAdapter {
     private void setNewState(@PlaybackStateCompat.State int newPlayerState){
         Log.i(TAG, "In setNewState");
 
+        currentState = newPlayerState;
+
         final long playbackPosition = mediaPlayer == null ? 0 : mediaPlayer.getCurrentPosition();
 
         final PlaybackStateCompat.Builder stateBuilder = new PlaybackStateCompat.Builder();
-        stateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY |
-                PlaybackStateCompat.ACTION_PLAY_PAUSE);
-        stateBuilder.setState(newPlayerState,
+        stateBuilder.setActions(getAvailableActions());
+        stateBuilder.setState(currentState,
                 playbackPosition,
                 1.0f,
                 SystemClock.elapsedRealtime());
         mediaPlaybackListener.onPlaybackStateChanged(stateBuilder.build());
+    }
+
+    @PlaybackStateCompat.Actions
+    private long getAvailableActions() {
+        long actions = PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID
+                | PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH
+                | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+                | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS;
+        switch (currentState) {
+            case PlaybackStateCompat.STATE_STOPPED:
+                actions |= PlaybackStateCompat.ACTION_PLAY
+                        | PlaybackStateCompat.ACTION_PAUSE;
+                break;
+            case PlaybackStateCompat.STATE_PLAYING:
+                actions |= PlaybackStateCompat.ACTION_STOP
+                        | PlaybackStateCompat.ACTION_PAUSE
+                        | PlaybackStateCompat.ACTION_SEEK_TO;
+                break;
+            case PlaybackStateCompat.STATE_PAUSED:
+                actions |= PlaybackStateCompat.ACTION_PLAY
+                        | PlaybackStateCompat.ACTION_STOP;
+                break;
+            default:
+                actions |= PlaybackStateCompat.ACTION_PLAY
+                        | PlaybackStateCompat.ACTION_PLAY_PAUSE
+                        | PlaybackStateCompat.ACTION_STOP
+                        | PlaybackStateCompat.ACTION_PAUSE;
+        }
+        return actions;
     }
 
     public boolean isPlaying(){ return mediaPlayer != null && mediaPlayer.isPlaying(); }

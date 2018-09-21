@@ -32,28 +32,6 @@ public class MusicLibrary {
         return false;
     }
 
-    /*public void buildLibrary(String songsString){
-        try {
-            JSONParser parser = new JSONParser();
-            JSONArray songsJson = (JSONArray) parser.parse(songsString);
-
-
-            for(Object obj : songsJson){
-                JSONObject jsonObj = (JSONObject) obj;
-
-                MediaMetadataCompat song = new MediaMetadataCompat.Builder()
-                        .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, (String) jsonObj.get("_id"))
-                        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, (String) jsonObj.get("name"))
-                        .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, ApiConstants.GET_SONG_URL((String) jsonObj.get("fileUrl"))).build();
-
-                mediaItems.put((String) jsonObj.get("_id"), song);
-            }
-
-        }catch (ParseException e){
-            e.printStackTrace();
-        }
-    }*/
-
     public MediaBrowserCompat.MediaItem getMediaItem(String id){
         return new MediaBrowserCompat.MediaItem(
                 mediaItems.get(id).getDescription(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE);
