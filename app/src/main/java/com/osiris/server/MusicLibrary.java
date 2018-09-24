@@ -23,6 +23,7 @@ public class MusicLibrary {
             MediaMetadataCompat song = new MediaMetadataCompat.Builder()
                     .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, songModel.getId())
                     .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songModel.getTitle())
+                    .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, songModel.getAlbum())
                     .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, ApiConstants.GET_SONG_URL(songModel.getFileUrl())).build();
 
             mediaItems.put(songModel.getId(), song);

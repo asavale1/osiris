@@ -53,8 +53,9 @@ public class BrowseFragment extends Fragment {
 
                     for(int i = 0; i < jsonArray.size(); i++){
                         SongModel song = new SongModel();
-                        song.setTitle(jsonArray.get(i).getAsJsonObject().get("name").getAsString());
+                        song.setTitle(jsonArray.get(i).getAsJsonObject().get("title").getAsString());
                         song.setId(jsonArray.get(i).getAsJsonObject().get("_id").getAsString());
+                        song.setAlbum(jsonArray.get(i).getAsJsonObject().get("album").getAsString());
                         song.setFileUrl(jsonArray.get(i).getAsJsonObject().get("fileUrl").getAsString());
                         songs.add(song);
                     }
