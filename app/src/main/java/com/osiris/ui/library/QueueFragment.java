@@ -126,6 +126,7 @@ public class QueueFragment extends Fragment {
 
     public void onMetadataChanged(MediaMetadataCompat metadata){
         songTitle.setText(metadata.getDescription().getTitle());
+        songTitle.setSelected(true);
     }
 
     public void onPlaybackStateChanged(PlaybackStateCompat state){
