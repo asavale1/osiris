@@ -13,7 +13,6 @@
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:gravity="center_vertical"
-        android:text="Song"
         android:textSize="24sp" />
 
 </LinearLayout>

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Osiris</string>
+    <string name="queue_placeholder">Start adding songs to the queue</string>
+    <string name="next_song">Next Song</string>
+    <string name="play_pause_song">Play/Pause Song</string>
+    <string name="previous_song">Previous Song</string>
 </resources>
