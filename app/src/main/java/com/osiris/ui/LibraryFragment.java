@@ -34,7 +34,7 @@ public class LibraryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewPager = view.findViewById(R.id.viewpager);
-        LibraryFragmentPagerAdapter adapter = new LibraryFragmentPagerAdapter(getActivity(), getChildFragmentManager());
+        LibraryFragmentPagerAdapter adapter = new LibraryFragmentPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = view.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);

@@ -7,16 +7,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
 import com.osiris.ui.library.BrowseFragment;
+import com.osiris.ui.library.PlaylistFragment;
 import com.osiris.ui.library.QueueFragment;
 
 public class LibraryFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private Context context;
     private static final String TAG = LibraryFragmentPagerAdapter.class.getName();
 
-    public LibraryFragmentPagerAdapter(Context context, FragmentManager fm) {
+    LibraryFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
-        this.context = context;
     }
 
     @Override
@@ -24,8 +23,10 @@ public class LibraryFragmentPagerAdapter extends FragmentPagerAdapter {
         Log.i(TAG, "Position: " + position);
         switch (position){
             case 0:
-                return new BrowseFragment();
+                return new PlaylistFragment();
             case 1:
+                return new BrowseFragment();
+            case 2:
                 return new QueueFragment();
             default:
                 return new BrowseFragment();
@@ -35,7 +36,7 @@ public class LibraryFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -43,11 +44,13 @@ public class LibraryFragmentPagerAdapter extends FragmentPagerAdapter {
         // Generate title based on item position
         switch (position) {
             case 0:
-                return "Browse";
+                return "Your playlists";
             case 1:
+                return "Browse";
+            case 2:
                 return "On Deck";
             default:
-                return "Browse";
+                return "Playlists";
         }
     }
 }
