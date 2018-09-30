@@ -22,7 +22,6 @@ import com.osiris.constants.FragmentConstants;
 import com.osiris.ui.LibraryFragment;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.PlayerControllerListener;
-import com.osiris.ui.PlayerFragment;
 import com.osiris.ui.common.SongModel;
 
 import java.util.List;
@@ -60,9 +59,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
             case FragmentConstants.FRAGMENT_LIBRARY:
                 fragment = new LibraryFragment();
                 break;
-            case FragmentConstants.FRAGMENT_PLAYER:
-                fragment = new PlayerFragment();
-                break;
             default:
                 fragment = null;
                 break;
@@ -81,9 +77,11 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
                 }
                 fragmentTransaction.replace(R.id.fragment_container, fragment);
             }
+
+            fragmentTransaction.commit();
         }
 
-        fragmentTransaction.commit();
+
 
         Log.i(TAG, "In replaceFragment");
         Log.i(TAG, "Size: " + fragmentManager.getFragments().size());
@@ -248,16 +246,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     /**
      * LibraryFragment callbacks for handling the library view
      */
-    @Override
-    public void buildQueue(String apiRequestUrl, int queueIndex){
-        Log.i(TAG, "In buildQueueNow");
-
-
-        getTransportControls().prepare();
-
-        replaceFragment(FragmentConstants.FRAGMENT_PLAYER);
-    }
-
     @Override
     public void playSongAt(int queueIndex){
         Bundle bundle = new Bundle();

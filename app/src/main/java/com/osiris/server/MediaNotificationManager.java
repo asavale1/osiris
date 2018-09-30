@@ -110,10 +110,9 @@ public class MediaNotificationManager {
                         mediaPlaybackService, PlaybackStateCompat.ACTION_STOP))
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
-        /*if ((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS) != 0) {
-            Log.i(TAG, "Add prev action");
+        if ((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS) != 0) {
             builder.addAction(mPrevAction);
-        }*/
+        }
 
         Log.i(TAG, "Get Actions: " + state.getActions());
         Log.i(TAG, "PlaybackStateCompat.SKIP_NEXT: " + (PlaybackStateCompat.ACTION_SKIP_TO_NEXT));
@@ -121,15 +120,11 @@ public class MediaNotificationManager {
         Log.i(TAG, "PlaybackStateCompat.SKIP_PREVIOUS: " + PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS);
         Log.i(TAG, "" + (state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS));
 
-        builder.addAction(mPrevAction);
-
         builder.addAction(isPlaying ? mPauseAction : mPlayAction);
 
-        builder.addAction(mNextAction);
-        /*if ((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_NEXT) != 0) {
-            Log.i(TAG, "Add next action");
+        if ((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_NEXT) != 0) {
             builder.addAction(mNextAction);
-        }*/
+        }
 
         builder.setStyle(
                 new MediaStyle()
