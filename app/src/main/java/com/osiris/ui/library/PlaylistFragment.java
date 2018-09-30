@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.osiris.api.ApiConstants;
 import com.osiris.api.GetUserPlaylistsAsync;
 import com.osiris.api.listeners.GetUserPlaylistsAsyncListener;
 import com.osiris.ui.common.PlaylistModel;
+import com.osiris.ui.common.PlaylistRecyclerViewAdapter;
 import com.osiris.ui.common.SongModel;
 
 import java.util.ArrayList;
@@ -27,12 +30,15 @@ public class PlaylistFragment extends Fragment {
     private FloatingActionButton newPlaylistButton;
     private final static String TAG = PlaylistFragment.class.getName();
     private List<PlaylistModel> playlists = new ArrayList<PlaylistModel>();
+    private View view;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_playlist,
+        view = inflater.inflate(R.layout.fragment_playlist,
                 container, false);
+
+        return view;
     }
 
     @Override
@@ -81,7 +87,19 @@ public class PlaylistFragment extends Fragment {
     }
 
     private void buildUI(){
+
+        RecyclerView recyclerView = view.findViewById(R.id.playlists_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        PlaylistRecyclerViewAdapter adapter = new PlaylistRecyclerViewAdapter(getContext(), playlists, itemClickListener);
+        recyclerView.setAdapter(adapter);
         Log.i(TAG, "Playlists size: " + playlists.size() );
     }
+
+    private PlaylistRecyclerViewAdapter.ItemClickListener itemClickListener = new PlaylistRecyclerViewAdapter.ItemClickListener() {
+        @Override
+        public void onItemClick(View view, int position) {
+
+        }
+    };
 
 }
