@@ -19,6 +19,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.osiris.server.MediaPlaybackService;
 import com.osiris.constants.FragmentConstants;
+import com.osiris.ui.CreatePlaylistFragment;
 import com.osiris.ui.LibraryFragment;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.PlayerControllerListener;
@@ -59,14 +60,16 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
             case FragmentConstants.FRAGMENT_LIBRARY:
                 fragment = new LibraryFragment();
                 break;
+            case FragmentConstants.FRAGMENT_CREATE_PLAYLIST:
+                Log.i(TAG, "Create Playlist Fragment");
+                fragment = new CreatePlaylistFragment();
+                break;
             default:
                 fragment = null;
                 break;
         }
 
         if(fragment != null){
-
-
 
             if(fragmentManager.getFragments().size() == 0){
                 fragmentTransaction.add(R.id.fragment_container, fragment);

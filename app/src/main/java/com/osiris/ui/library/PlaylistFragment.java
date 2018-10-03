@@ -14,13 +14,14 @@ import android.view.ViewGroup;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
+import com.osiris.MainActivity;
 import com.osiris.R;
 import com.osiris.api.ApiConstants;
 import com.osiris.api.GetUserPlaylistsAsync;
 import com.osiris.api.listeners.GetUserPlaylistsAsyncListener;
+import com.osiris.constants.FragmentConstants;
 import com.osiris.ui.common.PlaylistModel;
 import com.osiris.ui.common.PlaylistRecyclerViewAdapter;
-import com.osiris.ui.common.SongModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,7 @@ public class PlaylistFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Add playlist clicked");
+                ((MainActivity) getActivity()).replaceFragment(FragmentConstants.FRAGMENT_CREATE_PLAYLIST);
             }
         });
 
