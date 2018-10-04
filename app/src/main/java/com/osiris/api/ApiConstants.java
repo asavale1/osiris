@@ -8,6 +8,7 @@ public class ApiConstants {
     public static String GET_SONG_URL(String fileUrl){ return API_DOMAIN + fileUrl; }
 
     public static String GET_USER_PLAYLISTS(String userId){ return API_DOMAIN + "/playlists/user/" + userId; }
+    public static String CREATE_PLAYLIST(){ return API_DOMAIN + "/playlists"; }
 
 
     public static final String METHOD_GET = "GET";
