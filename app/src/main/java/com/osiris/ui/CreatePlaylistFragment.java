@@ -13,6 +13,7 @@ import android.widget.EditText;
 import com.google.gson.JsonObject;
 import com.osiris.R;
 import com.osiris.api.CreatePlaylistAsync;
+import com.osiris.api.RESTClient;
 import com.osiris.api.listeners.CreatePlaylistAsyncListener;
 
 public class CreatePlaylistFragment extends Fragment {
@@ -57,8 +58,8 @@ public class CreatePlaylistFragment extends Fragment {
 
             new CreatePlaylistAsync(playlistJson, new CreatePlaylistAsyncListener() {
                 @Override
-                public void createdPlaylist(String result) {
-                    Log.i(TAG, result);
+                public void onComplete(RESTClient.RESTResponse response) {
+                    Log.i(TAG, response.getData());
                 }
             }).execute();
         }

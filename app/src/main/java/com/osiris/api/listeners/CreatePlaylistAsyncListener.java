@@ -1,5 +1,7 @@
 package com.osiris.api.listeners;
 
+import com.osiris.api.RESTClient;
+
 public interface CreatePlaylistAsyncListener {
-    void createdPlaylist(String result);
+    void onComplete(RESTClient.RESTResponse response);
 }
