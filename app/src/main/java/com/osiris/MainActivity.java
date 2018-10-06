@@ -1,6 +1,8 @@
 package com.osiris;
 
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
@@ -24,6 +26,7 @@ import com.osiris.ui.LibraryFragment;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.PlayerControllerListener;
 import com.osiris.ui.common.SongModel;
+import com.osiris.utility.CacheManager;
 
 import java.util.List;
 
@@ -121,6 +124,9 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     }
 
 
+    /**
+     * Media Connection and Browser callbacks
+     */
     public class MediaBrowserSubscriptionCallback extends MediaBrowserCompat.SubscriptionCallback {
 
         @Override
@@ -221,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
                 Log.i(TAG, "Library Fragment is not null");
                 libraryFragment.onMetadataChanged(metadata);
             }
-
 
         }
 

@@ -10,7 +10,7 @@ public class CreatePlaylistAsync extends RESTClient {
     private CreatePlaylistAsyncListener callbackListener;
 
     public CreatePlaylistAsync(JsonObject playlistJson, CreatePlaylistAsyncListener callbackListener) {
-        super(ApiConstants.CREATE_PLAYLIST(), "POST", playlistJson);
+        super(ApiConstants.CREATE_PLAYLIST(), ApiConstants.METHOD_POST, playlistJson);
         this.callbackListener = callbackListener;
     }
 

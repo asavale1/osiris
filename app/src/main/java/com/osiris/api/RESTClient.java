@@ -57,7 +57,7 @@ public class RESTClient extends AsyncTask<Void, Void, RESTClient.RESTResponse> {
 
             InputStream inputStream;
 
-            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            if (connection.getResponseCode() < 400) {
                 inputStream = new BufferedInputStream(connection.getInputStream());
             }else{
                 inputStream = new BufferedInputStream(connection.getErrorStream());

@@ -1,5 +1,7 @@
 package com.osiris.ui.library;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +24,7 @@ import com.osiris.api.listeners.GetUserPlaylistsAsyncListener;
 import com.osiris.constants.FragmentConstants;
 import com.osiris.ui.common.PlaylistModel;
 import com.osiris.ui.common.PlaylistRecyclerViewAdapter;
+import com.osiris.utility.CacheManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,37 +57,47 @@ public class PlaylistFragment extends Fragment {
             }
         });
 
-        new GetUserPlaylistsAsync(ApiConstants.GET_USER_PLAYLISTS("5bb150e937a28b2c670644e2"), new GetUserPlaylistsAsyncListener() {
-            @Override
-            public void gotPlaylists(String playlistsString) {
-                Log.i(TAG, "Playlists response: " + playlistsString);
-                try{
-                    JsonParser parser = new JsonParser();
-                    JsonArray jsonArray = parser.parse(playlistsString).getAsJsonArray();
 
-                    Gson gson = new Gson();
+        boolean reloadPlaylists = CacheManager.getInstance(getActivity()).readBool(getString(R.string.cache_reload_playlists), false);
 
-                    for(int i = 0; i < jsonArray.size(); i++){
-                        PlaylistModel playlist = new PlaylistModel();
-                        playlist.setId(jsonArray.get(i).getAsJsonObject().get("_id").getAsString());
-                        playlist.setTitle(jsonArray.get(i).getAsJsonObject().get("title").getAsString());
-                        playlist.setUserId(jsonArray.get(i).getAsJsonObject().get("userId").getAsString());
+        if(playlists.size() == 0 || reloadPlaylists){
+            playlists.clear();
+            new GetUserPlaylistsAsync(ApiConstants.GET_USER_PLAYLISTS("5bb150e937a28b2c670644e2"), new GetUserPlaylistsAsyncListener() {
+                @Override
+                public void gotPlaylists(String playlistsString) {
+                    Log.i(TAG, "Playlists response: " + playlistsString);
+                    try{
+                        JsonParser parser = new JsonParser();
+                        JsonArray jsonArray = parser.parse(playlistsString).getAsJsonArray();
 
-                        String [] songs = gson.fromJson(jsonArray.get(i).getAsJsonObject().get("songs").getAsJsonArray(), String [].class);
+                        Gson gson = new Gson();
 
-                        playlist.setSongs(songs);
-                        playlists.add(playlist);
+                        for(int i = 0; i < jsonArray.size(); i++){
+                            PlaylistModel playlist = new PlaylistModel();
+                            playlist.setId(jsonArray.get(i).getAsJsonObject().get("_id").getAsString());
+                            playlist.setTitle(jsonArray.get(i).getAsJsonObject().get("title").getAsString());
+                            playlist.setUserId(jsonArray.get(i).getAsJsonObject().get("userId").getAsString());
 
+                            String [] songs = gson.fromJson(jsonArray.get(i).getAsJsonObject().get("songs").getAsJsonArray(), String [].class);
+
+                            playlist.setSongs(songs);
+                            playlists.add(playlist);
+
+                        }
+
+                        CacheManager.getInstance(getActivity()).writeBool(getString(R.string.cache_reload_playlists), false);
+
+                        buildUI();
+
+
+                    }catch (IllegalStateException e){
+                        e.printStackTrace();
                     }
-
-                    buildUI();
-
-
-                }catch (IllegalStateException e){
-                    e.printStackTrace();
                 }
-            }
-        }).execute();
+            }).execute();
+        }else{
+            buildUI();
+        }
 
     }
 
@@ -94,6 +107,7 @@ public class PlaylistFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         PlaylistRecyclerViewAdapter adapter = new PlaylistRecyclerViewAdapter(getContext(), playlists, itemClickListener);
         recyclerView.setAdapter(adapter);
+
         Log.i(TAG, "Playlists size: " + playlists.size() );
     }
 

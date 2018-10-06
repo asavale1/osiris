@@ -4,4 +4,7 @@
     <string name="next_song">Next Song</string>
     <string name="play_pause_song">Play/Pause Song</string>
     <string name="previous_song">Previous Song</string>
+
+    <string name="cache">OsirisCache</string>
+    <string name="cache_reload_playlists">reload_playlists</string>
 </resources>
