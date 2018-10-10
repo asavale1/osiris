@@ -11,8 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.osiris.MainActivity;
 import com.osiris.R;
 import com.osiris.api.CreatePlaylistAsync;
@@ -24,22 +27,17 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class CreatePlaylistFragment extends Fragment {
 
-    private View view;
     private EditText playlistTitle;
-    private Button cancel, create;
-
+    private TextView errorMessage;
 
     private static final String TAG = CreatePlaylistFragment.class.getName();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_create_playlist,
+        return inflater.inflate(R.layout.fragment_create_playlist,
                 container, false);
 
-
-
-        return view;
     }
 
     @Override
@@ -47,16 +45,14 @@ public class CreatePlaylistFragment extends Fragment {
 
 
         playlistTitle = view.findViewById(R.id.playlist_title);
-        cancel = view.findViewById(R.id.cancel_action);
-        cancel.setOnClickListener(cancelClickListener);
-        create = view.findViewById(R.id.create_action);
-        create.setOnClickListener(createClickListener);
+        errorMessage = view.findViewById(R.id.error_message);
+        view.findViewById(R.id.cancel_action).setOnClickListener(cancelClickListener);
+        view.findViewById(R.id.create_action).setOnClickListener(createClickListener);
     }
 
     View.OnClickListener cancelClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Log.i(TAG, "Cancel create");
             getFragmentManager().popBackStack();
         }
     };
@@ -71,20 +67,16 @@ public class CreatePlaylistFragment extends Fragment {
             new CreatePlaylistAsync(playlistJson, new CreatePlaylistAsyncListener() {
                 @Override
                 public void onComplete(RESTClient.RESTResponse response) {
-                    Log.i(TAG, response.getData());
 
                     if(response.getStatus() == HttpsURLConnection.HTTP_CREATED){
-                        /*SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putBoolean(getString(R.string.cache_reload_playlists), true);
-                        editor.commit();*/
                         CacheManager.getInstance(getActivity()).writeBool(getString(R.string.cache_reload_playlists), true);
-                        Log.i(TAG, "Success");
-
                         getFragmentManager().popBackStack();
 
                     }else{
-                        Log.i(TAG, "Failure");
+                        JsonParser parser = new JsonParser();
+                        JsonObject jsonObject = parser.parse(response.getData()).getAsJsonObject();
+
+                        errorMessage.setText(jsonObject.get("error").getAsString());
                     }
                 }
             }).execute();
