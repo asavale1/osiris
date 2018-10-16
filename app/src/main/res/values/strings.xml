@@ -7,4 +7,5 @@
 
     <string name="cache">OsirisCache</string>
     <string name="cache_reload_playlists">reload_playlists</string>
+    <string name="cache_user_id">user_id</string>
 </resources>

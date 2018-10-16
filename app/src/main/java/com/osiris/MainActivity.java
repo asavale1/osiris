@@ -25,6 +25,7 @@ import com.osiris.ui.CreatePlaylistFragment;
 import com.osiris.ui.LibraryFragment;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.PlayerControllerListener;
+import com.osiris.ui.VerifyAccountFragment;
 import com.osiris.ui.common.SongModel;
 import com.osiris.utility.CacheManager;
 
@@ -51,7 +52,12 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
         fragmentManager = getSupportFragmentManager();
 
-        replaceFragment(FragmentConstants.FRAGMENT_LIBRARY);
+        String userId = CacheManager.getInstance(this).readString(getString(R.string.cache_user_id), "");
+        if(userId.isEmpty()){
+            replaceFragment(FragmentConstants.FRAGMENT_VERIFY_ACCOUNT);
+        }else{
+            replaceFragment(FragmentConstants.FRAGMENT_LIBRARY);
+        }
     }
 
     public void replaceFragment(int fragmentType){
@@ -66,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
             case FragmentConstants.FRAGMENT_CREATE_PLAYLIST:
                 Log.i(TAG, "Create Playlist Fragment");
                 fragment = new CreatePlaylistFragment();
+                break;
+            case FragmentConstants.FRAGMENT_VERIFY_ACCOUNT:
+                fragment = new VerifyAccountFragment();
                 break;
             default:
                 fragment = null;

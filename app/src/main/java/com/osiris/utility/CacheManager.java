@@ -26,6 +26,16 @@ public class CacheManager {
        return sharedPreferences.getBoolean(key, defaultValue);
     }
 
+    public void writeString(String key, String value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
+
+    public String readString(String key, String defaultValue){
+        return sharedPreferences.getString(key, defaultValue);
+    }
+
 
     // static method to create instance of Singleton class
     public static CacheManager getInstance(Activity activity)
