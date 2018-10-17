@@ -61,14 +61,13 @@ public class VerifyAccountFragment extends Fragment {
                     public void onComplete(RESTClient.RESTResponse response) {
 
                         JsonParser parser = new JsonParser();
+                        JsonObject jsonObject = parser.parse(response.getData()).getAsJsonObject();
 
                         if(response.getStatus() == HttpsURLConnection.HTTP_OK){
-                            JsonObject jsonObject = parser.parse(response.getData()).getAsJsonObject();
                             CacheManager.getInstance(parentActivity).writeString(getString(R.string.cache_user_id), jsonObject.get("id").getAsString());
                             parentActivity.replaceFragment(FragmentConstants.FRAGMENT_LIBRARY);
                         }else{
 
-                            JsonObject jsonObject = parser.parse(response.getData()).getAsJsonObject();
                             errorMessage.setText(jsonObject.get("error").getAsString());
                         }
 

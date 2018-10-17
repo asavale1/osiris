@@ -1,12 +1,15 @@
 package com.osiris.ui.library;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,6 +22,7 @@ import com.osiris.api.listeners.GetSongsAsyncListener;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.common.SongModel;
 import com.osiris.ui.common.SongRecyclerViewAdapter;
+import com.osiris.ui.dialog.AddToPlaylistDialog;
 
 
 import java.util.ArrayList;
@@ -91,7 +95,31 @@ public class BrowseFragment extends Fragment {
     private SongRecyclerViewAdapter.ItemClickListener itemClickListener = new SongRecyclerViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            libraryFragmentListener.addSongToQueue(songs.get(position));
+            PopupMenu popup = new PopupMenu(getActivity(), view);
+            popup.inflate(R.menu.options_menu);
+
+            final SongModel selectedSong = songs.get(position);
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.add_to_playlist:
+                            //handle menu1 click
+                            Dialog dialog = new AddToPlaylistDialog(getActivity(), selectedSong.getId());//new Dialog(getActivity());
+                            //dialog.setContentView(R.layout.dialog_select_playlist);
+                            //dialog.setTitle("Title...");
+                            dialog.show();
+                            return true;
+                        case R.id.add_to_queue:
+                            libraryFragmentListener.addSongToQueue(selectedSong);
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+            popup.show();
+
         }
     };
 }
