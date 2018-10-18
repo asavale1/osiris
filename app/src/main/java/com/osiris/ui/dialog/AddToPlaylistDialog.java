@@ -111,7 +111,9 @@ public class AddToPlaylistDialog extends Dialog {
                     JsonParser parser = new JsonParser();
 
                     if(response.getStatus() == HttpsURLConnection.HTTP_OK){
-
+                        JsonObject jsonObject = parser.parse(response.getData()).getAsJsonObject();
+                        Toast.makeText(activity, jsonObject.get("message").getAsString(), Toast.LENGTH_LONG).show();
+                        dismiss();
                     }else{
                         JsonObject jsonObject = parser.parse(response.getData()).getAsJsonObject();
                         Toast.makeText(activity, jsonObject.get("error").getAsString(), Toast.LENGTH_LONG).show();
