@@ -42,6 +42,7 @@ public class QueueFragment extends Fragment {
             if(songs != null){
                 Log.i(TAG, "Songs size: " + songs.size());
                 buildUI();
+
             }
         }
     }
@@ -91,6 +92,12 @@ public class QueueFragment extends Fragment {
         view.findViewById(R.id.button_next).setOnClickListener(controllerClickListener);
 
         songTitle = view.findViewById(R.id.song_title);
+
+        if(libraryFragmentListener != null){
+            MediaMetadataCompat metadata = libraryFragmentListener.getCurrentMediaMetadata();
+            if(metadata != null)
+                songTitle.setText(metadata.getDescription().getTitle());
+        }
     }
 
 
@@ -139,6 +146,7 @@ public class QueueFragment extends Fragment {
     };
 
     public void onMetadataChanged(MediaMetadataCompat metadata){
+        Log.i(TAG, "In onMetadataChanged");
         songTitle.setText(metadata.getDescription().getTitle());
         songTitle.setSelected(true);
     }

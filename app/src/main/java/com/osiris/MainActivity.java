@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
             LibraryFragment libraryFragment = isLibraryFragmentVisible();
             if(libraryFragment != null){
-                Log.i(TAG, "Library Fragment is not null");
+                //Log.i(TAG, "Library Fragment is not null");
                 libraryFragment.onPlaybackStateChanged(state);
             }
 
@@ -302,6 +302,17 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     @Override
     public List<MediaSessionCompat.QueueItem> getQueue(){
         return getOsirisMediaController().getQueue();
+    }
+
+    @Override
+    public MediaMetadataCompat getCurrentMediaMetadata(){
+        Log.i(TAG, "Get Current mEDIA METADATA");
+        MediaMetadataCompat mediaMetadataCompat = getOsirisMediaController().getMetadata();
+        if(mediaMetadataCompat != null)
+            Log.i(TAG, "Current Song: " + mediaMetadataCompat.getDescription().getTitle());
+        else
+            Log.i(TAG, "MediaMetadata is null");
+        return mediaMetadataCompat;
     }
 
 
