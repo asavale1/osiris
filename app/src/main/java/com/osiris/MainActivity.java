@@ -26,7 +26,9 @@ import com.osiris.ui.LibraryFragment;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.PlayerControllerListener;
 import com.osiris.ui.VerifyAccountFragment;
+import com.osiris.ui.common.PlaylistDetailedModel;
 import com.osiris.ui.common.SongModel;
+import com.osiris.ui.library.ViewPlaylistFragment;
 import com.osiris.utility.CacheManager;
 
 import java.util.List;
@@ -54,13 +56,13 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
         String userId = CacheManager.getInstance(this).readString(getString(R.string.cache_user_id), "");
         if(userId.isEmpty()){
-            replaceFragment(FragmentConstants.FRAGMENT_VERIFY_ACCOUNT);
+            replaceFragment(FragmentConstants.FRAGMENT_VERIFY_ACCOUNT, null);
         }else{
-            replaceFragment(FragmentConstants.FRAGMENT_LIBRARY);
+            replaceFragment(FragmentConstants.FRAGMENT_LIBRARY, null);
         }
     }
 
-    public void replaceFragment(int fragmentType){
+    public void replaceFragment(int fragmentType, Bundle bundle){
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         Fragment fragment;
@@ -76,12 +78,20 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
             case FragmentConstants.FRAGMENT_VERIFY_ACCOUNT:
                 fragment = new VerifyAccountFragment();
                 break;
+            case FragmentConstants.FRAGMENT_VIEW_PLAYLIST:
+                fragment = new ViewPlaylistFragment();
+                break;
             default:
                 fragment = null;
                 break;
         }
 
         if(fragment != null){
+
+            if(bundle != null) {
+                Log.i(TAG, "Bundle is not null");
+                fragment.setArguments(bundle);
+            }
 
             if(fragmentManager.getFragments().size() == 0){
                 fragmentTransaction.add(R.id.fragment_container, fragment);
@@ -278,10 +288,15 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
         Bundle bundle = new Bundle();
         bundle.putString("songModel", new Gson().toJson(songModel));
-
         getOsirisMediaController().sendCommand("addSongToQueue", bundle, null);
 
+    }
 
+    @Override
+    public void addPlaylistToQueue(PlaylistDetailedModel playlist){
+        Bundle bundle = new Bundle();
+        bundle.putString("playlistModel", new Gson().toJson(playlist));
+        getOsirisMediaController().sendCommand("addPlaylistToQueue", bundle, null);
     }
 
     @Override

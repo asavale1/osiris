@@ -10,6 +10,7 @@ import android.util.Log;
 
 
 import com.google.gson.Gson;
+import com.osiris.ui.common.PlaylistDetailedModel;
 import com.osiris.ui.common.SongModel;
 
 import java.util.ArrayList;
@@ -163,6 +164,18 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
                 SongModel songModel = new Gson().fromJson(songModelJson, SongModel.class);
                 if(musicLibrary.addSongToMediaItems(songModel))
                     onAddQueueItem(musicLibrary.getMediaItem(songModel.getId()).getDescription());
+                break;
+            case "addPlaylistToQueue":
+                Log.i(TAG, "Add Playlist To Queue");
+                String playlistJson = extras.getString("playlistModel");
+                PlaylistDetailedModel playlistModel = new Gson().fromJson(playlistJson, PlaylistDetailedModel.class);
+                if(musicLibrary.addPlaylistToMediaItems(playlistModel)){
+                    for(SongModel song : playlistModel.getSongs()){
+                        Log.i(TAG, "On Add item queue: " + song.getTitle());
+                        onAddQueueItem(musicLibrary.getMediaItem(song.getId()).getDescription());
+                    }
+                }
+
                 break;
         }
 

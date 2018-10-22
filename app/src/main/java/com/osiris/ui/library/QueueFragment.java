@@ -39,6 +39,7 @@ public class QueueFragment extends Fragment {
         if(libraryFragmentListener != null){
             songs = libraryFragmentListener.getQueue();
             if(songs != null){
+                Log.i(TAG, "Songs size: " + songs.size());
                 buildUI();
             }
         }
@@ -67,6 +68,7 @@ public class QueueFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.songs_recycler_view);
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        Log.i(TAG, "In build UI: " + songs.size());
         QueueRecyclerViewAdapter adapter = new QueueRecyclerViewAdapter(getContext(), songs, itemClickListener);
         recyclerView.setAdapter(adapter);
 

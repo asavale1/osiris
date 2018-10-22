@@ -3,6 +3,7 @@ package com.osiris.ui.library;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -36,7 +37,7 @@ public class BrowseFragment extends Fragment {
     private LibraryFragmentListener libraryFragmentListener;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_browse,
                 container, false);
@@ -96,7 +97,7 @@ public class BrowseFragment extends Fragment {
         @Override
         public void onItemClick(View view, int position) {
             PopupMenu popup = new PopupMenu(getActivity(), view);
-            popup.inflate(R.menu.options_menu);
+            popup.inflate(R.menu.options_browse_fragment);
 
             final SongModel selectedSong = songs.get(position);
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -105,9 +106,7 @@ public class BrowseFragment extends Fragment {
                     switch (item.getItemId()) {
                         case R.id.add_to_playlist:
                             //handle menu1 click
-                            Dialog dialog = new AddToPlaylistDialog(getActivity(), selectedSong.getId());//new Dialog(getActivity());
-                            //dialog.setContentView(R.layout.dialog_select_playlist);
-                            //dialog.setTitle("Title...");
+                            Dialog dialog = new AddToPlaylistDialog(getActivity(), selectedSong.getId());
                             dialog.show();
                             return true;
                         case R.id.add_to_queue:

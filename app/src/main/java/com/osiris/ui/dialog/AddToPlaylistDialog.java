@@ -37,7 +37,7 @@ public class AddToPlaylistDialog extends Dialog {
     private final static String TAG = AddToPlaylistDialog.class.getName();
 
     private List<PlaylistModel> playlists = new ArrayList<>();
-    private String songId;
+    private String songId, userId;
     private Activity activity;
 
     public AddToPlaylistDialog(Activity activity, String songId){
@@ -45,11 +45,13 @@ public class AddToPlaylistDialog extends Dialog {
         setContentView(R.layout.dialog_select_playlist);
         this.songId = songId;
         this.activity = activity;
+        this.userId = CacheManager.getInstance(activity).readString(activity.getString(R.string.cache_user_id), "");
+
         preprocessUI();
     }
 
     private void preprocessUI(){
-        new GetUserPlaylistsAsync(ApiConstants.GET_USER_PLAYLISTS("5bb150e937a28b2c670644e2"), new GetUserPlaylistsAsyncListener() {
+        new GetUserPlaylistsAsync(ApiConstants.GET_USER_PLAYLISTS(userId), new GetUserPlaylistsAsyncListener() {
             @Override
             public void gotPlaylists(String playlistsString) {
                 try{
@@ -91,17 +93,12 @@ public class AddToPlaylistDialog extends Dialog {
     private PlaylistRecyclerViewAdapter.ItemClickListener itemClickListener = new PlaylistRecyclerViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            String userId = CacheManager.getInstance(activity).readString(activity.getString(R.string.cache_user_id), "");
             String playlistId = playlists.get(position).getId();
 
-            Log.i(TAG, "Playlist selected");
-
-            Log.i(TAG, "UserId: " + userId);
-            Log.i(TAG, "PlaylistId: " + playlistId);
-            Log.i(TAG, "SongId: " + songId);
             JsonObject requestBody = new JsonObject();
             requestBody.addProperty("userId", userId);
             requestBody.addProperty("songId", songId);
+
             new AddSongToPlaylistAsync(playlistId, requestBody, new AddSongToPlaylistAsyncListener() {
                 @Override
                 public void onComplete(RESTClient.RESTResponse response) {

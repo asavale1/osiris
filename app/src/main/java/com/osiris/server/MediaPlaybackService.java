@@ -45,15 +45,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         mediaSession.setCallback(new MediaSessionCallback(MediaPlaybackService.this, mediaSession, mediaPlayerAdapter, musicLibrary));
         setSessionToken(mediaSession.getSessionToken());
 
-        /*PlaybackStateCompat.Builder stateBuilder = new PlaybackStateCompat.Builder();
-        stateBuilder.setActions(PlaybackStateCompat.ACTION_SKIP_TO_NEXT);
-
-
-
-        mediaSession.setPlaybackState(stateBuilder.build());*/
-
-
-
         Log.i(TAG, "Session Token: " + mediaSession.getSessionToken().describeContents());
 
         mediaNotificationManager = new MediaNotificationManager(this);

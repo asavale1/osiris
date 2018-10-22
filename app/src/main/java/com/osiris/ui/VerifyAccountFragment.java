@@ -65,7 +65,7 @@ public class VerifyAccountFragment extends Fragment {
 
                         if(response.getStatus() == HttpsURLConnection.HTTP_OK){
                             CacheManager.getInstance(parentActivity).writeString(getString(R.string.cache_user_id), jsonObject.get("id").getAsString());
-                            parentActivity.replaceFragment(FragmentConstants.FRAGMENT_LIBRARY);
+                            parentActivity.replaceFragment(FragmentConstants.FRAGMENT_LIBRARY, null);
                         }else{
 
                             errorMessage.setText(jsonObject.get("error").getAsString());

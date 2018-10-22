@@ -53,7 +53,7 @@ public class PlaylistFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Add playlist clicked");
-                ((MainActivity) getActivity()).replaceFragment(FragmentConstants.FRAGMENT_CREATE_PLAYLIST);
+                ((MainActivity) getActivity()).replaceFragment(FragmentConstants.FRAGMENT_CREATE_PLAYLIST, null);
             }
         });
 
@@ -114,7 +114,9 @@ public class PlaylistFragment extends Fragment {
     private PlaylistRecyclerViewAdapter.ItemClickListener itemClickListener = new PlaylistRecyclerViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-
+            Bundle bundle = new Bundle();
+            bundle.putString("playlistId", playlists.get(position).getId());
+            ((MainActivity) getActivity()).replaceFragment(FragmentConstants.FRAGMENT_VIEW_PLAYLIST, bundle);
         }
     };
 
