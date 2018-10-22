@@ -36,6 +36,9 @@ class MusicLibrary {
 
     boolean addPlaylistToMediaItems(PlaylistDetailedModel playlist){
         try {
+
+            mediaItems.clear();
+
             for (SongModel songModel : playlist.getSongs()) {
                 if (mediaItems.get(songModel.getId()) == null) {
                     MediaMetadataCompat song = new MediaMetadataCompat.Builder()

@@ -118,6 +118,7 @@ public class ViewPlaylistFragment extends Fragment {
                 public void onClick(View v) {
                     Log.i(TAG, "Play button clicked");
                     libraryFragmentListener.addPlaylistToQueue(playlist);
+                    getFragmentManager().popBackStack();
                 }
             });
         }else{

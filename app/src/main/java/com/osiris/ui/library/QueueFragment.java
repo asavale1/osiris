@@ -36,6 +36,7 @@ public class QueueFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         Log.i(TAG, "Is visible to user: " + isVisibleToUser);
+
         if(libraryFragmentListener != null){
             songs = libraryFragmentListener.getQueue();
             if(songs != null){
@@ -59,16 +60,25 @@ public class QueueFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.i(TAG, "In onViewCreated");
+        //buildUI();
+
+        if(libraryFragmentListener != null){
+            songs = libraryFragmentListener.getQueue();
+            if(songs != null){
+                Log.i(TAG, "Songs size: " + songs.size());
+                buildUI();
+            }
+        }
 
     }
 
     private void buildUI(){
+        Log.i(TAG, "In build UI: " + songs.size());
 
         view.findViewById(R.id.linear_layout).setVisibility(View.VISIBLE);
         RecyclerView recyclerView = view.findViewById(R.id.songs_recycler_view);
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        Log.i(TAG, "In build UI: " + songs.size());
         QueueRecyclerViewAdapter adapter = new QueueRecyclerViewAdapter(getContext(), songs, itemClickListener);
         recyclerView.setAdapter(adapter);
 
@@ -87,8 +97,10 @@ public class QueueFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.i(TAG, "In onAttach");
         if (context instanceof LibraryFragmentListener) {
             libraryFragmentListener = (LibraryFragmentListener) context;
+
         } else {
             throw new ClassCastException(context.toString()
                     + " must implemenet LibraryFragmentListener");

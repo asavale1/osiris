@@ -167,13 +167,25 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
                 break;
             case "addPlaylistToQueue":
                 Log.i(TAG, "Add Playlist To Queue");
+
                 String playlistJson = extras.getString("playlistModel");
                 PlaylistDetailedModel playlistModel = new Gson().fromJson(playlistJson, PlaylistDetailedModel.class);
+
                 if(musicLibrary.addPlaylistToMediaItems(playlistModel)){
+
+                    onPause();
+
+                    playlist.clear();
+                    queueIndex = -1;
+
                     for(SongModel song : playlistModel.getSongs()){
                         Log.i(TAG, "On Add item queue: " + song.getTitle());
                         onAddQueueItem(musicLibrary.getMediaItem(song.getId()).getDescription());
                     }
+
+
+                    onPrepare();
+                    onPlay();
                 }
 
                 break;
