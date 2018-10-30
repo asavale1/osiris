@@ -9,69 +9,56 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import com.osiris.R;
-import com.osiris.api.ApiConstants;
-import com.osiris.api.GetSongsAsync;
-import com.osiris.api.listeners.GetSongsAsyncListener;
+import com.osiris.api.RESTClient;
+import com.osiris.api.SearchSongsAsync;
+import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.common.SongModel;
 import com.osiris.ui.common.SongRecyclerViewAdapter;
 import com.osiris.ui.dialog.AddToPlaylistDialog;
 
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class BrowseFragment extends Fragment {
 
-    private View view;
     private static final String TAG = BrowseFragment.class.getName();
     private List<SongModel> songs = new ArrayList<>();
     private LibraryFragmentListener libraryFragmentListener;
+    private EditText searchEditText;
+    private RecyclerView songsRecyclerView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_browse,
+        return inflater.inflate(R.layout.fragment_browse,
                 container, false);
-        Log.i(TAG, "In onCreateView");
-        return view;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        new GetSongsAsync(ApiConstants.GET_ALL_SONGS, new GetSongsAsyncListener() {
-            @Override
-            public void gotSongs(String songsString) {
+        searchEditText = view.findViewById(R.id.search_query);
+        songsRecyclerView = view.findViewById(R.id.songs_recycler_view);
+        songsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-                try{
-                    JsonParser parser = new JsonParser();
-                    JsonArray jsonArray = parser.parse(songsString).getAsJsonArray();
+        buildUI();
 
-                    for(int i = 0; i < jsonArray.size(); i++){
-                        SongModel song = new SongModel();
-                        song.setTitle(jsonArray.get(i).getAsJsonObject().get("title").getAsString());
-                        song.setId(jsonArray.get(i).getAsJsonObject().get("_id").getAsString());
-                        song.setAlbum(jsonArray.get(i).getAsJsonObject().get("album").getAsString());
-                        song.setFileUrl(jsonArray.get(i).getAsJsonObject().get("fileUrl").getAsString());
-                        songs.add(song);
-                    }
-
-                    buildUI();
-                }catch (IllegalStateException e){
-                    e.printStackTrace();
-                }
-
-            }
-        }).execute();
     }
 
     @Override
@@ -87,16 +74,25 @@ public class BrowseFragment extends Fragment {
 
     private void buildUI(){
 
-        RecyclerView recyclerView = view.findViewById(R.id.songs_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    songs.clear();
+                    searchSongs(searchEditText.getText().toString());
+                }
+                return false;
+            }
+        });
+
         SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), songs, itemClickListener);
-        recyclerView.setAdapter(adapter);
+        songsRecyclerView.swapAdapter(adapter, false);
     }
 
     private SongRecyclerViewAdapter.ItemClickListener itemClickListener = new SongRecyclerViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            PopupMenu popup = new PopupMenu(getActivity(), view);
+            PopupMenu popup = new PopupMenu(Objects.requireNonNull(getActivity()), view);
             popup.inflate(R.menu.options_browse_fragment);
 
             final SongModel selectedSong = songs.get(position);
@@ -105,7 +101,6 @@ public class BrowseFragment extends Fragment {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.add_to_playlist:
-                            //handle menu1 click
                             Dialog dialog = new AddToPlaylistDialog(getActivity(), selectedSong.getId());
                             dialog.show();
                             return true;
@@ -121,4 +116,35 @@ public class BrowseFragment extends Fragment {
 
         }
     };
+
+    private void searchSongs(String searchQuery){
+        new SearchSongsAsync(searchQuery, new RESTCallbackListener() {
+            @Override
+            public void onComplete(RESTClient.RESTResponse response) {
+                Log.i(TAG, "Status: " +response.getStatus());
+                Log.i(TAG, "Response: " + response.getData());
+
+                if(response.getStatus() == HttpsURLConnection.HTTP_OK){
+                    try{
+                        JsonParser parser = new JsonParser();
+                        JsonArray jsonArray = parser.parse(response.getData()).getAsJsonArray();
+
+                        for(int i = 0; i < jsonArray.size(); i++){
+                            SongModel song = new SongModel();
+                            song.setTitle(jsonArray.get(i).getAsJsonObject().get("title").getAsString());
+                            song.setId(jsonArray.get(i).getAsJsonObject().get("_id").getAsString());
+                            song.setAlbum(jsonArray.get(i).getAsJsonObject().get("album").getAsString());
+                            song.setFileUrl(jsonArray.get(i).getAsJsonObject().get("fileUrl").getAsString());
+                            songs.add(song);
+                        }
+
+                        buildUI();
+                    }catch (IllegalStateException e){
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }).execute();
+    }
 }
