@@ -11,8 +11,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.osiris.R;
@@ -42,7 +44,6 @@ public class QueueFragment extends Fragment {
             if(songs != null){
                 Log.i(TAG, "Songs size: " + songs.size());
                 buildUI();
-
             }
         }
     }
@@ -152,12 +153,13 @@ public class QueueFragment extends Fragment {
     }
 
     public void onPlaybackStateChanged(PlaybackStateCompat state){
-        Log.i(TAG, "In onPlaybackStateChanged");
         if(state == null)
             return;
 
-        Log.i(TAG, "playbackState is not null");
-
-        playPauseButton.setPressed((state.getState() == PlaybackStateCompat.STATE_PLAYING));
+        if(PlaybackStateCompat.STATE_PLAYING == state.getState()){
+            playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+        }else{
+            playPauseButton.setImageResource(android.R.drawable.ic_media_play);
+        }
     }
 }

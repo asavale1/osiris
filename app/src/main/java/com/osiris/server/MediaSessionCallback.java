@@ -155,6 +155,7 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
                 this.queueIndex = extras.getInt("queueIndex");
 
+                onPause();
                 preparedMedia = null;
                 onPlay();
 

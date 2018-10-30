@@ -55,7 +55,7 @@ public class LibraryFragment extends Fragment {
         Log.i(TAG, "In onSongMetadataChanged");
         int itemId = viewPager.getCurrentItem();
         switch (itemId){
-            case 1:
+            case 2:
                 QueueFragment queueFragment = (QueueFragment) getChildFragmentManager().findFragmentById(R.id.viewpager);
                 queueFragment.onMetadataChanged(metadata);
                 break;
@@ -68,7 +68,7 @@ public class LibraryFragment extends Fragment {
 
         int itemId = viewPager.getCurrentItem();
         switch (itemId){
-            case 1:
+            case 2:
                 QueueFragment queueFragment = (QueueFragment) getChildFragmentManager().findFragmentById(R.id.viewpager);
                 queueFragment.onPlaybackStateChanged(state);
                 break;

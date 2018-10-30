@@ -253,10 +253,15 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
             Log.i(TAG, "In onPlaybackStateChanged");
 
+
             LibraryFragment libraryFragment = isLibraryFragmentVisible();
+
             if(libraryFragment != null){
                 //Log.i(TAG, "Library Fragment is not null");
+                Log.i(TAG, "Library Fragment Is Visible" );
                 libraryFragment.onPlaybackStateChanged(state);
+            }else{
+                Log.i(TAG, "Library Fragment Is Not Visible" );
             }
 
         }
@@ -275,6 +280,7 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
      */
     @Override
     public void playSongAt(int queueIndex){
+        Log.i(TAG, "In playSongAt");
         Bundle bundle = new Bundle();
         bundle.putInt("queueIndex", queueIndex);
         getOsirisMediaController().sendCommand("playSongAt", bundle, null);
@@ -322,6 +328,7 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
     @Override
     public void onPlayPauseSong() {
+        Log.i(TAG, "In onPlayPauseSong");
         if(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING){
             getTransportControls().play();
         }else if(getPlaybackState() != -1){
