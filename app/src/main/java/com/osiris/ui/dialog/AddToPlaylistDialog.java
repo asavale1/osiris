@@ -2,14 +2,10 @@ package com.osiris.ui.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -18,11 +14,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.osiris.R;
 import com.osiris.api.AddSongToPlaylistAsync;
-import com.osiris.api.ApiConstants;
 import com.osiris.api.GetUserPlaylistsAsync;
 import com.osiris.api.RESTClient;
-import com.osiris.api.listeners.AddSongToPlaylistAsyncListener;
-import com.osiris.api.listeners.GetUserPlaylistsAsyncListener;
 import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.ui.common.PlaylistModel;
 import com.osiris.ui.common.PlaylistRecyclerViewAdapter;
@@ -103,7 +96,7 @@ public class AddToPlaylistDialog extends Dialog {
             requestBody.addProperty("userId", userId);
             requestBody.addProperty("songId", songId);
 
-            new AddSongToPlaylistAsync(playlistId, requestBody, new AddSongToPlaylistAsyncListener() {
+            new AddSongToPlaylistAsync(playlistId, requestBody, new RESTCallbackListener() {
                 @Override
                 public void onComplete(RESTClient.RESTResponse response) {
                     Log.i(TAG, "Status: " + response.getStatus());

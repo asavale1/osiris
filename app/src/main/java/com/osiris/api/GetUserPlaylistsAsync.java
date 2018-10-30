@@ -1,17 +1,6 @@
 package com.osiris.api;
 
-import android.os.AsyncTask;
-import android.util.Log;
-
-import com.osiris.api.listeners.GetUserPlaylistsAsyncListener;
 import com.osiris.api.listeners.RESTCallbackListener;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class GetUserPlaylistsAsync extends RESTClient {
 

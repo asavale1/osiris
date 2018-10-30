@@ -1,15 +1,15 @@
 package com.osiris.api;
 
 import com.google.gson.JsonObject;
-import com.osiris.api.listeners.CreatePlaylistAsyncListener;
+import com.osiris.api.listeners.RESTCallbackListener;
 
 public class CreatePlaylistAsync extends RESTClient {
 
     private static final String TAG = CreatePlaylistAsync.class.getName();
 
-    private CreatePlaylistAsyncListener callbackListener;
+    private RESTCallbackListener callbackListener;
 
-    public CreatePlaylistAsync(JsonObject playlistJson, CreatePlaylistAsyncListener callbackListener) {
+    public CreatePlaylistAsync(JsonObject playlistJson, RESTCallbackListener callbackListener) {
         super(ApiConstants.CREATE_PLAYLIST(), ApiConstants.METHOD_POST, playlistJson);
         this.callbackListener = callbackListener;
     }

@@ -1,26 +1,20 @@
 package com.osiris.ui;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.osiris.MainActivity;
 import com.osiris.R;
 import com.osiris.api.CreatePlaylistAsync;
 import com.osiris.api.RESTClient;
-import com.osiris.api.listeners.CreatePlaylistAsyncListener;
+import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.utility.CacheManager;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -64,7 +58,7 @@ public class CreatePlaylistFragment extends Fragment {
             playlistJson.addProperty("title", playlistTitle.getText().toString());
             playlistJson.addProperty("userId", "5bb150e937a28b2c670644e2");
 
-            new CreatePlaylistAsync(playlistJson, new CreatePlaylistAsyncListener() {
+            new CreatePlaylistAsync(playlistJson, new RESTCallbackListener() {
                 @Override
                 public void onComplete(RESTClient.RESTResponse response) {
 

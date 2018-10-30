@@ -1,13 +1,13 @@
 package com.osiris.api;
 
 import com.google.gson.JsonObject;
-import com.osiris.api.listeners.VerifyAccountAsyncListener;
+import com.osiris.api.listeners.RESTCallbackListener;
 
 public class VerifyAccountAsync extends RESTClient {
 
-    private VerifyAccountAsyncListener callbackListener;
+    private RESTCallbackListener callbackListener;
 
-    public VerifyAccountAsync(JsonObject requestBody, VerifyAccountAsyncListener callbackListener) {
+    public VerifyAccountAsync(JsonObject requestBody, RESTCallbackListener callbackListener) {
         super(ApiConstants.VERIFY_ACCOUNT(), ApiConstants.METHOD_POST, requestBody);
         this.callbackListener = callbackListener;
     }

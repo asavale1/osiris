@@ -16,7 +16,7 @@ import com.osiris.MainActivity;
 import com.osiris.R;
 import com.osiris.api.RESTClient;
 import com.osiris.api.VerifyAccountAsync;
-import com.osiris.api.listeners.VerifyAccountAsyncListener;
+import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.constants.FragmentConstants;
 import com.osiris.utility.CacheManager;
 
@@ -56,7 +56,7 @@ public class VerifyAccountFragment extends Fragment {
             if(!pin.isEmpty()){
                 JsonObject verifyJson = new JsonObject();
                 verifyJson.addProperty("pin", Integer.parseInt(verificationPin.getText().toString()));
-                new VerifyAccountAsync(verifyJson, new VerifyAccountAsyncListener() {
+                new VerifyAccountAsync(verifyJson, new RESTCallbackListener() {
                     @Override
                     public void onComplete(RESTClient.RESTResponse response) {
 

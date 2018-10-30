@@ -1,7 +1,5 @@
 package com.osiris.ui.library;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -18,10 +16,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import com.osiris.MainActivity;
 import com.osiris.R;
-import com.osiris.api.ApiConstants;
 import com.osiris.api.GetUserPlaylistsAsync;
 import com.osiris.api.RESTClient;
-import com.osiris.api.listeners.GetUserPlaylistsAsyncListener;
 import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.constants.FragmentConstants;
 import com.osiris.ui.common.PlaylistModel;
