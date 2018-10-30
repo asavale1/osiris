@@ -1,13 +1,12 @@
 package com.osiris.api;
 
-import com.google.gson.JsonObject;
-import com.osiris.api.listeners.GetPlaylistAsyncListener;
+import com.osiris.api.listeners.RESTCallbackListener;
 
 public class GetPlaylistAsync extends RESTClient {
 
-    private GetPlaylistAsyncListener callbackListener;
+    private RESTCallbackListener callbackListener;
 
-    public GetPlaylistAsync(String playlistId, boolean detailed, GetPlaylistAsyncListener callbackListener) {
+    public GetPlaylistAsync(String playlistId, boolean detailed, RESTCallbackListener callbackListener) {
         super(ApiConstants.GET_PLAYLIST(playlistId, detailed), ApiConstants.METHOD_GET, null);
         this.callbackListener = callbackListener;
     }

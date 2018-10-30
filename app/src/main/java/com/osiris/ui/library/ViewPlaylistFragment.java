@@ -21,7 +21,7 @@ import com.google.gson.JsonParser;
 import com.osiris.R;
 import com.osiris.api.GetPlaylistAsync;
 import com.osiris.api.RESTClient;
-import com.osiris.api.listeners.GetPlaylistAsyncListener;
+import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.common.PlaylistDetailedModel;
 import com.osiris.ui.common.SongModel;
@@ -55,7 +55,7 @@ public class ViewPlaylistFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        new GetPlaylistAsync(playlistId, true, new GetPlaylistAsyncListener() {
+        new GetPlaylistAsync(playlistId, true, new RESTCallbackListener() {
             @Override
             public void onComplete(RESTClient.RESTResponse response) {
                 Log.i(TAG, "Status: " + response.getStatus());

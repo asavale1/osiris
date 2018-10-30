@@ -20,7 +20,9 @@ import com.osiris.MainActivity;
 import com.osiris.R;
 import com.osiris.api.ApiConstants;
 import com.osiris.api.GetUserPlaylistsAsync;
+import com.osiris.api.RESTClient;
 import com.osiris.api.listeners.GetUserPlaylistsAsyncListener;
+import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.constants.FragmentConstants;
 import com.osiris.ui.common.PlaylistModel;
 import com.osiris.ui.common.PlaylistRecyclerViewAdapter;
@@ -28,6 +30,8 @@ import com.osiris.utility.CacheManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class PlaylistFragment extends Fragment {
 
@@ -62,38 +66,40 @@ public class PlaylistFragment extends Fragment {
 
         if(playlists.size() == 0 || reloadPlaylists){
             playlists.clear();
-            new GetUserPlaylistsAsync(ApiConstants.GET_USER_PLAYLISTS("5bb150e937a28b2c670644e2"), new GetUserPlaylistsAsyncListener() {
+            new GetUserPlaylistsAsync("5bb150e937a28b2c670644e2", new RESTCallbackListener() {
                 @Override
-                public void gotPlaylists(String playlistsString) {
-                    Log.i(TAG, "Playlists response: " + playlistsString);
-                    try{
-                        JsonParser parser = new JsonParser();
-                        JsonArray jsonArray = parser.parse(playlistsString).getAsJsonArray();
+                public void onComplete(RESTClient.RESTResponse response) {
+                    if(response.getStatus() == HttpsURLConnection.HTTP_OK){
+                        try{
+                            JsonParser parser = new JsonParser();
+                            JsonArray jsonArray = parser.parse(response.getData()).getAsJsonArray();
 
-                        Gson gson = new Gson();
+                            Gson gson = new Gson();
 
-                        for(int i = 0; i < jsonArray.size(); i++){
-                            PlaylistModel playlist = new PlaylistModel();
-                            playlist.setId(jsonArray.get(i).getAsJsonObject().get("_id").getAsString());
-                            playlist.setTitle(jsonArray.get(i).getAsJsonObject().get("title").getAsString());
-                            playlist.setUserId(jsonArray.get(i).getAsJsonObject().get("userId").getAsString());
+                            for(int i = 0; i < jsonArray.size(); i++){
+                                PlaylistModel playlist = new PlaylistModel();
+                                playlist.setId(jsonArray.get(i).getAsJsonObject().get("_id").getAsString());
+                                playlist.setTitle(jsonArray.get(i).getAsJsonObject().get("title").getAsString());
+                                playlist.setUserId(jsonArray.get(i).getAsJsonObject().get("userId").getAsString());
 
-                            String [] songs = gson.fromJson(jsonArray.get(i).getAsJsonObject().get("songs").getAsJsonArray(), String [].class);
+                                String [] songs = gson.fromJson(jsonArray.get(i).getAsJsonObject().get("songs").getAsJsonArray(), String [].class);
 
-                            playlist.setSongs(songs);
-                            playlists.add(playlist);
+                                playlist.setSongs(songs);
+                                playlists.add(playlist);
 
+                            }
+
+                            CacheManager.getInstance(getActivity()).writeBool(getString(R.string.cache_reload_playlists), false);
+
+                            buildUI();
+
+                        }catch (IllegalStateException e){
+                            e.printStackTrace();
                         }
-
-                        CacheManager.getInstance(getActivity()).writeBool(getString(R.string.cache_reload_playlists), false);
-
-                        buildUI();
-
-
-                    }catch (IllegalStateException e){
-                        e.printStackTrace();
                     }
+
                 }
+
             }).execute();
         }else{
             buildUI();

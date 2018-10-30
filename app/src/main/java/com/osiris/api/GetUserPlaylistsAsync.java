@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.osiris.api.listeners.GetUserPlaylistsAsyncListener;
+import com.osiris.api.listeners.RESTCallbackListener;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -12,19 +13,18 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class GetUserPlaylistsAsync extends AsyncTask<Void, Void, String> {
+public class GetUserPlaylistsAsync extends RESTClient {
 
 
-    GetUserPlaylistsAsyncListener callbackListener;
+    private RESTCallbackListener callbackListener;
     private final static String TAG = GetUserPlaylistsAsync.class.getName();
-    private String apiRequestUrl;
 
-    public GetUserPlaylistsAsync(String apiRequestUrl, GetUserPlaylistsAsyncListener callbackListener) {
+    public GetUserPlaylistsAsync(String userId, RESTCallbackListener callbackListener) {
+        super(ApiConstants.GET_USER_PLAYLISTS(userId), ApiConstants.METHOD_GET, null);
         this.callbackListener = callbackListener;
-        this.apiRequestUrl = apiRequestUrl;
     }
 
-    @Override
+    /*@Override
     protected String doInBackground(Void... voids) {
         StringBuilder data = new StringBuilder();
 
@@ -60,11 +60,13 @@ public class GetUserPlaylistsAsync extends AsyncTask<Void, Void, String> {
         }
 
         return data.toString();
-    }
+    }*/
 
     @Override
-    protected void onPostExecute(String result){
-        callbackListener.gotPlaylists(result);
+    protected void onPostExecute(RESTResponse restResponse)
+    {
+        super.onPostExecute(restResponse);
+        callbackListener.onComplete(restResponse);
     }
 
 }

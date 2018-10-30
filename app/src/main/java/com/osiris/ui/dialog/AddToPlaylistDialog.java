@@ -23,6 +23,7 @@ import com.osiris.api.GetUserPlaylistsAsync;
 import com.osiris.api.RESTClient;
 import com.osiris.api.listeners.AddSongToPlaylistAsyncListener;
 import com.osiris.api.listeners.GetUserPlaylistsAsyncListener;
+import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.ui.common.PlaylistModel;
 import com.osiris.ui.common.PlaylistRecyclerViewAdapter;
 import com.osiris.utility.CacheManager;
@@ -51,32 +52,35 @@ public class AddToPlaylistDialog extends Dialog {
     }
 
     private void preprocessUI(){
-        new GetUserPlaylistsAsync(ApiConstants.GET_USER_PLAYLISTS(userId), new GetUserPlaylistsAsyncListener() {
+
+        new GetUserPlaylistsAsync(userId, new RESTCallbackListener() {
             @Override
-            public void gotPlaylists(String playlistsString) {
-                try{
-                    JsonParser parser = new JsonParser();
-                    JsonArray jsonArray = parser.parse(playlistsString).getAsJsonArray();
+            public void onComplete(RESTClient.RESTResponse response) {
+                if(response.getStatus() == HttpsURLConnection.HTTP_OK){
+                    try{
+                        JsonParser parser = new JsonParser();
+                        JsonArray jsonArray = parser.parse(response.getData()).getAsJsonArray();
 
-                    Gson gson = new Gson();
+                        Gson gson = new Gson();
 
-                    for(int i = 0; i < jsonArray.size(); i++){
-                        PlaylistModel playlist = new PlaylistModel();
-                        playlist.setId(jsonArray.get(i).getAsJsonObject().get("_id").getAsString());
-                        playlist.setTitle(jsonArray.get(i).getAsJsonObject().get("title").getAsString());
-                        playlist.setUserId(jsonArray.get(i).getAsJsonObject().get("userId").getAsString());
+                        for(int i = 0; i < jsonArray.size(); i++){
+                            PlaylistModel playlist = new PlaylistModel();
+                            playlist.setId(jsonArray.get(i).getAsJsonObject().get("_id").getAsString());
+                            playlist.setTitle(jsonArray.get(i).getAsJsonObject().get("title").getAsString());
+                            playlist.setUserId(jsonArray.get(i).getAsJsonObject().get("userId").getAsString());
 
-                        String [] songs = gson.fromJson(jsonArray.get(i).getAsJsonObject().get("songs").getAsJsonArray(), String [].class);
+                            String [] songs = gson.fromJson(jsonArray.get(i).getAsJsonObject().get("songs").getAsJsonArray(), String [].class);
 
-                        playlist.setSongs(songs);
-                        playlists.add(playlist);
+                            playlist.setSongs(songs);
+                            playlists.add(playlist);
 
-                        setupUI();
+                            setupUI();
 
+                        }
+
+                    }catch (IllegalStateException e){
+                        e.printStackTrace();
                     }
-
-                }catch (IllegalStateException e){
-                    e.printStackTrace();
                 }
             }
         }).execute();
