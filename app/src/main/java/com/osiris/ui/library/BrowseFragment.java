@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
@@ -42,17 +43,21 @@ public class BrowseFragment extends Fragment {
     private LibraryFragmentListener libraryFragmentListener;
     private EditText searchEditText;
     private RecyclerView songsRecyclerView;
+    private View view;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_browse,
+        view = inflater.inflate(R.layout.fragment_browse,
                 container, false);
+
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         searchEditText = view.findViewById(R.id.search_query);
         songsRecyclerView = view.findViewById(R.id.songs_recycler_view);
         songsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -87,6 +92,7 @@ public class BrowseFragment extends Fragment {
 
         SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), songs, itemClickListener);
         songsRecyclerView.swapAdapter(adapter, false);
+        Log.i(TAG, "In build UI");
     }
 
     private SongRecyclerViewAdapter.ItemClickListener itemClickListener = new SongRecyclerViewAdapter.ItemClickListener() {
@@ -138,7 +144,17 @@ public class BrowseFragment extends Fragment {
                             songs.add(song);
                         }
 
+                        view.findViewById(R.id.songs_layout).setVisibility(View.VISIBLE);
+
+                        if(songs.size() == 0){
+                            ((TextView) view.findViewById(R.id.songs_layout_title)).setText("No songs found");
+                        }else{
+                            ((TextView) view.findViewById(R.id.songs_layout_title)).setText("Songs");
+                        }
+
                         buildUI();
+
+
                     }catch (IllegalStateException e){
                         e.printStackTrace();
                     }
