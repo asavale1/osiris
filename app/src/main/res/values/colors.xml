@@ -5,7 +5,8 @@
     <color name="colorPrimaryDark">#2f0d04</color>
     <color name="colorPrimaryDarkOpacity50">#802f0d04</color>
 
-    <color name="colorBlackOpacity50">#80111111</color>
+    <color name="colorBlackOpacity50">#80160500</color>
+    <color name="colorBlack">#160500</color>
 
     <color name="colorAccent">#f27a19</color>
 
