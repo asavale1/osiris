@@ -2,19 +2,17 @@ package com.osiris.server;
 
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
-import android.util.Log;
 
 import com.osiris.api.ApiConstants;
 import com.osiris.model.PlaylistDetailedModel;
 import com.osiris.model.SongModel;
-
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
 class MusicLibrary {
-    private static final String TAG = MusicLibrary.class.getName();
+    //private static final String TAG = MusicLibrary.class.getName();
     private TreeMap<String, MediaMetadataCompat> mediaItems = new TreeMap<>();
 
     boolean addSongToMediaItems(SongModel songModel){
@@ -63,7 +61,6 @@ class MusicLibrary {
     }
 
     List<MediaBrowserCompat.MediaItem> getMediaItems(){
-        Log.i(TAG, "In getMediaItems Size: " + mediaItems.size());
         List<MediaBrowserCompat.MediaItem> result = new ArrayList<>();
         for(MediaMetadataCompat metadata : mediaItems.values()){
             result.add(

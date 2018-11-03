@@ -11,20 +11,19 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.app.NotificationCompat.MediaStyle;
 import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v4.media.app.NotificationCompat.MediaStyle;
 import android.util.Log;
 
 import com.osiris.MainActivity;
 import com.osiris.R;
 
-public class MediaNotificationManager {
+class MediaNotificationManager {
 
     private static final String TAG = MediaNotificationManager.class.getName();
 
@@ -37,10 +36,10 @@ public class MediaNotificationManager {
 
     private static final String CHANNEL_ID = "com.osiris.mediaplayer.channel";
     private static final int REQUEST_CODE = 420;
-    public static final int NOTIFICATION_ID = 421;
+    static final int NOTIFICATION_ID = 421;
 
 
-    public MediaNotificationManager(MediaPlaybackService mediaPlaybackService){
+    MediaNotificationManager(MediaPlaybackService mediaPlaybackService){
         this.mediaPlaybackService = mediaPlaybackService;
 
         notificationManager = (NotificationManager) mediaPlaybackService.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -79,8 +78,8 @@ public class MediaNotificationManager {
         notificationManager.cancelAll();
     }
 
-    public Notification getNotification(MediaMetadataCompat metadata, PlaybackStateCompat state,
-                                        MediaSessionCompat.Token token){
+    Notification getNotification(MediaMetadataCompat metadata, PlaybackStateCompat state,
+                                 MediaSessionCompat.Token token){
 
         boolean isPlaying = state.getState() == PlaybackStateCompat.STATE_PLAYING;
         MediaDescriptionCompat mediaDescription = metadata.getDescription();
@@ -88,7 +87,7 @@ public class MediaNotificationManager {
         return builder.build();
     }
 
-    public NotificationManager getNotificationManager() {
+    NotificationManager getNotificationManager() {
         return notificationManager;
     }
 
@@ -105,7 +104,7 @@ public class MediaNotificationManager {
                 .setSmallIcon(android.R.drawable.alert_dark_frame)
                 .setContentIntent(createContentIntent())
                 .setContentTitle(mediaDescription.getTitle())
-                .setContentText(mediaDescription.getSubtitle())
+                //.setContentText(mediaDescription.getSubtitle())
                 .setDeleteIntent(MediaButtonReceiver.buildMediaButtonPendingIntent(
                         mediaPlaybackService, PlaybackStateCompat.ACTION_STOP))
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);

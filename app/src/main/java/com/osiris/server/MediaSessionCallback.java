@@ -19,7 +19,6 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
     private MediaPlayerAdapter mediaPlayerAdapter;
     private MediaSessionCompat mediaSession;
-    private MediaPlaybackService mediaPlaybackService;
     private MusicLibrary musicLibrary;
 
     private final List<MediaSessionCompat.QueueItem> playlist = new ArrayList<>();
@@ -29,13 +28,11 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
     private static final String TAG = MediaSessionCallback.class.getName();
 
-    public MediaSessionCallback(MediaPlaybackService mediaPlaybackService,
-                                MediaSessionCompat mediaSession,
-                                MediaPlayerAdapter mediaPlayerAdapter,
-                                MusicLibrary musicLibrary){
+    MediaSessionCallback(MediaSessionCompat mediaSession,
+                         MediaPlayerAdapter mediaPlayerAdapter,
+                         MusicLibrary musicLibrary){
         this.mediaSession = mediaSession;
         this.mediaPlayerAdapter = mediaPlayerAdapter;
-        this.mediaPlaybackService = mediaPlaybackService;
         this.musicLibrary = musicLibrary;
     }
 

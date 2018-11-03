@@ -8,7 +8,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
-public class MediaPlayerAdapter {
+class MediaPlayerAdapter {
 
     private final static String TAG = MediaPlayerAdapter.class.getName();
 
@@ -19,29 +19,24 @@ public class MediaPlayerAdapter {
     private MediaMetadataCompat currentMediaMetadata;
     private int currentState;
 
-    public MediaPlayerAdapter(MediaPlaybackService.MediaPlaybackListener mediaPlaybackListener){
+    MediaPlayerAdapter(MediaPlaybackService.MediaPlaybackListener mediaPlaybackListener){
         this.mediaPlaybackListener = mediaPlaybackListener;
     }
 
 
     private void initMediaPlayer(){
-        Log.i(TAG, "In initMediaPlayer");
         if(mediaPlayer == null){
-            Log.i(TAG, "media player is null");
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    Log.i(TAG, "In onCompletion");
                     setNewState(PlaybackStateCompat.STATE_PAUSED);
                 }
             });
         }
     }
 
-    public void playFromMedia(MediaMetadataCompat mediaMetadata){
-        Log.i(TAG, "In playFromMedia");
-        Log.i(TAG, mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI));
+    void playFromMedia(MediaMetadataCompat mediaMetadata){
 
         String mediaId = mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
 
@@ -64,6 +59,7 @@ public class MediaPlayerAdapter {
         currentSongId = mediaId;
         currentMediaMetadata = mediaMetadata;
 
+
         try {
             mediaPlayer.setDataSource(mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI));
             mediaPlayer.prepare();
@@ -74,14 +70,13 @@ public class MediaPlayerAdapter {
     }
 
     private void onPlay(){
-        Log.i(TAG, "In onPlay");
         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
             mediaPlayer.start();
             setNewState(PlaybackStateCompat.STATE_PLAYING);
         }
     }
 
-    public void onPause(){
+    void onPause(){
         if(mediaPlayer != null && mediaPlayer.isPlaying()){
             mediaPlayer.pause();
             setNewState(PlaybackStateCompat.STATE_PAUSED);
@@ -89,7 +84,7 @@ public class MediaPlayerAdapter {
     }
 
 
-    public void onStop(){
+    void onStop(){
         setNewState(PlaybackStateCompat.STATE_STOPPED);
         release();
     }
@@ -101,7 +96,7 @@ public class MediaPlayerAdapter {
         }
     }
 
-    public MediaMetadataCompat getCurrentMediaMetadata() {
+    MediaMetadataCompat getCurrentMediaMetadata() {
         return currentMediaMetadata;
     }
 
@@ -150,6 +145,6 @@ public class MediaPlayerAdapter {
         return actions;
     }
 
-    public boolean isPlaying(){ return mediaPlayer != null && mediaPlayer.isPlaying(); }
+    boolean isPlaying(){ return mediaPlayer != null && mediaPlayer.isPlaying(); }
 
 }
