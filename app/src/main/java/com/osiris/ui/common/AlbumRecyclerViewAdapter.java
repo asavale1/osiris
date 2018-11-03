@@ -18,7 +18,6 @@ public class AlbumRecyclerViewAdapter extends RecyclerView.Adapter<AlbumViewHold
     private List<AlbumModel> albums;
     private ItemClickListener itemClickListener;
 
-    // data is passed into the constructor
     public AlbumRecyclerViewAdapter(Context context, List<AlbumModel> albums, ItemClickListener itemClickListener) {
         this.layoutInflater = LayoutInflater.from(context);
         this.albums = albums;

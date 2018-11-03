@@ -11,11 +11,11 @@ public class QueueViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     TextView songTitle;
     private QueueRecyclerViewAdapter.ItemClickListener itemClickListener;
-    private static final String TAG = SongViewHolder.class.getName();
+    //private static final String TAG = SongViewHolder.class.getName();
 
     QueueViewHolder(@NonNull View itemView, QueueRecyclerViewAdapter.ItemClickListener itemClickListener) {
         super(itemView);
-        this.songTitle = (TextView) itemView.findViewById(R.id.song_title);
+        this.songTitle = itemView.findViewById(R.id.song_title);
         this.itemClickListener = itemClickListener;
         itemView.setOnClickListener(this);
     }

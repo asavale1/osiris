@@ -18,13 +18,11 @@ public class QueueRecyclerViewAdapter extends RecyclerView.Adapter<QueueViewHold
     private List<MediaSessionCompat.QueueItem> songs;
     private ItemClickListener itemClickListener;
 
-    // data is passed into the constructor
     public QueueRecyclerViewAdapter(Context context, List<MediaSessionCompat.QueueItem> songs, ItemClickListener itemClickListener) {
         this.layoutInflater = LayoutInflater.from(context);
         this.songs = songs;
         this.itemClickListener = itemClickListener;
     }
-
 
     @NonNull
     @Override

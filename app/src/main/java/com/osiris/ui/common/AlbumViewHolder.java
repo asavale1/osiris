@@ -11,11 +11,11 @@ public class AlbumViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     TextView albumTitle;
     private AlbumRecyclerViewAdapter.ItemClickListener itemClickListener;
-    private static final String TAG = AlbumViewHolder.class.getName();
+    //private static final String TAG = AlbumViewHolder.class.getName();
 
     AlbumViewHolder(@NonNull View itemView, AlbumRecyclerViewAdapter.ItemClickListener itemClickListener) {
         super(itemView);
-        this.albumTitle = (TextView) itemView.findViewById(R.id.album_title);
+        this.albumTitle = itemView.findViewById(R.id.album_title);
         this.itemClickListener = itemClickListener;
         itemView.setOnClickListener(this);
     }

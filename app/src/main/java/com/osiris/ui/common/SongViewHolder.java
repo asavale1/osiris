@@ -12,11 +12,11 @@ class SongViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
 
     TextView songTitle;
     private SongRecyclerViewAdapter.ItemClickListener itemClickListener;
-    private static final String TAG = SongViewHolder.class.getName();
+    //private static final String TAG = SongViewHolder.class.getName();
 
     SongViewHolder(@NonNull View itemView, SongRecyclerViewAdapter.ItemClickListener itemClickListener) {
         super(itemView);
-        this.songTitle = (TextView) itemView.findViewById(R.id.song_title);
+        this.songTitle = itemView.findViewById(R.id.song_title);
         this.itemClickListener = itemClickListener;
         itemView.setOnClickListener(this);
     }

@@ -18,13 +18,11 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongViewHolder
     private List<SongModel> songs;
     private ItemClickListener itemClickListener;
 
-    // data is passed into the constructor
     public SongRecyclerViewAdapter(Context context, List<SongModel> songs, ItemClickListener itemClickListener) {
         this.layoutInflater = LayoutInflater.from(context);
         this.songs = songs;
         this.itemClickListener = itemClickListener;
     }
-
 
     @NonNull
     @Override

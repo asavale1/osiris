@@ -2,7 +2,6 @@ package com.osiris.ui.common;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -12,11 +11,11 @@ class PlaylistViewHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     TextView playlistTitle;
     private PlaylistRecyclerViewAdapter.ItemClickListener itemClickListener;
-    private static final String TAG = PlaylistViewHolder.class.getName();
+    //private static final String TAG = PlaylistViewHolder.class.getName();
 
     PlaylistViewHolder(@NonNull View itemView, PlaylistRecyclerViewAdapter.ItemClickListener itemClickListener) {
         super(itemView);
-        this.playlistTitle = (TextView) itemView.findViewById(R.id.playlist_title);
+        this.playlistTitle = itemView.findViewById(R.id.playlist_title);
         this.itemClickListener = itemClickListener;
         itemView.setOnClickListener(this);
     }

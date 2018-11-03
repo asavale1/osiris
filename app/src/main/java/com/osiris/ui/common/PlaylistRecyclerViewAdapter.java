@@ -3,7 +3,6 @@ package com.osiris.ui.common;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,16 +18,13 @@ public class PlaylistRecyclerViewAdapter extends RecyclerView.Adapter<PlaylistVi
     private List<PlaylistModel> playlists;
     private ItemClickListener itemClickListener;
 
-    private final static String TAG = PlaylistRecyclerViewAdapter.class.getName();
+    //private final static String TAG = PlaylistRecyclerViewAdapter.class.getName();
 
-    // data is passed into the constructor
     public PlaylistRecyclerViewAdapter(Context context, List<PlaylistModel> playlists, ItemClickListener itemClickListener) {
         this.layoutInflater = LayoutInflater.from(context);
         this.playlists = playlists;
         this.itemClickListener = itemClickListener;
-        Log.i(TAG, "Playlists size : " + playlists.size());
     }
-
 
     @NonNull
     @Override
