@@ -39,7 +39,7 @@ public class VerifyAccountFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         verificationPin = view.findViewById(R.id.verification_pin);
         errorMessage = view.findViewById(R.id.error_message);
         view.findViewById(R.id.submit_action).setOnClickListener(submitClickListener);
@@ -74,7 +74,7 @@ public class VerifyAccountFragment extends Fragment {
                     }
                 }).execute();
             }else{
-                errorMessage.setText("Please specify a pin");
+                errorMessage.setText(getString(R.string.specify_pin));
             }
 
         }

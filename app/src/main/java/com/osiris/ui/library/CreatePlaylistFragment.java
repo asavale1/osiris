@@ -1,4 +1,4 @@
-package com.osiris.ui;
+package com.osiris.ui.library;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,7 +24,7 @@ public class CreatePlaylistFragment extends Fragment {
     private EditText playlistTitle;
     private TextView errorMessage;
 
-    private static final String TAG = CreatePlaylistFragment.class.getName();
+    //private static final String TAG = CreatePlaylistFragment.class.getName();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -35,9 +35,7 @@ public class CreatePlaylistFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
-
-
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         playlistTitle = view.findViewById(R.id.playlist_title);
         errorMessage = view.findViewById(R.id.error_message);
         view.findViewById(R.id.cancel_action).setOnClickListener(cancelClickListener);
@@ -47,6 +45,7 @@ public class CreatePlaylistFragment extends Fragment {
     View.OnClickListener cancelClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            assert getFragmentManager() != null;
             getFragmentManager().popBackStack();
         }
     };
@@ -56,7 +55,8 @@ public class CreatePlaylistFragment extends Fragment {
         public void onClick(View v) {
             JsonObject playlistJson = new JsonObject();
             playlistJson.addProperty("title", playlistTitle.getText().toString());
-            playlistJson.addProperty("userId", "5bb150e937a28b2c670644e2");
+            playlistJson.addProperty("userId",
+                    CacheManager.getInstance(getActivity()).readString(getString(R.string.cache_user_id), ""));
 
             new CreatePlaylistAsync(playlistJson, new RESTCallbackListener() {
                 @Override
@@ -64,6 +64,7 @@ public class CreatePlaylistFragment extends Fragment {
 
                     if(response.getStatus() == HttpsURLConnection.HTTP_CREATED){
                         CacheManager.getInstance(getActivity()).writeBool(getString(R.string.cache_reload_playlists), true);
+                        assert getFragmentManager() != null;
                         getFragmentManager().popBackStack();
 
                     }else{

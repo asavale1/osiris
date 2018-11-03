@@ -19,7 +19,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.osiris.server.MediaPlaybackService;
 import com.osiris.constants.FragmentConstants;
-import com.osiris.ui.CreatePlaylistFragment;
+import com.osiris.ui.library.CreatePlaylistFragment;
 import com.osiris.ui.LibraryFragment;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.PlayerControllerListener;

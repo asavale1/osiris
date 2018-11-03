@@ -141,7 +141,7 @@ public class BrowseFragment extends Fragment {
         public void onItemClick(View view, int position) {
             Bundle bundle = new Bundle();
             bundle.putString("albumId", albums.get(position).getId());
-            ((MainActivity) getActivity()).replaceFragment(FragmentConstants.FRAGMENT_VIEW_ALBUM, bundle);
+            ((MainActivity) Objects.requireNonNull(getActivity())).replaceFragment(FragmentConstants.FRAGMENT_VIEW_ALBUM, bundle);
         }
     };
 
@@ -161,9 +161,9 @@ public class BrowseFragment extends Fragment {
                         }
 
                         if(songs.size() == 0){
-                            ((TextView) view.findViewById(R.id.songs_layout_title)).setText("No songs found");
+                            ((TextView) view.findViewById(R.id.songs_layout_title)).setText(getString(R.string.no_songs_found));
                         }else{
-                            ((TextView) view.findViewById(R.id.songs_layout_title)).setText("Songs");
+                            ((TextView) view.findViewById(R.id.songs_layout_title)).setText(getString(R.string.songs));
                         }
                         view.findViewById(R.id.songs_layout).setVisibility(View.VISIBLE);
 
@@ -174,9 +174,9 @@ public class BrowseFragment extends Fragment {
                         }
 
                         if(albums.size() == 0){
-                            ((TextView) view.findViewById(R.id.albums_layout_title)).setText("No albums found");
+                            ((TextView) view.findViewById(R.id.albums_layout_title)).setText(getString(R.string.no_albums_found));
                         }else{
-                            ((TextView) view.findViewById(R.id.albums_layout_title)).setText("Albums");
+                            ((TextView) view.findViewById(R.id.albums_layout_title)).setText(R.string.albums);
                         }
                         view.findViewById(R.id.albums_layout).setVisibility(View.VISIBLE);
 

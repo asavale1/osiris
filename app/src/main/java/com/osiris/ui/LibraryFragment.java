@@ -57,6 +57,7 @@ public class LibraryFragment extends Fragment {
         switch (itemId){
             case 2:
                 QueueFragment queueFragment = (QueueFragment) getChildFragmentManager().findFragmentById(R.id.viewpager);
+                assert queueFragment != null;
                 queueFragment.onMetadataChanged(metadata);
                 break;
 
@@ -70,6 +71,7 @@ public class LibraryFragment extends Fragment {
         switch (itemId){
             case 2:
                 QueueFragment queueFragment = (QueueFragment) getChildFragmentManager().findFragmentById(R.id.viewpager);
+                assert queueFragment != null;
                 queueFragment.onPlaybackStateChanged(state);
                 break;
 

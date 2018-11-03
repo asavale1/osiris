@@ -4,6 +4,11 @@
     <string name="next_song">Next Song</string>
     <string name="play_pause_song">Play/Pause Song</string>
     <string name="previous_song">Previous Song</string>
+    <string name="no_songs_found">No Songs Found</string>
+    <string name="songs">Songs</string>
+    <string name="no_albums_found">No Albums Found</string>
+    <string name="albums">Albums</string>
+    <string name="specify_pin">Please specify a pin</string>
 
     <string name="cache">OsirisCache</string>
     <string name="cache_reload_playlists">reload_playlists</string>

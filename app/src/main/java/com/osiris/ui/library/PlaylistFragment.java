@@ -2,16 +2,13 @@ package com.osiris.ui.library;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -28,6 +25,7 @@ import com.osiris.utility.CacheManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -54,7 +52,7 @@ public class PlaylistFragment extends Fragment {
         view.findViewById(R.id.newPlaylist).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).replaceFragment(FragmentConstants.FRAGMENT_CREATE_PLAYLIST, null);
+                ((MainActivity) Objects.requireNonNull(getActivity())).replaceFragment(FragmentConstants.FRAGMENT_CREATE_PLAYLIST, null);
             }
         });
 
@@ -106,7 +104,7 @@ public class PlaylistFragment extends Fragment {
         public void onItemClick(View view, int position) {
             Bundle bundle = new Bundle();
             bundle.putString("playlistId", playlists.get(position).getId());
-            ((MainActivity) getActivity()).replaceFragment(FragmentConstants.FRAGMENT_VIEW_PLAYLIST, bundle);
+            ((MainActivity) Objects.requireNonNull(getActivity())).replaceFragment(FragmentConstants.FRAGMENT_VIEW_PLAYLIST, bundle);
         }
     };
 

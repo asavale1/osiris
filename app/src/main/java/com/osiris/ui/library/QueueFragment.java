@@ -2,6 +2,7 @@ package com.osiris.ui.library;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -9,25 +10,21 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.osiris.R;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.PlayerControllerListener;
 import com.osiris.ui.common.QueueRecyclerViewAdapter;
-import com.osiris.ui.common.SongRecyclerViewAdapter;
 
 import java.util.List;
 
 public class QueueFragment extends Fragment {
     private View view;
-    private static final String TAG = QueueFragment.class.getName();
+    //private static final String TAG = QueueFragment.class.getName();
     private LibraryFragmentListener libraryFragmentListener;
     private List<MediaSessionCompat.QueueItem> songs;
     private AppCompatImageButton playPauseButton;
@@ -37,37 +34,30 @@ public class QueueFragment extends Fragment {
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        Log.i(TAG, "Is visible to user: " + isVisibleToUser);
 
         if(libraryFragmentListener != null){
             songs = libraryFragmentListener.getQueue();
             if(songs != null){
-                Log.i(TAG, "Songs size: " + songs.size());
                 buildUI();
             }
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i(TAG, "In onCreateView");
-
         view = inflater.inflate(R.layout.fragment_queue,
                 container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.i(TAG, "In onViewCreated");
-        //buildUI();
 
         if(libraryFragmentListener != null){
             songs = libraryFragmentListener.getQueue();
             if(songs != null){
-                Log.i(TAG, "Songs size: " + songs.size());
                 buildUI();
             }
         }
@@ -75,7 +65,6 @@ public class QueueFragment extends Fragment {
     }
 
     private void buildUI(){
-        Log.i(TAG, "In build UI: " + songs.size());
 
         view.findViewById(R.id.linear_layout).setVisibility(View.VISIBLE);
         RecyclerView recyclerView = view.findViewById(R.id.songs_recycler_view);
@@ -105,7 +94,6 @@ public class QueueFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.i(TAG, "In onAttach");
         if (context instanceof LibraryFragmentListener) {
             libraryFragmentListener = (LibraryFragmentListener) context;
 
@@ -147,7 +135,6 @@ public class QueueFragment extends Fragment {
     };
 
     public void onMetadataChanged(MediaMetadataCompat metadata){
-        Log.i(TAG, "In onMetadataChanged");
         songTitle.setText(metadata.getDescription().getTitle());
         songTitle.setSelected(true);
     }

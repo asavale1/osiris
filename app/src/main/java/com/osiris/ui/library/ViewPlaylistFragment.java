@@ -14,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.osiris.R;
@@ -24,13 +22,11 @@ import com.osiris.api.RESTClient;
 import com.osiris.api.RemoveSongFromPlaylistAsync;
 import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.model.ModelParser;
-import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.model.PlaylistDetailedModel;
-import com.osiris.model.SongModel;
+import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.common.SongRecyclerViewAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -124,7 +120,7 @@ public class ViewPlaylistFragment extends Fragment {
     private SongRecyclerViewAdapter.ItemClickListener itemClickListener = new SongRecyclerViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, final int position) {
-            PopupMenu popup = new PopupMenu(getActivity(), view);
+            PopupMenu popup = new PopupMenu(Objects.requireNonNull(getActivity()), view);
             popup.inflate(R.menu.options_view_playlist_fragment);
 
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
