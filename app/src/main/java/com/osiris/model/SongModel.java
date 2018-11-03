@@ -10,9 +10,9 @@ public class SongModel {
     public void setId(String id) { this.id = id; }
 
     public String getFileUrl() { return fileUrl; }
-    public void setFileUrl(String fileUrl) { this.fileUrl = fileUrl; }
+    void setFileUrl(String fileUrl) { this.fileUrl = fileUrl; }
 
     public String getAlbum(){ return album; }
-    public void setAlbum(String album){ this.album = album; }
+    void setAlbum(String album){ this.album = album; }
 
 }
