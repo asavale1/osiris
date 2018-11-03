@@ -1,4 +1,4 @@
-package com.osiris.ui.common;
+package com.osiris.model;
 
 public class PlaylistModel {
     private String id, title, userId;

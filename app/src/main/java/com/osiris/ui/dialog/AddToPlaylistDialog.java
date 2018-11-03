@@ -17,7 +17,7 @@ import com.osiris.api.AddSongToPlaylistAsync;
 import com.osiris.api.GetUserPlaylistsAsync;
 import com.osiris.api.RESTClient;
 import com.osiris.api.listeners.RESTCallbackListener;
-import com.osiris.ui.common.PlaylistModel;
+import com.osiris.model.PlaylistModel;
 import com.osiris.ui.common.PlaylistRecyclerViewAdapter;
 import com.osiris.utility.CacheManager;
 

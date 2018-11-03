@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -18,8 +17,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.osiris.MainActivity;
 import com.osiris.R;
@@ -27,10 +26,11 @@ import com.osiris.api.RESTClient;
 import com.osiris.api.SearchSongsAsync;
 import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.constants.FragmentConstants;
+import com.osiris.model.AlbumModel;
+import com.osiris.model.ModelParser;
+import com.osiris.model.SongModel;
 import com.osiris.ui.LibraryFragmentListener;
-import com.osiris.ui.common.AlbumModel;
 import com.osiris.ui.common.AlbumRecyclerViewAdapter;
-import com.osiris.ui.common.SongModel;
 import com.osiris.ui.common.SongRecyclerViewAdapter;
 import com.osiris.ui.dialog.AddToPlaylistDialog;
 
@@ -42,7 +42,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class BrowseFragment extends Fragment {
 
-    private static final String TAG = BrowseFragment.class.getName();
+    //private static final String TAG = BrowseFragment.class.getName();
+
     private List<SongModel> songs = new ArrayList<>();
     private List<AlbumModel> albums = new ArrayList<>();
     private LibraryFragmentListener libraryFragmentListener;
@@ -148,22 +149,15 @@ public class BrowseFragment extends Fragment {
         new SearchSongsAsync(searchQuery, new RESTCallbackListener() {
             @Override
             public void onComplete(RESTClient.RESTResponse response) {
-                Log.i(TAG, "Status: " +response.getStatus());
-                Log.i(TAG, "Response: " + response.getData());
 
                 if(response.getStatus() == HttpsURLConnection.HTTP_OK){
                     try{
                         JsonParser parser = new JsonParser();
                         JsonArray songsJsonArray = parser.parse(response.getData()).getAsJsonObject().get("songs").getAsJsonArray();
 
-                        for(int i = 0; i < songsJsonArray.size(); i++){
-                            SongModel song = new SongModel();
 
-                            song.setTitle(songsJsonArray.get(i).getAsJsonObject().get("title").getAsString());
-                            song.setId(songsJsonArray.get(i).getAsJsonObject().get("_id").getAsString());
-                            song.setAlbum(songsJsonArray.get(i).getAsJsonObject().get("albumId").getAsString());
-                            song.setFileUrl(songsJsonArray.get(i).getAsJsonObject().get("fileUrl").getAsString());
-                            songs.add(song);
+                        for(JsonElement elem : songsJsonArray){
+                            songs.add(ModelParser.parseSongModelJson(elem.getAsJsonObject()));
                         }
 
                         if(songs.size() == 0){
@@ -175,20 +169,9 @@ public class BrowseFragment extends Fragment {
 
                         JsonArray albumsJsonArray = parser.parse(response.getData()).getAsJsonObject().get("albums").getAsJsonArray();
 
-                        Gson gson = new Gson();
-
-                        for(int i = 0; i < albumsJsonArray.size(); i++){
-
-                            AlbumModel album = new AlbumModel();
-                            album.setId(albumsJsonArray.get(i).getAsJsonObject().get("_id").getAsString());
-                            album.setTitle(albumsJsonArray.get(i).getAsJsonObject().get("title").getAsString());
-
-                            String [] songs = gson.fromJson(albumsJsonArray.get(i).getAsJsonObject().get("songs").getAsJsonArray(), String [].class);
-
-                            album.setSongs(songs);
-                            albums.add(album);
+                        for(JsonElement elem : albumsJsonArray){
+                            albums.add(ModelParser.parseAlbumModelJson(elem.getAsJsonObject()));
                         }
-
 
                         if(albums.size() == 0){
                             ((TextView) view.findViewById(R.id.albums_layout_title)).setText("No albums found");

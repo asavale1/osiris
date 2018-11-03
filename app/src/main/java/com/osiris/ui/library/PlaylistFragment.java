@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.osiris.MainActivity;
 import com.osiris.R;
@@ -20,7 +21,8 @@ import com.osiris.api.GetUserPlaylistsAsync;
 import com.osiris.api.RESTClient;
 import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.constants.FragmentConstants;
-import com.osiris.ui.common.PlaylistModel;
+import com.osiris.model.ModelParser;
+import com.osiris.model.PlaylistModel;
 import com.osiris.ui.common.PlaylistRecyclerViewAdapter;
 import com.osiris.utility.CacheManager;
 
@@ -31,9 +33,9 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class PlaylistFragment extends Fragment {
 
-    private FloatingActionButton newPlaylistButton;
-    private final static String TAG = PlaylistFragment.class.getName();
-    private List<PlaylistModel> playlists = new ArrayList<PlaylistModel>();
+    //private final static String TAG = PlaylistFragment.class.getName();
+
+    private List<PlaylistModel> playlists = new ArrayList<>();
     private View view;
 
     @Override
@@ -46,13 +48,12 @@ public class PlaylistFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.newPlaylist).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Add playlist clicked");
                 ((MainActivity) getActivity()).replaceFragment(FragmentConstants.FRAGMENT_CREATE_PLAYLIST, null);
             }
         });
@@ -62,7 +63,7 @@ public class PlaylistFragment extends Fragment {
 
         if(playlists.size() == 0 || reloadPlaylists){
             playlists.clear();
-            new GetUserPlaylistsAsync("5bb150e937a28b2c670644e2", new RESTCallbackListener() {
+            new GetUserPlaylistsAsync(CacheManager.getInstance(getActivity()).readString(getString(R.string.cache_user_id), ""), new RESTCallbackListener() {
                 @Override
                 public void onComplete(RESTClient.RESTResponse response) {
                     if(response.getStatus() == HttpsURLConnection.HTTP_OK){
@@ -70,19 +71,8 @@ public class PlaylistFragment extends Fragment {
                             JsonParser parser = new JsonParser();
                             JsonArray jsonArray = parser.parse(response.getData()).getAsJsonArray();
 
-                            Gson gson = new Gson();
-
-                            for(int i = 0; i < jsonArray.size(); i++){
-                                PlaylistModel playlist = new PlaylistModel();
-                                playlist.setId(jsonArray.get(i).getAsJsonObject().get("_id").getAsString());
-                                playlist.setTitle(jsonArray.get(i).getAsJsonObject().get("title").getAsString());
-                                playlist.setUserId(jsonArray.get(i).getAsJsonObject().get("userId").getAsString());
-
-                                String [] songs = gson.fromJson(jsonArray.get(i).getAsJsonObject().get("songs").getAsJsonArray(), String [].class);
-
-                                playlist.setSongs(songs);
-                                playlists.add(playlist);
-
+                            for(JsonElement elem : jsonArray){
+                                playlists.add(ModelParser.parsePlaylistModelJson(elem.getAsJsonObject()));
                             }
 
                             CacheManager.getInstance(getActivity()).writeBool(getString(R.string.cache_reload_playlists), false);
@@ -93,7 +83,6 @@ public class PlaylistFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
-
                 }
 
             }).execute();
@@ -110,7 +99,6 @@ public class PlaylistFragment extends Fragment {
         PlaylistRecyclerViewAdapter adapter = new PlaylistRecyclerViewAdapter(getContext(), playlists, itemClickListener);
         recyclerView.setAdapter(adapter);
 
-        Log.i(TAG, "Playlists size: " + playlists.size() );
     }
 
     private PlaylistRecyclerViewAdapter.ItemClickListener itemClickListener = new PlaylistRecyclerViewAdapter.ItemClickListener() {

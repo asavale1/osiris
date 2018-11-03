@@ -23,9 +23,10 @@ import com.osiris.api.GetPlaylistAsync;
 import com.osiris.api.RESTClient;
 import com.osiris.api.RemoveSongFromPlaylistAsync;
 import com.osiris.api.listeners.RESTCallbackListener;
+import com.osiris.model.ModelParser;
 import com.osiris.ui.LibraryFragmentListener;
-import com.osiris.ui.common.PlaylistDetailedModel;
-import com.osiris.ui.common.SongModel;
+import com.osiris.model.PlaylistDetailedModel;
+import com.osiris.model.SongModel;
 import com.osiris.ui.common.SongRecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -47,14 +48,14 @@ public class ViewPlaylistFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_view_playlist,
                 container, false);
 
+        assert this.getArguments() != null;
         playlistId = this.getArguments().getString("playlistId");
 
-        Log.i(TAG, "In onCreateView");
         return view;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getPlaylist();
     }
@@ -83,11 +84,10 @@ public class ViewPlaylistFragment extends Fragment {
                 public void onClick(View v) {
                     Log.i(TAG, "Play button clicked");
                     libraryFragmentListener.addPlaylistToQueue(playlist);
+                    assert getFragmentManager() != null;
                     getFragmentManager().popBackStack();
                 }
             });
-        }else{
-
         }
     }
 
@@ -95,34 +95,11 @@ public class ViewPlaylistFragment extends Fragment {
         new GetPlaylistAsync(playlistId, true, new RESTCallbackListener() {
             @Override
             public void onComplete(RESTClient.RESTResponse response) {
-                Log.i(TAG, "Status: " + response.getStatus());
-                Log.i(TAG, "Data: " + response.getData());
                 if(response.getStatus() == HttpsURLConnection.HTTP_OK){
 
                     JsonParser parser = new JsonParser();
                     JsonObject playlistJson = parser.parse(response.getData()).getAsJsonObject();
-
-                    playlist = new PlaylistDetailedModel();
-                    playlist.setId(playlistJson.get("_id").getAsString());
-                    playlist.setTitle(playlistJson.get("title").getAsString());
-                    playlist.setUserId(playlistJson.get("userId").getAsString());
-                    List<SongModel> songs = new ArrayList<>();
-
-                    JsonArray songsJsonArray = playlistJson.getAsJsonArray("songs");
-                    for(JsonElement songJsonElem : songsJsonArray){
-
-                        JsonObject songJson = songJsonElem.getAsJsonObject();
-
-                        SongModel songModel = new SongModel();
-                        songModel.setId(songJson.get("_id").getAsString());
-                        songModel.setAlbum(songJson.get("albumId").getAsString());
-                        songModel.setFileUrl(songJson.get("fileUrl").getAsString());
-                        songModel.setTitle(songJson.get("title").getAsString());
-                        songs.add(songModel);
-                    }
-
-                    playlist.setSongs(songs);
-                }else{
+                    playlist = ModelParser.parsePlaylistDetailedModelJson(playlistJson);
 
                 }
 
@@ -132,14 +109,11 @@ public class ViewPlaylistFragment extends Fragment {
     }
 
     private void removeSongFromPlaylist(String songId){
-        Log.i(TAG, "Song id: " + songId);
         JsonObject requestJson = new JsonObject();
         requestJson.addProperty("songId", songId);
         new RemoveSongFromPlaylistAsync(playlistId, requestJson, new RESTCallbackListener() {
             @Override
             public void onComplete(RESTClient.RESTResponse response) {
-                Log.i(TAG, "Status: " + response.getStatus());
-                Log.i(TAG, "Message: " + response.getData());
                 if(response.getStatus() == HttpsURLConnection.HTTP_OK){
                     getPlaylist();
                 }
@@ -158,7 +132,6 @@ public class ViewPlaylistFragment extends Fragment {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.remove_from_playlist:
-                            Log.i(TAG, "Remove from playlist");
                             removeSongFromPlaylist(playlist.getSongs().get(position).getId());
                             return true;
                         default:

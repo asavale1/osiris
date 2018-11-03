@@ -3,8 +3,8 @@ package com.osiris.ui;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 
-import com.osiris.ui.common.PlaylistDetailedModel;
-import com.osiris.ui.common.SongModel;
+import com.osiris.model.PlaylistDetailedModel;
+import com.osiris.model.SongModel;
 
 import java.util.List;
 

@@ -1,8 +1,6 @@
 package com.osiris;
 
 import android.content.ComponentName;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
@@ -26,8 +24,8 @@ import com.osiris.ui.LibraryFragment;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.PlayerControllerListener;
 import com.osiris.ui.VerifyAccountFragment;
-import com.osiris.ui.common.PlaylistDetailedModel;
-import com.osiris.ui.common.SongModel;
+import com.osiris.model.PlaylistDetailedModel;
+import com.osiris.model.SongModel;
 import com.osiris.ui.library.ViewAlbumFragment;
 import com.osiris.ui.library.ViewPlaylistFragment;
 import com.osiris.utility.CacheManager;

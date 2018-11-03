@@ -1,13 +1,12 @@
 package com.osiris.server;
 
 import android.support.v4.media.MediaBrowserCompat;
-import android.support.v4.media.MediaBrowserServiceCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
 
 import com.osiris.api.ApiConstants;
-import com.osiris.ui.common.PlaylistDetailedModel;
-import com.osiris.ui.common.SongModel;
+import com.osiris.model.PlaylistDetailedModel;
+import com.osiris.model.SongModel;
 
 
 import java.util.ArrayList;

@@ -1,6 +1,8 @@
-package com.osiris.ui.common;
+package com.osiris.model;
 
-public class AlbumModel {
+import java.util.List;
+
+public class AlbumDetailedModel {
 
     private String id;
     public String getId() { return id; }
@@ -10,8 +12,8 @@ public class AlbumModel {
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 
-    private String [] songs;
-    public String[] getSongs() { return songs; }
-    public void setSongs(String[] songs) { this.songs = songs; }
+    private List<SongModel> songs;
+    public List<SongModel> getSongs() { return songs; }
+    public void setSongs(List<SongModel> songs) { this.songs = songs; }
 
 }

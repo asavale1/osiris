@@ -8,35 +8,31 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.osiris.R;
 import com.osiris.api.GetAlbumAsync;
 import com.osiris.api.RESTClient;
 import com.osiris.api.listeners.RESTCallbackListener;
+import com.osiris.model.AlbumDetailedModel;
+import com.osiris.model.ModelParser;
+import com.osiris.model.SongModel;
 import com.osiris.ui.LibraryFragmentListener;
-import com.osiris.ui.common.AlbumDetailedModel;
-import com.osiris.ui.common.SongModel;
 import com.osiris.ui.common.SongRecyclerViewAdapter;
 import com.osiris.ui.dialog.AddToPlaylistDialog;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import javax.net.ssl.HttpsURLConnection;
 
 public class ViewAlbumFragment extends Fragment {
-    private static final String TAG = ViewAlbumFragment.class.getName();
+    //private static final String TAG = ViewAlbumFragment.class.getName();
     private View view;
     private String albumId;
     private AlbumDetailedModel album;
@@ -50,43 +46,24 @@ public class ViewAlbumFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_view_album,
                 container, false);
 
+        assert this.getArguments() != null;
         albumId = this.getArguments().getString("albumId");
 
         return view;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         new GetAlbumAsync(albumId, true, new RESTCallbackListener() {
             @Override
             public void onComplete(RESTClient.RESTResponse response) {
-                Log.i(TAG, "Status: " + response.getStatus());
-                Log.i(TAG, "Message: " + response.getData());
 
                 if(response.getStatus() == HttpsURLConnection.HTTP_OK){
                     JsonParser parser = new JsonParser();
                     JsonObject albumJson = parser.parse(response.getData()).getAsJsonObject();
 
-                    album = new AlbumDetailedModel();
-                    album.setId(albumJson.get("_id").getAsString());
-                    album.setTitle(albumJson.get("title").getAsString());
-                    List<SongModel> songs = new ArrayList<>();
-
-                    JsonArray songsJsonArray = albumJson.getAsJsonArray("songs");
-                    for(JsonElement songJsonElem : songsJsonArray){
-
-                        JsonObject songJson = songJsonElem.getAsJsonObject();
-
-                        SongModel songModel = new SongModel();
-                        songModel.setId(songJson.get("_id").getAsString());
-                        songModel.setAlbum(songJson.get("albumId").getAsString());
-                        songModel.setFileUrl(songJson.get("fileUrl").getAsString());
-                        songModel.setTitle(songJson.get("title").getAsString());
-                        songs.add(songModel);
-                    }
-
-                    album.setSongs(songs);
+                    album = ModelParser.parseAlbumDetailedModelJson(albumJson);
                 }
 
                 buildUI();

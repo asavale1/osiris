@@ -2,7 +2,6 @@ package com.osiris.server;
 
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.support.annotation.NonNull;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -10,11 +9,10 @@ import android.util.Log;
 
 
 import com.google.gson.Gson;
-import com.osiris.ui.common.PlaylistDetailedModel;
-import com.osiris.ui.common.SongModel;
+import com.osiris.model.PlaylistDetailedModel;
+import com.osiris.model.SongModel;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class MediaSessionCallback extends MediaSessionCompat.Callback {

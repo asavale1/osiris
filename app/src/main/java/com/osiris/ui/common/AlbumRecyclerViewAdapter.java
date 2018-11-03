@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.osiris.R;
+import com.osiris.model.AlbumModel;
 
 import java.util.List;
 
