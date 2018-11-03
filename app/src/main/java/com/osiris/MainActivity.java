@@ -28,6 +28,7 @@ import com.osiris.ui.PlayerControllerListener;
 import com.osiris.ui.VerifyAccountFragment;
 import com.osiris.ui.common.PlaylistDetailedModel;
 import com.osiris.ui.common.SongModel;
+import com.osiris.ui.library.ViewAlbumFragment;
 import com.osiris.ui.library.ViewPlaylistFragment;
 import com.osiris.utility.CacheManager;
 
@@ -80,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
                 break;
             case FragmentConstants.FRAGMENT_VIEW_PLAYLIST:
                 fragment = new ViewPlaylistFragment();
+                break;
+            case FragmentConstants.FRAGMENT_VIEW_ALBUM:
+                fragment = new ViewAlbumFragment();
                 break;
             default:
                 fragment = null;

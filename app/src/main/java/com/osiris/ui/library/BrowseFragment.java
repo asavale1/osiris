@@ -16,16 +16,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
+import com.osiris.MainActivity;
 import com.osiris.R;
 import com.osiris.api.RESTClient;
 import com.osiris.api.SearchSongsAsync;
 import com.osiris.api.listeners.RESTCallbackListener;
+import com.osiris.constants.FragmentConstants;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.common.AlbumModel;
 import com.osiris.ui.common.AlbumRecyclerViewAdapter;
@@ -110,7 +111,7 @@ public class BrowseFragment extends Fragment {
         @Override
         public void onItemClick(View view, int position) {
             PopupMenu popup = new PopupMenu(Objects.requireNonNull(getActivity()), view);
-            popup.inflate(R.menu.options_browse_fragment);
+            popup.inflate(R.menu.song_select_options);
 
             final SongModel selectedSong = songs.get(position);
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -137,8 +138,9 @@ public class BrowseFragment extends Fragment {
     private AlbumRecyclerViewAdapter.ItemClickListener albumItemClickListener = new AlbumRecyclerViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-
-            Log.i(TAG, "Clicked on album");
+            Bundle bundle = new Bundle();
+            bundle.putString("albumId", albums.get(position).getId());
+            ((MainActivity) getActivity()).replaceFragment(FragmentConstants.FRAGMENT_VIEW_ALBUM, bundle);
         }
     };
 
