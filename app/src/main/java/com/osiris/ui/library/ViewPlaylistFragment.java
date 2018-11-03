@@ -21,6 +21,7 @@ import com.google.gson.JsonParser;
 import com.osiris.R;
 import com.osiris.api.GetPlaylistAsync;
 import com.osiris.api.RESTClient;
+import com.osiris.api.RemoveSongFromPlaylistAsync;
 import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.common.PlaylistDetailedModel;
@@ -55,6 +56,42 @@ public class ViewPlaylistFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getPlaylist();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof LibraryFragmentListener) {
+            libraryFragmentListener = (LibraryFragmentListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implemenet LibraryFragmentListener");
+        }
+    }
+
+    private void buildUI(){
+        if(playlist != null){
+            ((TextView)view.findViewById(R.id.playlist_title)).setText(playlist.getTitle());
+            RecyclerView recyclerView = view.findViewById(R.id.songs_recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), playlist.getSongs(), itemClickListener);
+            recyclerView.swapAdapter(adapter, false);
+
+            view.findViewById(R.id.queuePlaylist).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i(TAG, "Play button clicked");
+                    libraryFragmentListener.addPlaylistToQueue(playlist);
+                    getFragmentManager().popBackStack();
+                }
+            });
+        }else{
+
+        }
+    }
+
+    private void getPlaylist(){
         new GetPlaylistAsync(playlistId, true, new RESTCallbackListener() {
             @Override
             public void onComplete(RESTClient.RESTResponse response) {
@@ -94,41 +131,25 @@ public class ViewPlaylistFragment extends Fragment {
         }).execute();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof LibraryFragmentListener) {
-            libraryFragmentListener = (LibraryFragmentListener) context;
-        } else {
-            throw new ClassCastException(context.toString()
-                    + " must implemenet LibraryFragmentListener");
-        }
-    }
-
-    private void buildUI(){
-        if(playlist != null){
-            ((TextView)view.findViewById(R.id.playlist_title)).setText(playlist.getTitle());
-            RecyclerView recyclerView = view.findViewById(R.id.songs_recycler_view);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), playlist.getSongs(), itemClickListener);
-            recyclerView.setAdapter(adapter);
-
-            view.findViewById(R.id.queuePlaylist).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i(TAG, "Play button clicked");
-                    libraryFragmentListener.addPlaylistToQueue(playlist);
-                    getFragmentManager().popBackStack();
+    private void removeSongFromPlaylist(String songId){
+        Log.i(TAG, "Song id: " + songId);
+        JsonObject requestJson = new JsonObject();
+        requestJson.addProperty("songId", songId);
+        new RemoveSongFromPlaylistAsync(playlistId, requestJson, new RESTCallbackListener() {
+            @Override
+            public void onComplete(RESTClient.RESTResponse response) {
+                Log.i(TAG, "Status: " + response.getStatus());
+                Log.i(TAG, "Message: " + response.getData());
+                if(response.getStatus() == HttpsURLConnection.HTTP_OK){
+                    getPlaylist();
                 }
-            });
-        }else{
-
-        }
+            }
+        }).execute();
     }
 
     private SongRecyclerViewAdapter.ItemClickListener itemClickListener = new SongRecyclerViewAdapter.ItemClickListener() {
         @Override
-        public void onItemClick(View view, int position) {
+        public void onItemClick(View view, final int position) {
             PopupMenu popup = new PopupMenu(getActivity(), view);
             popup.inflate(R.menu.options_view_playlist_fragment);
 
@@ -138,6 +159,7 @@ public class ViewPlaylistFragment extends Fragment {
                     switch (item.getItemId()) {
                         case R.id.remove_from_playlist:
                             Log.i(TAG, "Remove from playlist");
+                            removeSongFromPlaylist(playlist.getSongs().get(position).getId());
                             return true;
                         default:
                             return false;
