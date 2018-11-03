@@ -78,7 +78,7 @@ public class ViewPlaylistFragment extends Fragment {
 
                         SongModel songModel = new SongModel();
                         songModel.setId(songJson.get("_id").getAsString());
-                        songModel.setAlbum(songJson.get("album").getAsString());
+                        songModel.setAlbum(songJson.get("albumId").getAsString());
                         songModel.setFileUrl(songJson.get("fileUrl").getAsString());
                         songModel.setTitle(songJson.get("title").getAsString());
                         songs.add(songModel);
