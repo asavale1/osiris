@@ -5,7 +5,7 @@ import com.osiris.api.listeners.RESTCallbackListener;
 
 public class CreatePlaylistAsync extends RESTClient {
 
-    private static final String TAG = CreatePlaylistAsync.class.getName();
+    //private static final String TAG = CreatePlaylistAsync.class.getName();
 
     private RESTCallbackListener callbackListener;
 

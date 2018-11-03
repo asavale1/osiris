@@ -17,7 +17,7 @@ public class RESTClient extends AsyncTask<Void, Void, RESTClient.RESTResponse> {
 
     private static final String TAG = RESTClient.class.getName();
 
-    private JsonObject requestBody = null;
+    private JsonObject requestBody;
     private String method;
     private String restUrl;
 
