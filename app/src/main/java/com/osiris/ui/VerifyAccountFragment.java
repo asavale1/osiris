@@ -3,7 +3,6 @@ package com.osiris.ui;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class VerifyAccountFragment extends Fragment {
 
-    private static final String TAG = VerifyAccountFragment.class.getName();
+    //private static final String TAG = VerifyAccountFragment.class.getName();
 
     private EditText verificationPin;
     private TextView errorMessage;
@@ -48,7 +47,6 @@ public class VerifyAccountFragment extends Fragment {
     View.OnClickListener submitClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Log.i(TAG, "In submit click");
             String pin = verificationPin.getText().toString();
 
             errorMessage.setText(null);
