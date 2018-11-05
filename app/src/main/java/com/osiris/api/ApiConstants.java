@@ -2,7 +2,7 @@ package com.osiris.api;
 
 public class ApiConstants {
 
-    private static final String API_DOMAIN = "http://192.168.0.6:3000";
+    private static final String API_DOMAIN = "http://192.168.1.134:3000";
 
     public static String GET_SONG_URL(String fileUrl){ return API_DOMAIN + fileUrl; }
     static String SEARCH_URL(String searchQuery){ return API_DOMAIN + "/search?query=" + searchQuery; }

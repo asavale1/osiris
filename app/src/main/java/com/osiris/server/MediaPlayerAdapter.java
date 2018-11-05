@@ -30,7 +30,13 @@ class MediaPlayerAdapter {
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
+
+
                     setNewState(PlaybackStateCompat.STATE_PAUSED);
+
+                    mediaPlaybackListener.onPlaybackCompleted();
+
+
                 }
             });
         }

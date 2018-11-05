@@ -9,6 +9,7 @@ import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaBrowserServiceCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     private final static String MY_MEDIA_ROOT_ID = "Osiris";
     private boolean mServiceInStartedState;
 
-    //private static final String TAG = MediaPlaybackService.class.getName();
+    private static final String TAG = MediaPlaybackService.class.getName();
 
     private MediaNotificationManager mediaNotificationManager;
 
@@ -71,7 +72,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
     }
 
-    class MediaPlaybackListener {
+    class MediaPlaybackListener extends PlaybackInfoListener {
         private final ServiceManager serviceManager;
 
         MediaPlaybackListener() {
@@ -92,6 +93,14 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                     serviceManager.moveServiceOutOfStartedState(state);
                     break;
             }
+        }
+
+        @Override
+        public void onPlaybackCompleted() {
+            super.onPlaybackCompleted();
+            Log.i(TAG, "On Playback Completed");
+            mediaSession.getController().getTransportControls().skipToNext();
+            Log.i(TAG, "After skip");
         }
 
         class ServiceManager {

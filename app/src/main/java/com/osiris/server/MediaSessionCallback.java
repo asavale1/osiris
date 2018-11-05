@@ -104,7 +104,7 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
             }
 
             onPrepare();
-            onPause();
+            onPlay();
         }
     }
 
@@ -124,9 +124,7 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
         if(mediaPlayerAdapter.isPlaying()){
             onPlay();
         }else{
-            if(!isReadyToPlay()){
-                return;
-            }
+            if(!isReadyToPlay()){ return; }
 
             onPrepare();
             onPause();
@@ -186,8 +184,6 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
                 break;
         }
-
-
     }
 
     private boolean isReadyToPlay() {
