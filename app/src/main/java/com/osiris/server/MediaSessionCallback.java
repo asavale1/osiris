@@ -99,12 +99,10 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
         if(mediaPlayerAdapter.isPlaying()){
             onPlay();
         }else{
-            if(!isReadyToPlay()){
-                return;
-            }
+            if(!isReadyToPlay()){ return; }
 
             onPrepare();
-            onPlay();
+            onPause();
         }
     }
 

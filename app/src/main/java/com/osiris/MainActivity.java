@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.i(TAG, "In OnCreate");
-
         mediaBrowser = new MediaBrowserCompat(this,
                 new ComponentName(this, MediaPlaybackService.class), connectionCallback, null);
         mediaBrowserSubscriptionCallback = new MediaBrowserSubscriptionCallback();
@@ -71,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
                 fragment = new LibraryFragment();
                 break;
             case FragmentConstants.FRAGMENT_CREATE_PLAYLIST:
-                Log.i(TAG, "Create Playlist Fragment");
                 fragment = new CreatePlaylistFragment();
                 break;
             case FragmentConstants.FRAGMENT_VERIFY_ACCOUNT:
@@ -91,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         if(fragment != null){
 
             if(bundle != null) {
-                Log.i(TAG, "Bundle is not null");
                 fragment.setArguments(bundle);
             }
 
@@ -108,10 +104,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
             fragmentTransaction.commit();
         }
 
-
-
-        Log.i(TAG, "In replaceFragment");
-        Log.i(TAG, "Size: " + fragmentManager.getFragments().size());
     }
 
 
@@ -119,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     @Override
     public void onStart(){
         super.onStart();
-        Log.i(TAG, "In onStart");
         mediaBrowser.connect();
     }
 
@@ -140,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     @Override
     public void onResume(){
         super.onResume();
-        Log.i(TAG, "In onResume");
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
@@ -154,8 +144,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         public void onChildrenLoaded(@NonNull String parentId,
                                      @NonNull List<MediaBrowserCompat.MediaItem> children) {
             super.onChildrenLoaded(parentId, children);
-
-            Log.i(TAG, "In onChildrenloaded");
 
             if(!children.isEmpty()){
 
@@ -237,15 +225,12 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
         @Override
         public void onMetadataChanged(MediaMetadataCompat metadata) {
-            Log.i(TAG, "In onMetadataChanged");
             if(metadata == null){
-                Log.i(TAG, "metadata is null");
                 return;
             }
 
             LibraryFragment libraryFragment = isLibraryFragmentVisible();
             if(libraryFragment != null){
-                Log.i(TAG, "Library Fragment is not null");
                 libraryFragment.onMetadataChanged(metadata);
             }
 
@@ -253,17 +238,11 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
-            Log.i(TAG, "In onPlaybackStateChanged");
-
 
             LibraryFragment libraryFragment = isLibraryFragmentVisible();
 
             if(libraryFragment != null){
-                //Log.i(TAG, "Library Fragment is not null");
-                Log.i(TAG, "Library Fragment Is Visible" );
                 libraryFragment.onPlaybackStateChanged(state);
-            }else{
-                Log.i(TAG, "Library Fragment Is Not Visible" );
             }
 
         }
@@ -271,8 +250,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         @Override
         public void onSessionDestroyed() {
             super.onSessionDestroyed();
-
-            Log.i(TAG, "In onSessionDestroyed");
         }
 
     };
@@ -282,22 +259,16 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
      */
     @Override
     public void playSongAt(int queueIndex){
-        Log.i(TAG, "In playSongAt");
         Bundle bundle = new Bundle();
         bundle.putInt("queueIndex", queueIndex);
         getOsirisMediaController().sendCommand("playSongAt", bundle, null);
     }
 
-
-
     @Override
     public void addSongToQueue(SongModel songModel){
-        Log.i(TAG, "In addSongToQueue");
-
         Bundle bundle = new Bundle();
         bundle.putString("songModel", new Gson().toJson(songModel));
         getOsirisMediaController().sendCommand("addSongToQueue", bundle, null);
-
     }
 
     @Override
@@ -314,15 +285,8 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
     @Override
     public MediaMetadataCompat getCurrentMediaMetadata(){
-        Log.i(TAG, "Get Current mEDIA METADATA");
-        MediaMetadataCompat mediaMetadataCompat = getOsirisMediaController().getMetadata();
-        if(mediaMetadataCompat != null)
-            Log.i(TAG, "Current Song: " + mediaMetadataCompat.getDescription().getTitle());
-        else
-            Log.i(TAG, "MediaMetadata is null");
-        return mediaMetadataCompat;
+        return getOsirisMediaController().getMetadata();
     }
-
 
     /**
      * PlayerFragment callbacks for handling the media player
@@ -330,7 +294,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
     @Override
     public void onPlayPauseSong() {
-        Log.i(TAG, "In onPlayPauseSong");
         if(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING){
             getTransportControls().play();
         }else if(getPlaybackState() != -1){
@@ -347,13 +310,11 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
     @Override
     public void onSkipToNextSong(){
-        Log.i(TAG, "In onSkipToNextSong");
         getTransportControls().skipToNext();
     }
 
     @Override
     public void onSkipToPreviousSong(){
-        Log.i(TAG, "In onSkipToPreviousSong");
         getTransportControls().skipToPrevious();
     }
 

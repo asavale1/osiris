@@ -9,7 +9,6 @@ import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaBrowserServiceCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.Log;
 
 import java.util.List;
 
@@ -43,8 +42,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         setSessionToken(mediaSession.getSessionToken());
 
         mediaNotificationManager = new MediaNotificationManager(this);
-
-
 
     }
 
@@ -98,9 +95,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         @Override
         public void onPlaybackCompleted() {
             super.onPlaybackCompleted();
-            Log.i(TAG, "On Playback Completed");
             mediaSession.getController().getTransportControls().skipToNext();
-            Log.i(TAG, "After skip");
+            mediaSession.getController().getTransportControls().play();
         }
 
         class ServiceManager {
