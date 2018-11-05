@@ -71,7 +71,8 @@ public class BrowseFragment extends Fragment {
         albumsRecyclerView = view.findViewById(R.id.albums_recycler_view);
         albumsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        buildUI();
+        //buildUI();
+        searchLibrary("");
 
     }
 

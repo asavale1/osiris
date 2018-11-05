@@ -10,13 +10,14 @@ import com.osiris.R;
 
 class SongViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-    TextView songTitle;
+    TextView songTitle, albumTitle;
     private SongRecyclerViewAdapter.ItemClickListener itemClickListener;
     //private static final String TAG = SongViewHolder.class.getName();
 
     SongViewHolder(@NonNull View itemView, SongRecyclerViewAdapter.ItemClickListener itemClickListener) {
         super(itemView);
         this.songTitle = itemView.findViewById(R.id.song_title);
+        this.albumTitle = itemView.findViewById(R.id.album_title);
         this.itemClickListener = itemClickListener;
         itemView.setOnClickListener(this);
     }

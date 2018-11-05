@@ -13,9 +13,11 @@ public class ModelParser {
     public static SongModel parseSongModelJson(JsonObject songJson){
         SongModel songModel = new SongModel();
         songModel.setId(songJson.get("_id").getAsString());
-        songModel.setAlbum(songJson.get("albumId").getAsString());
+        songModel.setAlbumId(songJson.get("albumId").getAsString());
+        songModel.setAlbumTitle(songJson.get("albumTitle").getAsString());
         songModel.setFileUrl(songJson.get("fileUrl").getAsString());
         songModel.setTitle(songJson.get("title").getAsString());
+
         return songModel;
     }
 

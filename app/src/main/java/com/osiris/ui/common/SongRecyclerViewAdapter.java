@@ -34,6 +34,7 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongViewHolder
     @Override
     public void onBindViewHolder(@NonNull SongViewHolder songViewHolder, int i) {
         songViewHolder.songTitle.setText(songs.get(i).getTitle());
+        songViewHolder.albumTitle.setText(songs.get(i).getAlbumTitle());
     }
 
     @Override

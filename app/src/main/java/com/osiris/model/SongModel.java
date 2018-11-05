@@ -1,7 +1,7 @@
 package com.osiris.model;
 
 public class SongModel {
-    private String title, album, id, fileUrl;
+    private String title, albumId, albumTitle, id, fileUrl;
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
@@ -12,7 +12,10 @@ public class SongModel {
     public String getFileUrl() { return fileUrl; }
     void setFileUrl(String fileUrl) { this.fileUrl = fileUrl; }
 
-    public String getAlbum(){ return album; }
-    void setAlbum(String album){ this.album = album; }
+    public String getAlbumId(){ return albumId; }
+    void setAlbumId(String albumId){ this.albumId = albumId; }
+
+    public String getAlbumTitle(){ return this.albumTitle; }
+    void setAlbumTitle(String albumTitle){ this.albumTitle = albumTitle; }
 
 }

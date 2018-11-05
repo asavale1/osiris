@@ -12,7 +12,10 @@
         android:layout_height="75dp"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
+        android:scrollHorizontally="true"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:gravity="center_vertical"
-        android:textSize="24sp" />
+        android:textSize="18sp" />
 
 </LinearLayout>

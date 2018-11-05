@@ -75,15 +75,22 @@ public class ViewPlaylistFragment extends Fragment {
             SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), playlist.getSongs(), itemClickListener);
             recyclerView.swapAdapter(adapter, false);
 
-            view.findViewById(R.id.queuePlaylist).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i(TAG, "Play button clicked");
-                    libraryFragmentListener.addPlaylistToQueue(playlist);
-                    assert getFragmentManager() != null;
-                    getFragmentManager().popBackStack();
-                }
-            });
+            if(playlist.getSongs().size() > 0){
+                view.findViewById(R.id.empty_playlist).setVisibility(View.GONE);
+                view.findViewById(R.id.queuePlaylist).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.queuePlaylist).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        libraryFragmentListener.addPlaylistToQueue(playlist);
+                        assert getFragmentManager() != null;
+                        getFragmentManager().popBackStack();
+                    }
+                });
+            }else{
+                view.findViewById(R.id.empty_playlist).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.queuePlaylist).setVisibility(View.GONE);
+            }
+
         }
     }
 

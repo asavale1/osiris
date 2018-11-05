@@ -34,6 +34,7 @@ public class QueueRecyclerViewAdapter extends RecyclerView.Adapter<QueueViewHold
     @Override
     public void onBindViewHolder(@NonNull QueueViewHolder queueViewHolder, int i) {
         queueViewHolder.songTitle.setText(songs.get(i).getDescription().getTitle());
+        queueViewHolder.albumTitle.setText(songs.get(i).getDescription().getSubtitle());
     }
 
     @Override

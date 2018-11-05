@@ -9,6 +9,9 @@
     <string name="no_albums_found">No Albums Found</string>
     <string name="albums">Albums</string>
     <string name="specify_pin">Please specify a pin</string>
+    <string name="start_adding_songs">Start adding songs</string>
+
+
 
     <string name="cache">OsirisCache</string>
     <string name="cache_reload_playlists">reload_playlists</string>
