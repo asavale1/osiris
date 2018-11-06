@@ -17,6 +17,7 @@ public class ApiConstants {
 
     static String GET_PLAYLIST(String playlistId, boolean detailed){ return API_DOMAIN + "/playlists/"+ playlistId + "?detailed=" + detailed; }
     static String GET_ALBUM(String albumId, boolean detailed){ return API_DOMAIN + "/albums/"+ albumId + "?detailed=" + detailed; }
+    static String DELETE_PLAYLIST(String playlistId){ return API_DOMAIN + "/playlists/" + playlistId; }
 
     static final String METHOD_GET = "GET";
     static final String METHOD_POST = "POST";

@@ -11,12 +11,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.osiris.MainActivity;
 import com.osiris.R;
+import com.osiris.api.DeletePlaylist;
 import com.osiris.api.GetUserPlaylistsAsync;
 import com.osiris.api.RESTClient;
 import com.osiris.api.listeners.RESTCallbackListener;
@@ -59,7 +61,6 @@ public class PlaylistFragment extends Fragment {
             }
         });
 
-
         boolean reloadPlaylists = CacheManager.getInstance(getActivity()).readBool(getString(R.string.cache_reload_playlists), false);
 
         if(playlists.size() == 0 || reloadPlaylists){
@@ -98,7 +99,7 @@ public class PlaylistFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.playlists_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         PlaylistRecyclerViewAdapter adapter = new PlaylistRecyclerViewAdapter(getContext(), playlists, itemClickListener, itemLongClickListener);
-        recyclerView.setAdapter(adapter);
+        recyclerView.swapAdapter(adapter, false);
 
     }
 
@@ -113,7 +114,7 @@ public class PlaylistFragment extends Fragment {
 
     private PlaylistRecyclerViewAdapter.ItemLongClickListener itemLongClickListener = new PlaylistRecyclerViewAdapter.ItemLongClickListener() {
         @Override
-        public void onItemLongClick(View view, int position) {
+        public void onItemLongClick(View view, final int position) {
             PopupMenu popup = new PopupMenu(Objects.requireNonNull(getActivity()), view);
             popup.inflate(R.menu.playlist_fragment_options);
 
@@ -122,7 +123,18 @@ public class PlaylistFragment extends Fragment {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.delete_playlist:
-                            Log.i(TAG, "Delete playlist");
+                            new DeletePlaylist(playlists.get(position).getId(), new RESTCallbackListener() {
+                                @Override
+                                public void onComplete(RESTClient.RESTResponse response) {
+                                    if(response.getStatus() == HttpsURLConnection.HTTP_OK){
+                                        playlists.remove(position);
+                                        buildUI();
+                                    }else{
+                                        Toast.makeText(getActivity(), "Failed to delete playlist", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            }).execute();
                             return true;
                         default:
                             return false;
