@@ -60,7 +60,7 @@
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:orientation="vertical"
-                android:layout_height="250dp">
+                android:layout_height="300dp">
 
                 <TextView
                     android:id="@+id/songs_layout_title"
@@ -92,7 +92,7 @@
             android:visibility="gone"
             android:layout_width="match_parent"
             android:orientation="vertical"
-            android:layout_height="250dp">
+            android:layout_height="300dp">
 
             <TextView
                 android:id="@+id/albums_layout_title"

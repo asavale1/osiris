@@ -19,8 +19,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:gravity="center_vertical"
-        android:textSize="18sp"
-        android:text="Song Title"/>
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/album_title"
@@ -35,7 +34,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:gravity="center_vertical"
-        android:textSize="18sp"
-        android:text="Album Title"/>
+        android:textSize="16sp"/>
 
 </LinearLayout>
