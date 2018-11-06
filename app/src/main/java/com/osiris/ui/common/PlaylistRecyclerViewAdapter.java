@@ -17,20 +17,23 @@ public class PlaylistRecyclerViewAdapter extends RecyclerView.Adapter<PlaylistVi
     private LayoutInflater layoutInflater;
     private List<PlaylistModel> playlists;
     private ItemClickListener itemClickListener;
+    private ItemLongClickListener itemLongClickListener;
 
     //private final static String TAG = PlaylistRecyclerViewAdapter.class.getName();
 
-    public PlaylistRecyclerViewAdapter(Context context, List<PlaylistModel> playlists, ItemClickListener itemClickListener) {
+    public PlaylistRecyclerViewAdapter(Context context, List<PlaylistModel> playlists,
+                                       ItemClickListener itemClickListener, ItemLongClickListener itemLongClickListener) {
         this.layoutInflater = LayoutInflater.from(context);
         this.playlists = playlists;
         this.itemClickListener = itemClickListener;
+        this.itemLongClickListener = itemLongClickListener;
     }
 
     @NonNull
     @Override
     public PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = layoutInflater.inflate(R.layout.recyclerview_item_playlist, viewGroup, false);
-        return new PlaylistViewHolder(view, itemClickListener);
+        return new PlaylistViewHolder(view, itemClickListener, itemLongClickListener);
     }
 
     @Override
@@ -45,6 +48,10 @@ public class PlaylistRecyclerViewAdapter extends RecyclerView.Adapter<PlaylistVi
 
     public interface ItemClickListener{
         void onItemClick(View view, int position);
+    }
+
+    public interface ItemLongClickListener{
+        void onItemLongClick(View view, int position);
     }
 
 

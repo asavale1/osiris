@@ -4,8 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -31,7 +34,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class PlaylistFragment extends Fragment {
 
-    //private final static String TAG = PlaylistFragment.class.getName();
+    private final static String TAG = PlaylistFragment.class.getName();
 
     private List<PlaylistModel> playlists = new ArrayList<>();
     private View view;
@@ -94,7 +97,7 @@ public class PlaylistFragment extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.playlists_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        PlaylistRecyclerViewAdapter adapter = new PlaylistRecyclerViewAdapter(getContext(), playlists, itemClickListener);
+        PlaylistRecyclerViewAdapter adapter = new PlaylistRecyclerViewAdapter(getContext(), playlists, itemClickListener, itemLongClickListener);
         recyclerView.setAdapter(adapter);
 
     }
@@ -105,6 +108,28 @@ public class PlaylistFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putString("playlistId", playlists.get(position).getId());
             ((MainActivity) Objects.requireNonNull(getActivity())).replaceFragment(FragmentConstants.FRAGMENT_VIEW_PLAYLIST, bundle);
+        }
+    };
+
+    private PlaylistRecyclerViewAdapter.ItemLongClickListener itemLongClickListener = new PlaylistRecyclerViewAdapter.ItemLongClickListener() {
+        @Override
+        public void onItemLongClick(View view, int position) {
+            PopupMenu popup = new PopupMenu(Objects.requireNonNull(getActivity()), view);
+            popup.inflate(R.menu.playlist_fragment_options);
+
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.delete_playlist:
+                            Log.i(TAG, "Delete playlist");
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+            popup.show();
         }
     };
 

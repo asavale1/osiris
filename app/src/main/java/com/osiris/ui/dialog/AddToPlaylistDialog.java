@@ -71,7 +71,7 @@ public class AddToPlaylistDialog extends Dialog {
     private void setupUI(){
         RecyclerView recyclerView = findViewById(R.id.playlists_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        PlaylistRecyclerViewAdapter adapter = new PlaylistRecyclerViewAdapter(getContext(), playlists, itemClickListener);
+        PlaylistRecyclerViewAdapter adapter = new PlaylistRecyclerViewAdapter(getContext(), playlists, itemClickListener, null);
         recyclerView.setAdapter(adapter);
     }
 
