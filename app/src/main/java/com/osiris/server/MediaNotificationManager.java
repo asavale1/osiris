@@ -104,7 +104,7 @@ class MediaNotificationManager {
                 .setSmallIcon(android.R.drawable.alert_dark_frame)
                 .setContentIntent(createContentIntent())
                 .setContentTitle(mediaDescription.getTitle())
-                //.setContentText(mediaDescription.getSubtitle())
+                .setContentText(mediaDescription.getSubtitle())
                 .setDeleteIntent(MediaButtonReceiver.buildMediaButtonPendingIntent(
                         mediaPlaybackService, PlaybackStateCompat.ACTION_STOP))
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
