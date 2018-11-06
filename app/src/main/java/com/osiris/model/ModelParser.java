@@ -60,6 +60,7 @@ public class ModelParser {
         playlist.setId(playlistJson.get("_id").getAsString());
         playlist.setTitle(playlistJson.get("title").getAsString());
         playlist.setUserId(playlistJson.get("userId").getAsString());
+        playlist.setPrimary(playlistJson.get("primary").getAsBoolean());
 
         Gson gson = new Gson();
         String [] songs = gson.fromJson(playlistJson.get("songs").getAsJsonArray(), String [].class);
@@ -74,6 +75,8 @@ public class ModelParser {
         playlist.setId(playlistDetailedJson.get("_id").getAsString());
         playlist.setTitle(playlistDetailedJson.get("title").getAsString());
         playlist.setUserId(playlistDetailedJson.get("userId").getAsString());
+        playlist.setPrimary(playlistDetailedJson.get("primary").getAsBoolean());
+
         List<SongModel> songs = new ArrayList<>();
 
         JsonArray songsJsonArray = playlistDetailedJson.getAsJsonArray("songs");

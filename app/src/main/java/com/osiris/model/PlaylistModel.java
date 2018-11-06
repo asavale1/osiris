@@ -3,6 +3,7 @@ package com.osiris.model;
 public class PlaylistModel {
     private String id, title, userId;
     private String [] songs;
+    private boolean isPrimary;
 
 
     public String getId() { return id; }
@@ -21,4 +22,6 @@ public class PlaylistModel {
     public void setSongs(String[] songs) { this.songs = songs; }
 
 
+    public boolean isPrimary() { return isPrimary; }
+    public void setPrimary(boolean primary) { isPrimary = primary; }
 }

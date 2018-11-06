@@ -115,33 +115,38 @@ public class PlaylistFragment extends Fragment {
     private PlaylistRecyclerViewAdapter.ItemLongClickListener itemLongClickListener = new PlaylistRecyclerViewAdapter.ItemLongClickListener() {
         @Override
         public void onItemLongClick(View view, final int position) {
-            PopupMenu popup = new PopupMenu(Objects.requireNonNull(getActivity()), view);
-            popup.inflate(R.menu.playlist_fragment_options);
+            if(!playlists.get(position).isPrimary()){
+                PopupMenu popup = new PopupMenu(Objects.requireNonNull(getActivity()), view);
+                popup.inflate(R.menu.playlist_fragment_options);
 
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.delete_playlist:
-                            new DeletePlaylist(playlists.get(position).getId(), new RESTCallbackListener() {
-                                @Override
-                                public void onComplete(RESTClient.RESTResponse response) {
-                                    if(response.getStatus() == HttpsURLConnection.HTTP_OK){
-                                        playlists.remove(position);
-                                        buildUI();
-                                    }else{
-                                        Toast.makeText(getActivity(), "Failed to delete playlist", Toast.LENGTH_SHORT).show();
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.delete_playlist:
+                                new DeletePlaylist(playlists.get(position).getId(), new RESTCallbackListener() {
+                                    @Override
+                                    public void onComplete(RESTClient.RESTResponse response) {
+                                        if(response.getStatus() == HttpsURLConnection.HTTP_OK){
+                                            playlists.remove(position);
+                                            buildUI();
+                                        }else{
+                                            Toast.makeText(getActivity(), "Failed to delete playlist", Toast.LENGTH_SHORT).show();
+                                        }
+
                                     }
-
-                                }
-                            }).execute();
-                            return true;
-                        default:
-                            return false;
+                                }).execute();
+                                return true;
+                            default:
+                                return false;
+                        }
                     }
-                }
-            });
-            popup.show();
+                });
+                popup.show();
+            }else{
+                Toast.makeText(getActivity(), "Can't delete your library", Toast.LENGTH_SHORT).show();
+
+            }
         }
     };
 
