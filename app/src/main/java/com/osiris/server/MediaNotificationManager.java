@@ -94,7 +94,6 @@ class MediaNotificationManager {
 
     private NotificationCompat.Builder buildNotification(@NonNull  PlaybackStateCompat state, MediaSessionCompat.Token token,
                                                          boolean isPlaying, MediaDescriptionCompat mediaDescription){
-        Log.i(TAG, "In buildNotification");
         if(isAndroidOOrHigher()){
             createChannel();
         }
@@ -112,12 +111,6 @@ class MediaNotificationManager {
         if ((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS) != 0) {
             builder.addAction(mPrevAction);
         }
-
-        Log.i(TAG, "Get Actions: " + state.getActions());
-        Log.i(TAG, "PlaybackStateCompat.SKIP_NEXT: " + (PlaybackStateCompat.ACTION_SKIP_TO_NEXT));
-        Log.i(TAG, "" + (state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_NEXT));
-        Log.i(TAG, "PlaybackStateCompat.SKIP_PREVIOUS: " + PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS);
-        Log.i(TAG, "" + (state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS));
 
         builder.addAction(isPlaying ? mPauseAction : mPlayAction);
 

@@ -6,4 +6,5 @@ public interface PlayerControllerListener {
     void onStopSong();
     void onSkipToNextSong();
     void onSkipToPreviousSong();
+    boolean isMediaPlaying();
 }

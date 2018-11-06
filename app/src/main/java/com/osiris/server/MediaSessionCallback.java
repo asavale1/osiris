@@ -175,11 +175,20 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
                         onAddQueueItem(musicLibrary.getMediaItem(song.getId()).getDescription());
                     }
 
-
                     onPrepare();
                     onPlay();
                 }
 
+                break;
+            case "clearQueue":
+                onStop();
+                preparedMedia = null;
+                queueIndex = -1;
+
+                musicLibrary.clearQueue();
+                playlist.clear();
+                mediaSession.setQueue(playlist);
+                cb.send(100, null);
                 break;
         }
     }

@@ -12,6 +12,7 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.os.ResultReceiver;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -288,6 +289,12 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         return getOsirisMediaController().getMetadata();
     }
 
+    @Override
+    public void clearQueue(ResultReceiver callback){
+        getOsirisMediaController().sendCommand("clearQueue", null, callback);
+    }
+
+
     /**
      * PlayerFragment callbacks for handling the media player
      */
@@ -316,6 +323,11 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     @Override
     public void onSkipToPreviousSong(){
         getTransportControls().skipToPrevious();
+    }
+
+    @Override
+    public boolean isMediaPlaying(){
+        return (getPlaybackState() == PlaybackStateCompat.STATE_PLAYING);
     }
 
 }
