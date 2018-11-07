@@ -1,5 +1,7 @@
 package com.osiris.model;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -9,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModelParser {
+
+    private static final String TAG = ModelParser.class.getName();
 
     public static SongModel parseSongModelJson(JsonObject songJson){
         SongModel songModel = new SongModel();

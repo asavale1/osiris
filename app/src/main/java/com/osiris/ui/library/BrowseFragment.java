@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -30,6 +31,7 @@ import com.osiris.model.AlbumModel;
 import com.osiris.model.ModelParser;
 import com.osiris.model.SongModel;
 import com.osiris.ui.LibraryFragmentListener;
+import com.osiris.ui.PlayerControllerListener;
 import com.osiris.ui.common.AlbumRecyclerViewAdapter;
 import com.osiris.ui.common.SongRecyclerViewAdapter;
 import com.osiris.ui.dialog.AddToPlaylistDialog;
@@ -42,11 +44,12 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class BrowseFragment extends Fragment {
 
-    //private static final String TAG = BrowseFragment.class.getName();
+    private static final String TAG = BrowseFragment.class.getName();
 
     private List<SongModel> songs = new ArrayList<>();
     private List<AlbumModel> albums = new ArrayList<>();
     private LibraryFragmentListener libraryFragmentListener;
+    private PlayerControllerListener playerControllerListener;
     private EditText searchEditText;
     private RecyclerView songsRecyclerView, albumsRecyclerView;
     private View view;
@@ -71,7 +74,6 @@ public class BrowseFragment extends Fragment {
         albumsRecyclerView = view.findViewById(R.id.albums_recycler_view);
         albumsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        //buildUI();
         searchLibrary("");
 
     }
@@ -84,6 +86,13 @@ public class BrowseFragment extends Fragment {
         } else {
             throw new ClassCastException(context.toString()
                     + " must implemenet LibraryFragmentListener");
+        }
+
+        if (context instanceof PlayerControllerListener) {
+            playerControllerListener = (PlayerControllerListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implemenet PlayerControllerListener");
         }
     }
 
@@ -101,7 +110,7 @@ public class BrowseFragment extends Fragment {
             }
         });
 
-        SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), songs, itemClickListener);
+        SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), songs, itemClickListener, songItemLongClickListener);
         songsRecyclerView.swapAdapter(adapter, false);
 
         AlbumRecyclerViewAdapter albumsAdapter = new AlbumRecyclerViewAdapter(getContext(), albums, albumItemClickListener);
@@ -109,9 +118,9 @@ public class BrowseFragment extends Fragment {
 
     }
 
-    private SongRecyclerViewAdapter.ItemClickListener itemClickListener = new SongRecyclerViewAdapter.ItemClickListener() {
+    private SongRecyclerViewAdapter.ItemLongClickListener songItemLongClickListener = new SongRecyclerViewAdapter.ItemLongClickListener() {
         @Override
-        public void onItemClick(View view, int position) {
+        public void onItemLongClick(View view, int position) {
             PopupMenu popup = new PopupMenu(Objects.requireNonNull(getActivity()), view);
             popup.inflate(R.menu.song_select_options);
 
@@ -134,6 +143,14 @@ public class BrowseFragment extends Fragment {
             });
             popup.show();
 
+        }
+    };
+
+    private SongRecyclerViewAdapter.ItemClickListener itemClickListener = new SongRecyclerViewAdapter.ItemClickListener() {
+        @Override
+        public void onItemClick(View view, int position) {
+            libraryFragmentListener.addSongToQueue(songs.get(position));
+            playerControllerListener.onPlaySong();
         }
     };
 

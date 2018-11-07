@@ -88,7 +88,7 @@ public class ViewAlbumFragment extends Fragment {
             ((TextView)view.findViewById(R.id.album_title)).setText(album.getTitle());
             RecyclerView recyclerView = view.findViewById(R.id.songs_recycler_view);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), album.getSongs(), itemClickListener);
+            SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), album.getSongs(), itemClickListener, null);
             recyclerView.setAdapter(adapter);
         }
     }

@@ -309,6 +309,20 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     }
 
     @Override
+    public void onPlaySong(){
+        if(getPlaybackState() != PlaybackStateCompat.STATE_PLAYING){
+            getTransportControls().play();
+        }
+    }
+
+    @Override
+    public void onPauseSong(){
+        if(getPlaybackState() == PlaybackStateCompat.STATE_PLAYING){
+            getTransportControls().pause();
+        }
+    }
+
+    @Override
     public void onStopSong(){
         if(getPlaybackState() != PlaybackStateCompat.STATE_STOPPED){
             getTransportControls().stop();

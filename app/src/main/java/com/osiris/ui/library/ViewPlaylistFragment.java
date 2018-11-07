@@ -72,7 +72,7 @@ public class ViewPlaylistFragment extends Fragment {
             ((TextView)view.findViewById(R.id.playlist_title)).setText(playlist.getTitle());
             RecyclerView recyclerView = view.findViewById(R.id.songs_recycler_view);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), playlist.getSongs(), itemClickListener);
+            SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), playlist.getSongs(), itemClickListener, null);
             recyclerView.swapAdapter(adapter, false);
 
             if(playlist.getSongs().size() > 0){
