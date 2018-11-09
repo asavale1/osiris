@@ -13,7 +13,9 @@ public abstract class JsonConstants {
 
     public static final String SONG_ID = "songId";
     public static final String USER_ID = "userId";
+    public static final String USER_USERNAME = "userUsername";
 
+    public static final String PLAYLISTS = "playlists";
     public static final String PIN = "pin";
 
     public static final String ERROR = "error";

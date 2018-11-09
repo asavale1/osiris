@@ -65,6 +65,7 @@ public class ModelParser {
         playlist.setId(playlistJson.get(JsonConstants._ID).getAsString());
         playlist.setTitle(playlistJson.get(JsonConstants.TITLE).getAsString());
         playlist.setUserId(playlistJson.get(JsonConstants.USER_ID).getAsString());
+        playlist.setUserUsername(playlistJson.get(JsonConstants.USER_USERNAME).getAsString());
         playlist.setPrimary(playlistJson.get(JsonConstants.PRIMARY).getAsBoolean());
 
         Gson gson = new Gson();
@@ -80,6 +81,7 @@ public class ModelParser {
         playlist.setId(playlistDetailedJson.get(JsonConstants._ID).getAsString());
         playlist.setTitle(playlistDetailedJson.get(JsonConstants.TITLE).getAsString());
         playlist.setUserId(playlistDetailedJson.get(JsonConstants.USER_ID).getAsString());
+        playlist.setUserUsername(playlistDetailedJson.get(JsonConstants.USER_USERNAME).getAsString());
         playlist.setPrimary(playlistDetailedJson.get(JsonConstants.PRIMARY).getAsBoolean());
 
         List<SongModel> songs = new ArrayList<>();

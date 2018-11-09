@@ -31,6 +31,7 @@ import com.osiris.constants.FragmentConstants;
 import com.osiris.constants.JsonConstants;
 import com.osiris.model.AlbumModel;
 import com.osiris.model.ModelParser;
+import com.osiris.model.PlaylistModel;
 import com.osiris.model.SongModel;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.PlayerControllerListener;
@@ -50,10 +51,11 @@ public class BrowseFragment extends Fragment {
 
     private List<SongModel> songs = new ArrayList<>();
     private List<AlbumModel> albums = new ArrayList<>();
+    private List<PlaylistModel> playlists = new ArrayList<>();
     private LibraryFragmentListener libraryFragmentListener;
     private PlayerControllerListener playerControllerListener;
     private EditText searchEditText;
-    private RecyclerView songsRecyclerView, albumsRecyclerView;
+    private RecyclerView songsRecyclerView, albumsRecyclerView, playlistsRecyclerView;
     private View view;
 
     @Override
@@ -70,11 +72,16 @@ public class BrowseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         searchEditText = view.findViewById(R.id.search_query);
+
         songsRecyclerView = view.findViewById(R.id.songs_recycler_view);
         songsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         albumsRecyclerView = view.findViewById(R.id.albums_recycler_view);
         albumsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        playlistsRecyclerView = view.findViewById(R.id.playlists_recycler_view);
+        playlistsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
 
         searchLibrary("");
 
@@ -200,8 +207,19 @@ public class BrowseFragment extends Fragment {
                         }
                         view.findViewById(R.id.albums_layout).setVisibility(View.VISIBLE);
 
-                        buildUI();
+                        JsonArray playlistsJsonArray = parser.parse(response.getData()).getAsJsonObject().get(JsonConstants.PLAYLISTS).getAsJsonArray();
+                        for(JsonElement elem : playlistsJsonArray){
+                            playlists.add(ModelParser.parsePlaylistModelJson(elem.getAsJsonObject()));
+                        }
 
+                        if(playlists.size() == 0){
+                            ((TextView) view.findViewById(R.id.playlists_layout_title)).setText("No Playlists Found");
+                        }else{
+                            ((TextView) view.findViewById(R.id.playlists_layout_title)).setText("Playlists");
+                        }
+                        view.findViewById(R.id.playlists_layout).setVisibility(View.VISIBLE);
+
+                        buildUI();
 
                     }catch (IllegalStateException e){
                         e.printStackTrace();

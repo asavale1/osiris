@@ -61,13 +61,13 @@ class MediaPlayerAdapter {
 
 
         try {
-            Log.i(TAG, "Media Url: " + mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI));
             mediaPlayer.setDataSource(mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI));
             mediaPlayer.prepare();
+            onPlay();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        onPlay();
+
     }
 
     private void onPlay(){

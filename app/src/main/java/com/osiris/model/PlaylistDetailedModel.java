@@ -3,7 +3,7 @@ package com.osiris.model;
 import java.util.List;
 
 public class PlaylistDetailedModel {
-    private String id, title, userId;
+    private String id, title, userId, userUsername;
     private List<SongModel> songs;
     private boolean isPrimary;
 
@@ -21,4 +21,8 @@ public class PlaylistDetailedModel {
 
     public boolean isPrimary() { return isPrimary; }
     public void setPrimary(boolean primary) { isPrimary = primary; }
+
+    public String getUserUsername() { return userUsername; }
+    public void setUserUsername(String userUsername) { this.userUsername = userUsername; }
+
 }

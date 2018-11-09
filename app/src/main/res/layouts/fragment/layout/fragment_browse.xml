@@ -87,36 +87,67 @@
             </LinearLayout>
 
 
-        <LinearLayout
-            android:id="@+id/albums_layout"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="300dp">
-
-            <TextView
-                android:id="@+id/albums_layout_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:text="Albums"
-                android:textColor="@color/colorPrimaryLight"
-                android:textSize="20sp" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/albums_recycler_view"
+            <LinearLayout
+                android:id="@+id/albums_layout"
+                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp" >
-            </android.support.v7.widget.RecyclerView>
+                android:orientation="vertical"
+                android:layout_height="300dp">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/albums_layout_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="Albums"
+                    android:textColor="@color/colorPrimaryLight"
+                    android:textSize="20sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/albums_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp" >
+                </android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/playlists_layout"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="300dp">
+
+                <TextView
+                    android:id="@+id/playlists_layout_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="Playlists"
+                    android:textColor="@color/colorPrimaryLight"
+                    android:textSize="20sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/playlists_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp" >
+                </android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
 
 
         </LinearLayout>
