@@ -26,7 +26,9 @@ import com.osiris.R;
 import com.osiris.api.RESTClient;
 import com.osiris.api.SearchSongsAsync;
 import com.osiris.api.listeners.RESTCallbackListener;
+import com.osiris.constants.BundleConstants;
 import com.osiris.constants.FragmentConstants;
+import com.osiris.constants.JsonConstants;
 import com.osiris.model.AlbumModel;
 import com.osiris.model.ModelParser;
 import com.osiris.model.SongModel;
@@ -158,7 +160,7 @@ public class BrowseFragment extends Fragment {
         @Override
         public void onItemClick(View view, int position) {
             Bundle bundle = new Bundle();
-            bundle.putString("albumId", albums.get(position).getId());
+            bundle.putString(BundleConstants.ALBUM_ID, albums.get(position).getId());
             ((MainActivity) Objects.requireNonNull(getActivity())).replaceFragment(FragmentConstants.FRAGMENT_VIEW_ALBUM, bundle);
         }
     };
@@ -171,7 +173,7 @@ public class BrowseFragment extends Fragment {
                 if(response.getStatus() == HttpsURLConnection.HTTP_OK){
                     try{
                         JsonParser parser = new JsonParser();
-                        JsonArray songsJsonArray = parser.parse(response.getData()).getAsJsonObject().get("songs").getAsJsonArray();
+                        JsonArray songsJsonArray = parser.parse(response.getData()).getAsJsonObject().get(JsonConstants.SONGS).getAsJsonArray();
 
 
                         for(JsonElement elem : songsJsonArray){
@@ -185,7 +187,7 @@ public class BrowseFragment extends Fragment {
                         }
                         view.findViewById(R.id.songs_layout).setVisibility(View.VISIBLE);
 
-                        JsonArray albumsJsonArray = parser.parse(response.getData()).getAsJsonObject().get("albums").getAsJsonArray();
+                        JsonArray albumsJsonArray = parser.parse(response.getData()).getAsJsonObject().get(JsonConstants.ALBUMS).getAsJsonArray();
 
                         for(JsonElement elem : albumsJsonArray){
                             albums.add(ModelParser.parseAlbumModelJson(elem.getAsJsonObject()));

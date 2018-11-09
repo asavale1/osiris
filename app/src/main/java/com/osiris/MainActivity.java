@@ -18,6 +18,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.osiris.constants.BundleConstants;
+import com.osiris.constants.MediaConstants;
 import com.osiris.server.MediaPlaybackService;
 import com.osiris.constants.FragmentConstants;
 import com.osiris.ui.library.CreatePlaylistFragment;
@@ -261,22 +263,22 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     @Override
     public void playSongAt(int queueIndex){
         Bundle bundle = new Bundle();
-        bundle.putInt("queueIndex", queueIndex);
-        getOsirisMediaController().sendCommand("playSongAt", bundle, null);
+        bundle.putInt(BundleConstants.QUEUE_INDEX, queueIndex);
+        getOsirisMediaController().sendCommand(MediaConstants.COMMAND_PLAY_SONG_AT, bundle, null);
     }
 
     @Override
     public void addSongToQueue(SongModel songModel){
         Bundle bundle = new Bundle();
-        bundle.putString("songModel", new Gson().toJson(songModel));
-        getOsirisMediaController().sendCommand("addSongToQueue", bundle, null);
+        bundle.putString(BundleConstants.SONG_MODEL, new Gson().toJson(songModel));
+        getOsirisMediaController().sendCommand(MediaConstants.COMMAND_ADD_SONG_TO_QUEUE, bundle, null);
     }
 
     @Override
     public void addPlaylistToQueue(PlaylistDetailedModel playlist){
         Bundle bundle = new Bundle();
-        bundle.putString("playlistModel", new Gson().toJson(playlist));
-        getOsirisMediaController().sendCommand("addPlaylistToQueue", bundle, null);
+        bundle.putString(BundleConstants.PLAYLIST_MODEL, new Gson().toJson(playlist));
+        getOsirisMediaController().sendCommand(MediaConstants.COMMAND_ADD_PLAYLIST_TO_QUEUE, bundle, null);
     }
 
     @Override
@@ -291,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
     @Override
     public void clearQueue(ResultReceiver callback){
-        getOsirisMediaController().sendCommand("clearQueue", null, callback);
+        getOsirisMediaController().sendCommand(MediaConstants.COMMAND_CLEAR_QUEUE, null, callback);
     }
 
 

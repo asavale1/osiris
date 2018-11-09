@@ -10,6 +10,8 @@ import android.support.v4.media.MediaBrowserServiceCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
+import com.osiris.constants.MediaConstants;
+
 import java.util.List;
 
 public class MediaPlaybackService extends MediaBrowserServiceCompat {
@@ -17,7 +19,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     private MediaSessionCompat mediaSession;
     private MusicLibrary musicLibrary;
     private MediaPlayerAdapter mediaPlayerAdapter;
-    private final static String MY_MEDIA_ROOT_ID = "Osiris";
+    private final static String MY_MEDIA_ROOT_ID = MediaConstants.MEDIA_ROOT_ID;
     private boolean mServiceInStartedState;
 
     private static final String TAG = MediaPlaybackService.class.getName();

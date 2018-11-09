@@ -22,6 +22,7 @@ import com.osiris.api.DeletePlaylist;
 import com.osiris.api.GetUserPlaylistsAsync;
 import com.osiris.api.RESTClient;
 import com.osiris.api.listeners.RESTCallbackListener;
+import com.osiris.constants.BundleConstants;
 import com.osiris.constants.FragmentConstants;
 import com.osiris.model.ModelParser;
 import com.osiris.model.PlaylistModel;
@@ -107,7 +108,7 @@ public class PlaylistFragment extends Fragment {
         @Override
         public void onItemClick(View view, int position) {
             Bundle bundle = new Bundle();
-            bundle.putString("playlistId", playlists.get(position).getId());
+            bundle.putString(BundleConstants.PLAYLIST_ID, playlists.get(position).getId());
             ((MainActivity) Objects.requireNonNull(getActivity())).replaceFragment(FragmentConstants.FRAGMENT_VIEW_PLAYLIST, bundle);
         }
     };

@@ -1,6 +1,7 @@
 package com.osiris.api;
 
 import com.osiris.api.listeners.RESTCallbackListener;
+import com.osiris.constants.ApiConstants;
 
 public class DeletePlaylist extends RESTClient {
     private RESTCallbackListener callbackListener;

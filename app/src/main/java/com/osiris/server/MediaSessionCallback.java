@@ -9,6 +9,8 @@ import android.util.Log;
 
 
 import com.google.gson.Gson;
+import com.osiris.constants.BundleConstants;
+import com.osiris.constants.MediaConstants;
 import com.osiris.model.PlaylistDetailedModel;
 import com.osiris.model.SongModel;
 
@@ -139,28 +141,24 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
     @Override
     public void onCommand(String command, Bundle extras, ResultReceiver cb){
 
-        Log.i(TAG, "In onCommand");
         switch(command){
-            case "playSongAt":
-                Log.i(TAG, "In onCommand: playSongAt");
-
-                this.queueIndex = extras.getInt("queueIndex");
-
+            case MediaConstants.COMMAND_PLAY_SONG_AT:
+                this.queueIndex = extras.getInt(BundleConstants.QUEUE_INDEX);
                 onPause();
                 preparedMedia = null;
                 onPlay();
 
                 break;
-            case "addSongToQueue":
-                String songModelJson = extras.getString("songModel");
+            case MediaConstants.COMMAND_ADD_SONG_TO_QUEUE:
+
+                String songModelJson = extras.getString(BundleConstants.SONG_MODEL);
                 SongModel songModel = new Gson().fromJson(songModelJson, SongModel.class);
                 if(musicLibrary.addSongToMediaItems(songModel))
                     onAddQueueItem(musicLibrary.getMediaItem(songModel.getId()).getDescription());
                 break;
-            case "addPlaylistToQueue":
-                Log.i(TAG, "Add Playlist To Queue");
+            case MediaConstants.COMMAND_ADD_PLAYLIST_TO_QUEUE:
 
-                String playlistJson = extras.getString("playlistModel");
+                String playlistJson = extras.getString(BundleConstants.PLAYLIST_MODEL);
                 PlaylistDetailedModel playlistModel = new Gson().fromJson(playlistJson, PlaylistDetailedModel.class);
 
                 if(musicLibrary.addPlaylistToMediaItems(playlistModel)){
@@ -171,7 +169,6 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
                     queueIndex = -1;
 
                     for(SongModel song : playlistModel.getSongs()){
-                        Log.i(TAG, "On Add item queue: " + song.getTitle());
                         onAddQueueItem(musicLibrary.getMediaItem(song.getId()).getDescription());
                     }
 
@@ -180,7 +177,7 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
                 }
 
                 break;
-            case "clearQueue":
+            case MediaConstants.COMMAND_CLEAR_QUEUE:
                 onStop();
                 preparedMedia = null;
                 queueIndex = -1;
@@ -188,7 +185,7 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
                 musicLibrary.clearQueue();
                 playlist.clear();
                 mediaSession.setQueue(playlist);
-                cb.send(100, null);
+                cb.send(MediaConstants.RESULT_CODE_CLEAR_QUEUE, null);
                 break;
         }
     }

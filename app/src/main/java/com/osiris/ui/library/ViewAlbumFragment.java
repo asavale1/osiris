@@ -20,6 +20,7 @@ import com.osiris.R;
 import com.osiris.api.GetAlbumAsync;
 import com.osiris.api.RESTClient;
 import com.osiris.api.listeners.RESTCallbackListener;
+import com.osiris.constants.BundleConstants;
 import com.osiris.model.AlbumDetailedModel;
 import com.osiris.model.ModelParser;
 import com.osiris.model.SongModel;
@@ -47,7 +48,7 @@ public class ViewAlbumFragment extends Fragment {
                 container, false);
 
         assert this.getArguments() != null;
-        albumId = this.getArguments().getString("albumId");
+        albumId = this.getArguments().getString(BundleConstants.ALBUM_ID);
 
         return view;
     }

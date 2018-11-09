@@ -15,6 +15,7 @@ import com.osiris.R;
 import com.osiris.api.CreatePlaylistAsync;
 import com.osiris.api.RESTClient;
 import com.osiris.api.listeners.RESTCallbackListener;
+import com.osiris.constants.JsonConstants;
 import com.osiris.utility.CacheManager;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -54,8 +55,8 @@ public class CreatePlaylistFragment extends Fragment {
         @Override
         public void onClick(View v) {
             JsonObject playlistJson = new JsonObject();
-            playlistJson.addProperty("title", playlistTitle.getText().toString());
-            playlistJson.addProperty("userId",
+            playlistJson.addProperty(JsonConstants.TITLE, playlistTitle.getText().toString());
+            playlistJson.addProperty(JsonConstants.USER_ID,
                     CacheManager.getInstance(getActivity()).readString(getString(R.string.cache_user_id), ""));
 
             new CreatePlaylistAsync(playlistJson, new RESTCallbackListener() {
@@ -71,7 +72,7 @@ public class CreatePlaylistFragment extends Fragment {
                         JsonParser parser = new JsonParser();
                         JsonObject jsonObject = parser.parse(response.getData()).getAsJsonObject();
 
-                        errorMessage.setText(jsonObject.get("error").getAsString());
+                        errorMessage.setText(jsonObject.get(JsonConstants.ERROR).getAsString());
                     }
                 }
             }).execute();

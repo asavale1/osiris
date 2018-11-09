@@ -2,6 +2,7 @@ package com.osiris.api;
 
 import com.google.gson.JsonObject;
 import com.osiris.api.listeners.RESTCallbackListener;
+import com.osiris.constants.ApiConstants;
 
 public class AddSongToPlaylistAsync extends RESTClient {
 

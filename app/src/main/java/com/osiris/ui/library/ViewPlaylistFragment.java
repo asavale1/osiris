@@ -21,6 +21,8 @@ import com.osiris.api.GetPlaylistAsync;
 import com.osiris.api.RESTClient;
 import com.osiris.api.RemoveSongFromPlaylistAsync;
 import com.osiris.api.listeners.RESTCallbackListener;
+import com.osiris.constants.BundleConstants;
+import com.osiris.constants.JsonConstants;
 import com.osiris.model.ModelParser;
 import com.osiris.model.PlaylistDetailedModel;
 import com.osiris.ui.LibraryFragmentListener;
@@ -45,7 +47,7 @@ public class ViewPlaylistFragment extends Fragment {
                 container, false);
 
         assert this.getArguments() != null;
-        playlistId = this.getArguments().getString("playlistId");
+        playlistId = this.getArguments().getString(BundleConstants.PLAYLIST_ID);
 
         return view;
     }
@@ -113,7 +115,7 @@ public class ViewPlaylistFragment extends Fragment {
 
     private void removeSongFromPlaylist(String songId){
         JsonObject requestJson = new JsonObject();
-        requestJson.addProperty("songId", songId);
+        requestJson.addProperty(JsonConstants.SONG_ID, songId);
         new RemoveSongFromPlaylistAsync(playlistId, requestJson, new RESTCallbackListener() {
             @Override
             public void onComplete(RESTClient.RESTResponse response) {

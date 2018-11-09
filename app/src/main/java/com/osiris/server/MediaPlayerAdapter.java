@@ -23,20 +23,14 @@ class MediaPlayerAdapter {
         this.mediaPlaybackListener = mediaPlaybackListener;
     }
 
-
     private void initMediaPlayer(){
         if(mediaPlayer == null){
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-
-
                     setNewState(PlaybackStateCompat.STATE_PAUSED);
-
                     mediaPlaybackListener.onPlaybackCompleted();
-
-
                 }
             });
         }
@@ -67,6 +61,7 @@ class MediaPlayerAdapter {
 
 
         try {
+            Log.i(TAG, "Media Url: " + mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI));
             mediaPlayer.setDataSource(mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI));
             mediaPlayer.prepare();
         } catch (IOException e) {
@@ -107,8 +102,6 @@ class MediaPlayerAdapter {
     }
 
     private void setNewState(@PlaybackStateCompat.State int newPlayerState){
-        Log.i(TAG, "In setNewState");
-
         currentState = newPlayerState;
 
         final long playbackPosition = mediaPlayer == null ? 0 : mediaPlayer.getCurrentPosition();

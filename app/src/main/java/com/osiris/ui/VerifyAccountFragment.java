@@ -17,6 +17,7 @@ import com.osiris.api.RESTClient;
 import com.osiris.api.VerifyAccountAsync;
 import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.constants.FragmentConstants;
+import com.osiris.constants.JsonConstants;
 import com.osiris.utility.CacheManager;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -53,7 +54,7 @@ public class VerifyAccountFragment extends Fragment {
 
             if(!pin.isEmpty()){
                 JsonObject verifyJson = new JsonObject();
-                verifyJson.addProperty("pin", Integer.parseInt(verificationPin.getText().toString()));
+                verifyJson.addProperty(JsonConstants.PIN, Integer.parseInt(verificationPin.getText().toString()));
                 new VerifyAccountAsync(verifyJson, new RESTCallbackListener() {
                     @Override
                     public void onComplete(RESTClient.RESTResponse response) {
@@ -62,11 +63,11 @@ public class VerifyAccountFragment extends Fragment {
                         JsonObject jsonObject = parser.parse(response.getData()).getAsJsonObject();
 
                         if(response.getStatus() == HttpsURLConnection.HTTP_OK){
-                            CacheManager.getInstance(parentActivity).writeString(getString(R.string.cache_user_id), jsonObject.get("id").getAsString());
+                            CacheManager.getInstance(parentActivity).writeString(getString(R.string.cache_user_id), jsonObject.get(JsonConstants._ID).getAsString());
                             parentActivity.replaceFragment(FragmentConstants.FRAGMENT_LIBRARY, null);
                         }else{
 
-                            errorMessage.setText(jsonObject.get("error").getAsString());
+                            errorMessage.setText(jsonObject.get(JsonConstants.ERROR).getAsString());
                         }
 
                     }
