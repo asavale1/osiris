@@ -36,6 +36,7 @@ import com.osiris.model.SongModel;
 import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.PlayerControllerListener;
 import com.osiris.ui.common.AlbumRecyclerViewAdapter;
+import com.osiris.ui.common.PlaylistRecyclerViewAdapter;
 import com.osiris.ui.common.SongRecyclerViewAdapter;
 import com.osiris.ui.dialog.AddToPlaylistDialog;
 
@@ -63,7 +64,7 @@ public class BrowseFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_browse,
                 container, false);
-
+        Log.i(TAG, "onCreateView");
         return view;
     }
 
@@ -82,8 +83,10 @@ public class BrowseFragment extends Fragment {
         playlistsRecyclerView = view.findViewById(R.id.playlists_recycler_view);
         playlistsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-
+        Log.i(TAG, "Query: " + searchEditText.getText().toString());
         searchLibrary("");
+
+        Log.i(TAG, "onViewCreated");
 
     }
 
@@ -113,6 +116,7 @@ public class BrowseFragment extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     songs.clear();
                     albums.clear();
+                    playlists.clear();
                     searchLibrary(searchEditText.getText().toString());
                 }
                 return false;
@@ -124,6 +128,9 @@ public class BrowseFragment extends Fragment {
 
         AlbumRecyclerViewAdapter albumsAdapter = new AlbumRecyclerViewAdapter(getContext(), albums, albumItemClickListener);
         albumsRecyclerView.swapAdapter(albumsAdapter, false);
+
+        PlaylistRecyclerViewAdapter playlistsAdapter = new PlaylistRecyclerViewAdapter(getContext(), playlists, playlistItemClicklistener, null);
+        playlistsRecyclerView.swapAdapter(playlistsAdapter, false);
 
     }
 
@@ -151,7 +158,6 @@ public class BrowseFragment extends Fragment {
                 }
             });
             popup.show();
-
         }
     };
 
@@ -169,6 +175,15 @@ public class BrowseFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putString(BundleConstants.ALBUM_ID, albums.get(position).getId());
             ((MainActivity) Objects.requireNonNull(getActivity())).replaceFragment(FragmentConstants.FRAGMENT_VIEW_ALBUM, bundle);
+        }
+    };
+
+    private PlaylistRecyclerViewAdapter.ItemClickListener playlistItemClicklistener = new PlaylistRecyclerViewAdapter.ItemClickListener() {
+        @Override
+        public void onItemClick(View view, int position) {
+            Bundle bundle = new Bundle();
+            bundle.putString(BundleConstants.PLAYLIST_ID, playlists.get(position).getId());
+            ((MainActivity) Objects.requireNonNull(getActivity())).replaceFragment(FragmentConstants.FRAGMENT_VIEW_PLAYLIST, bundle);
         }
     };
 
@@ -191,6 +206,7 @@ public class BrowseFragment extends Fragment {
                             ((TextView) view.findViewById(R.id.songs_layout_title)).setText(getString(R.string.no_songs_found));
                         }else{
                             ((TextView) view.findViewById(R.id.songs_layout_title)).setText(getString(R.string.songs));
+                            songsRecyclerView.setVisibility(View.VISIBLE);
                         }
                         view.findViewById(R.id.songs_layout).setVisibility(View.VISIBLE);
 
@@ -204,6 +220,7 @@ public class BrowseFragment extends Fragment {
                             ((TextView) view.findViewById(R.id.albums_layout_title)).setText(getString(R.string.no_albums_found));
                         }else{
                             ((TextView) view.findViewById(R.id.albums_layout_title)).setText(R.string.albums);
+                            albumsRecyclerView.setVisibility(View.VISIBLE);
                         }
                         view.findViewById(R.id.albums_layout).setVisibility(View.VISIBLE);
 
@@ -213,9 +230,10 @@ public class BrowseFragment extends Fragment {
                         }
 
                         if(playlists.size() == 0){
-                            ((TextView) view.findViewById(R.id.playlists_layout_title)).setText("No Playlists Found");
+                            ((TextView) view.findViewById(R.id.playlists_layout_title)).setText(getString(R.string.no_playlists_found));
                         }else{
-                            ((TextView) view.findViewById(R.id.playlists_layout_title)).setText("Playlists");
+                            ((TextView) view.findViewById(R.id.playlists_layout_title)).setText(getString(R.string.playlists));
+                            playlistsRecyclerView.setVisibility(View.VISIBLE);
                         }
                         view.findViewById(R.id.playlists_layout).setVisibility(View.VISIBLE);
 

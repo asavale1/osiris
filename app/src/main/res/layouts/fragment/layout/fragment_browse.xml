@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient">
@@ -75,6 +74,7 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/songs_recycler_view"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -107,6 +107,7 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/albums_recycler_view"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -138,9 +139,9 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/playlists_recycler_view"
-                    android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="10dp"

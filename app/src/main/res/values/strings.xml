@@ -8,6 +8,8 @@
     <string name="songs">Songs</string>
     <string name="no_albums_found">No Albums Found</string>
     <string name="albums">Albums</string>
+    <string name="no_playlists_found">No Playlists Found</string>
+    <string name="playlists">Playlists</string>
     <string name="specify_pin">Please specify a pin</string>
     <string name="start_adding_songs">Start adding songs</string>
 
