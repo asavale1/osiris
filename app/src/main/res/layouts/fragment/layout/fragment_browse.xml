@@ -68,7 +68,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
-                    android:text="Songs"
+                    android:text="@string/songs"
                     android:textColor="@color/colorPrimaryLight"
                     android:textSize="20sp" />
 
@@ -101,7 +101,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
-                    android:text="Albums"
+                    android:text="@string/albums"
                     android:textColor="@color/colorPrimaryLight"
                     android:textSize="20sp" />
 
@@ -133,7 +133,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
-                    android:text="Playlists"
+                    android:text="@string/playlists"
                     android:textColor="@color/colorPrimaryLight"
                     android:textSize="20sp" />
 
@@ -142,6 +142,7 @@
                     android:visibility="gone"
                     android:layout_height="0dp"
                     android:layout_width="match_parent"
+                    android:layout_weight="1"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="10dp"
@@ -149,7 +150,6 @@
                 </android.support.v7.widget.RecyclerView>
 
             </LinearLayout>
-
 
         </LinearLayout>
     </ScrollView>

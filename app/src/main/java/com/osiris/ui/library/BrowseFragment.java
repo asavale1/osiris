@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.osiris.MainActivity;
 import com.osiris.R;
@@ -64,7 +65,6 @@ public class BrowseFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_browse,
                 container, false);
-        Log.i(TAG, "onCreateView");
         return view;
     }
 
@@ -83,10 +83,11 @@ public class BrowseFragment extends Fragment {
         playlistsRecyclerView = view.findViewById(R.id.playlists_recycler_view);
         playlistsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        Log.i(TAG, "Query: " + searchEditText.getText().toString());
-        searchLibrary("");
-
-        Log.i(TAG, "onViewCreated");
+        if(playlists.size() == 0 && albums.size() == 0 && songs.size() == 0) {
+            searchLibrary("");
+        } else{
+            buildUI();
+        }
 
     }
 
@@ -126,12 +127,35 @@ public class BrowseFragment extends Fragment {
         SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), songs, itemClickListener, songItemLongClickListener);
         songsRecyclerView.swapAdapter(adapter, false);
 
+        if(songs.size() == 0){
+            view.findViewById(R.id.songs_layout).setVisibility(View.GONE);
+        }else{
+            ((TextView) view.findViewById(R.id.songs_layout_title)).setText(getString(R.string.songs));
+            songsRecyclerView.setVisibility(View.VISIBLE);
+            view.findViewById(R.id.songs_layout).setVisibility(View.VISIBLE);
+        }
+
         AlbumRecyclerViewAdapter albumsAdapter = new AlbumRecyclerViewAdapter(getContext(), albums, albumItemClickListener);
         albumsRecyclerView.swapAdapter(albumsAdapter, false);
+
+        if(albums.size() == 0){
+            view.findViewById(R.id.albums_layout).setVisibility(View.GONE);
+        }else{
+            ((TextView) view.findViewById(R.id.albums_layout_title)).setText(R.string.albums);
+            albumsRecyclerView.setVisibility(View.VISIBLE);
+            view.findViewById(R.id.albums_layout).setVisibility(View.VISIBLE);
+        }
 
         PlaylistRecyclerViewAdapter playlistsAdapter = new PlaylistRecyclerViewAdapter(getContext(), playlists, playlistItemClicklistener, null);
         playlistsRecyclerView.swapAdapter(playlistsAdapter, false);
 
+        if(playlists.size() == 0){
+            view.findViewById(R.id.playlists_layout).setVisibility(View.GONE);
+        }else{
+            ((TextView) view.findViewById(R.id.playlists_layout_title)).setText(getString(R.string.playlists));
+            playlistsRecyclerView.setVisibility(View.VISIBLE);
+            view.findViewById(R.id.playlists_layout).setVisibility(View.VISIBLE);
+        }
     }
 
     private SongRecyclerViewAdapter.ItemLongClickListener songItemLongClickListener = new SongRecyclerViewAdapter.ItemLongClickListener() {
@@ -195,47 +219,22 @@ public class BrowseFragment extends Fragment {
                 if(response.getStatus() == HttpsURLConnection.HTTP_OK){
                     try{
                         JsonParser parser = new JsonParser();
-                        JsonArray songsJsonArray = parser.parse(response.getData()).getAsJsonObject().get(JsonConstants.SONGS).getAsJsonArray();
+                        JsonObject responseJson = parser.parse(response.getData()).getAsJsonObject();
 
-
+                        JsonArray songsJsonArray = responseJson.get(JsonConstants.SONGS).getAsJsonArray();
                         for(JsonElement elem : songsJsonArray){
                             songs.add(ModelParser.parseSongModelJson(elem.getAsJsonObject()));
                         }
 
-                        if(songs.size() == 0){
-                            ((TextView) view.findViewById(R.id.songs_layout_title)).setText(getString(R.string.no_songs_found));
-                        }else{
-                            ((TextView) view.findViewById(R.id.songs_layout_title)).setText(getString(R.string.songs));
-                            songsRecyclerView.setVisibility(View.VISIBLE);
-                        }
-                        view.findViewById(R.id.songs_layout).setVisibility(View.VISIBLE);
-
-                        JsonArray albumsJsonArray = parser.parse(response.getData()).getAsJsonObject().get(JsonConstants.ALBUMS).getAsJsonArray();
-
+                        JsonArray albumsJsonArray = responseJson.get(JsonConstants.ALBUMS).getAsJsonArray();
                         for(JsonElement elem : albumsJsonArray){
                             albums.add(ModelParser.parseAlbumModelJson(elem.getAsJsonObject()));
                         }
 
-                        if(albums.size() == 0){
-                            ((TextView) view.findViewById(R.id.albums_layout_title)).setText(getString(R.string.no_albums_found));
-                        }else{
-                            ((TextView) view.findViewById(R.id.albums_layout_title)).setText(R.string.albums);
-                            albumsRecyclerView.setVisibility(View.VISIBLE);
-                        }
-                        view.findViewById(R.id.albums_layout).setVisibility(View.VISIBLE);
-
-                        JsonArray playlistsJsonArray = parser.parse(response.getData()).getAsJsonObject().get(JsonConstants.PLAYLISTS).getAsJsonArray();
+                        JsonArray playlistsJsonArray = responseJson.get(JsonConstants.PLAYLISTS).getAsJsonArray();
                         for(JsonElement elem : playlistsJsonArray){
                             playlists.add(ModelParser.parsePlaylistModelJson(elem.getAsJsonObject()));
                         }
-
-                        if(playlists.size() == 0){
-                            ((TextView) view.findViewById(R.id.playlists_layout_title)).setText(getString(R.string.no_playlists_found));
-                        }else{
-                            ((TextView) view.findViewById(R.id.playlists_layout_title)).setText(getString(R.string.playlists));
-                            playlistsRecyclerView.setVisibility(View.VISIBLE);
-                        }
-                        view.findViewById(R.id.playlists_layout).setVisibility(View.VISIBLE);
 
                         buildUI();
 
