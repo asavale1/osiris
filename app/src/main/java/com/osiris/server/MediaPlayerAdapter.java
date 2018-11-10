@@ -67,7 +67,6 @@ class MediaPlayerAdapter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private void onPlay(){
@@ -83,7 +82,6 @@ class MediaPlayerAdapter {
             setNewState(PlaybackStateCompat.STATE_PAUSED);
         }
     }
-
 
     void onStop(){
         setNewState(PlaybackStateCompat.STATE_STOPPED);
