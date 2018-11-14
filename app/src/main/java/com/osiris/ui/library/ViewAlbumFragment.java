@@ -16,15 +16,18 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.osiris.MainActivity;
 import com.osiris.R;
 import com.osiris.api.GetAlbumAsync;
 import com.osiris.api.RESTClient;
 import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.constants.BundleConstants;
+import com.osiris.constants.FragmentConstants;
 import com.osiris.model.AlbumDetailedModel;
 import com.osiris.model.ModelParser;
 import com.osiris.model.SongModel;
 import com.osiris.ui.LibraryFragmentListener;
+import com.osiris.ui.PlayerControllerListener;
 import com.osiris.ui.common.SongRecyclerViewAdapter;
 import com.osiris.ui.dialog.AddToPlaylistDialog;
 
@@ -38,6 +41,7 @@ public class ViewAlbumFragment extends Fragment {
     private String albumId;
     private AlbumDetailedModel album;
     private LibraryFragmentListener libraryFragmentListener;
+    private PlayerControllerListener playerControllerListener;
 
 
     @Override
@@ -82,6 +86,13 @@ public class ViewAlbumFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implemenet LibraryFragmentListener");
         }
+
+        if (context instanceof PlayerControllerListener) {
+            playerControllerListener = (PlayerControllerListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implemenet PlayerControllerListener");
+        }
     }
 
     private void buildUI(){
@@ -89,7 +100,7 @@ public class ViewAlbumFragment extends Fragment {
             ((TextView)view.findViewById(R.id.album_title)).setText(album.getTitle());
             RecyclerView recyclerView = view.findViewById(R.id.songs_recycler_view);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), album.getSongs(), itemClickListener, null);
+            SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), album.getSongs(), itemClickListener, itemLongClickListener);
             recyclerView.setAdapter(adapter);
         }
     }
@@ -97,6 +108,15 @@ public class ViewAlbumFragment extends Fragment {
     private SongRecyclerViewAdapter.ItemClickListener itemClickListener = new SongRecyclerViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
+            libraryFragmentListener.addSongToQueue(album.getSongs().get(position));
+            playerControllerListener.onPlaySong();
+            Objects.requireNonNull(getActivity()).onBackPressed();
+        }
+    };
+
+    private SongRecyclerViewAdapter.ItemLongClickListener itemLongClickListener = new SongRecyclerViewAdapter.ItemLongClickListener() {
+        @Override
+        public void onItemLongClick(View view, int position) {
             PopupMenu popup = new PopupMenu(Objects.requireNonNull(getActivity()), view);
             popup.inflate(R.menu.song_select_options);
 

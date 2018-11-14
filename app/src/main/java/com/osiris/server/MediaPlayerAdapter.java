@@ -64,6 +64,8 @@ class MediaPlayerAdapter {
             mediaPlayer.prepare();
             onPlay();
         } catch (IOException e) {
+            mediaPlayer.release();
+            mediaPlayer = null;
             e.printStackTrace();
         }
     }

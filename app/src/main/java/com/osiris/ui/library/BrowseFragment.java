@@ -135,7 +135,7 @@ public class BrowseFragment extends Fragment {
             view.findViewById(R.id.songs_layout).setVisibility(View.VISIBLE);
         }
 
-        AlbumRecyclerViewAdapter albumsAdapter = new AlbumRecyclerViewAdapter(getContext(), albums, albumItemClickListener);
+        AlbumRecyclerViewAdapter albumsAdapter = new AlbumRecyclerViewAdapter(getContext(), albums, albumItemClickListener, null);
         albumsRecyclerView.swapAdapter(albumsAdapter, false);
 
         if(albums.size() == 0){

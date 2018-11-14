@@ -17,19 +17,20 @@ public class AlbumRecyclerViewAdapter extends RecyclerView.Adapter<AlbumViewHold
     private LayoutInflater layoutInflater;
     private List<AlbumModel> albums;
     private ItemClickListener itemClickListener;
+    private ItemLongClickListener itemLongClickListener;
 
-    public AlbumRecyclerViewAdapter(Context context, List<AlbumModel> albums, ItemClickListener itemClickListener) {
+    public AlbumRecyclerViewAdapter(Context context, List<AlbumModel> albums, ItemClickListener itemClickListener, ItemLongClickListener itemLongClickListener) {
         this.layoutInflater = LayoutInflater.from(context);
         this.albums = albums;
         this.itemClickListener = itemClickListener;
+        this.itemLongClickListener = itemLongClickListener;
     }
-
 
     @NonNull
     @Override
     public AlbumViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = layoutInflater.inflate(R.layout.recyclerview_item_album, viewGroup, false);
-        return new AlbumViewHolder(view, itemClickListener);
+        return new AlbumViewHolder(view, itemClickListener, itemLongClickListener);
     }
 
     @Override
@@ -44,6 +45,10 @@ public class AlbumRecyclerViewAdapter extends RecyclerView.Adapter<AlbumViewHold
 
     public interface ItemClickListener{
         void onItemClick(View view, int position);
+    }
+
+    public interface ItemLongClickListener{
+        void onItemLongClick(View view, int position);
     }
 
 }

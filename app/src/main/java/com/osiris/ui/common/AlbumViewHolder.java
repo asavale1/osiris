@@ -7,17 +7,21 @@ import android.widget.TextView;
 
 import com.osiris.R;
 
-public class AlbumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class AlbumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
     TextView albumTitle;
     private AlbumRecyclerViewAdapter.ItemClickListener itemClickListener;
+    private AlbumRecyclerViewAdapter.ItemLongClickListener itemLongClickListener;
+
     //private static final String TAG = AlbumViewHolder.class.getName();
 
-    AlbumViewHolder(@NonNull View itemView, AlbumRecyclerViewAdapter.ItemClickListener itemClickListener) {
+    AlbumViewHolder(@NonNull View itemView, AlbumRecyclerViewAdapter.ItemClickListener itemClickListener, AlbumRecyclerViewAdapter.ItemLongClickListener itemLongClickListener) {
         super(itemView);
         this.albumTitle = itemView.findViewById(R.id.album_title);
         this.itemClickListener = itemClickListener;
+        this.itemLongClickListener = itemLongClickListener;
         itemView.setOnClickListener(this);
+        itemView.setOnLongClickListener(this);
     }
 
     @Override
@@ -25,5 +29,13 @@ public class AlbumViewHolder extends RecyclerView.ViewHolder implements View.OnC
         if(itemClickListener != null){
             itemClickListener.onItemClick(v, getAdapterPosition());
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        if(itemLongClickListener != null){
+            itemLongClickListener.onItemLongClick(v, getAdapterPosition());
+        }
+        return true;
     }
 }
