@@ -6,4 +6,5 @@ public abstract class FragmentConstants {
     public static final int FRAGMENT_VERIFY_ACCOUNT = 3;
     public static final int FRAGMENT_VIEW_PLAYLIST = 4;
     public static final int FRAGMENT_VIEW_ALBUM = 5;
+    public static final int FRAGMENT_USER_SETTINGS = 6;
 }

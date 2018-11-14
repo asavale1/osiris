@@ -59,7 +59,6 @@ class MediaPlayerAdapter {
         currentSongId = mediaId;
         currentMediaMetadata = mediaMetadata;
 
-
         try {
             mediaPlayer.setDataSource(mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI));
             mediaPlayer.prepare();

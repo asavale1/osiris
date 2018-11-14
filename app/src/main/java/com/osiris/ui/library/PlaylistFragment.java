@@ -62,6 +62,13 @@ public class PlaylistFragment extends Fragment {
             }
         });
 
+        view.findViewById(R.id.settings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) Objects.requireNonNull(getActivity())).replaceFragment(FragmentConstants.FRAGMENT_USER_SETTINGS, null);
+            }
+        });
+
         boolean reloadPlaylists = CacheManager.getInstance(getActivity()).readBool(getString(R.string.cache_reload_playlists), false);
 
         if(playlists.size() == 0 || reloadPlaylists){

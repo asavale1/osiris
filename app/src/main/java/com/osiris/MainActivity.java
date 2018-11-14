@@ -18,6 +18,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.osiris.api.GetUser;
+import com.osiris.api.RESTClient;
+import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.constants.BundleConstants;
 import com.osiris.constants.MediaConstants;
 import com.osiris.server.MediaPlaybackService;
@@ -29,11 +32,14 @@ import com.osiris.ui.PlayerControllerListener;
 import com.osiris.ui.VerifyAccountFragment;
 import com.osiris.model.PlaylistDetailedModel;
 import com.osiris.model.SongModel;
+import com.osiris.ui.library.UserSettingsFragment;
 import com.osiris.ui.library.ViewAlbumFragment;
 import com.osiris.ui.library.ViewPlaylistFragment;
 import com.osiris.utility.CacheManager;
 
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity implements PlayerControllerListener, LibraryFragmentListener {
 
@@ -58,7 +64,16 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         if(userId.isEmpty()){
             replaceFragment(FragmentConstants.FRAGMENT_VERIFY_ACCOUNT, null);
         }else{
-            replaceFragment(FragmentConstants.FRAGMENT_LIBRARY, null);
+            new GetUser(userId, new RESTCallbackListener() {
+                @Override
+                public void onComplete(RESTClient.RESTResponse response) {
+                    if(response.getStatus() == HttpsURLConnection.HTTP_OK){
+                        replaceFragment(FragmentConstants.FRAGMENT_LIBRARY, null);
+                    }else{
+                        replaceFragment(FragmentConstants.FRAGMENT_VERIFY_ACCOUNT, null);
+                    }
+                }
+            }).execute();
         }
     }
 
@@ -82,6 +97,9 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
                 break;
             case FragmentConstants.FRAGMENT_VIEW_ALBUM:
                 fragment = new ViewAlbumFragment();
+                break;
+            case FragmentConstants.FRAGMENT_USER_SETTINGS:
+                fragment = new UserSettingsFragment();
                 break;
             default:
                 fragment = null;
@@ -223,7 +241,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         return null;
     }
 
-
     MediaControllerCompat.Callback controllerCallback = new MediaControllerCompat.Callback() {
 
         @Override
@@ -236,18 +253,15 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
             if(libraryFragment != null){
                 libraryFragment.onMetadataChanged(metadata);
             }
-
         }
 
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
 
             LibraryFragment libraryFragment = isLibraryFragmentVisible();
-
             if(libraryFragment != null){
                 libraryFragment.onPlaybackStateChanged(state);
             }
-
         }
 
         @Override

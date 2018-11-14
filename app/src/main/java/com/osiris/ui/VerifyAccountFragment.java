@@ -3,6 +3,7 @@ package com.osiris.ui;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +19,15 @@ import com.osiris.api.VerifyAccountAsync;
 import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.constants.FragmentConstants;
 import com.osiris.constants.JsonConstants;
+import com.osiris.model.ModelParser;
+import com.osiris.model.UserModel;
 import com.osiris.utility.CacheManager;
 
 import javax.net.ssl.HttpsURLConnection;
 
 public class VerifyAccountFragment extends Fragment {
 
-    //private static final String TAG = VerifyAccountFragment.class.getName();
+    private static final String TAG = VerifyAccountFragment.class.getName();
 
     private EditText verificationPin;
     private TextView errorMessage;
@@ -62,8 +65,11 @@ public class VerifyAccountFragment extends Fragment {
                         JsonParser parser = new JsonParser();
                         JsonObject jsonObject = parser.parse(response.getData()).getAsJsonObject();
 
+                        UserModel user = ModelParser.parseUserModelJson(jsonObject);
+
                         if(response.getStatus() == HttpsURLConnection.HTTP_OK){
-                            CacheManager.getInstance(parentActivity).writeString(getString(R.string.cache_user_id), jsonObject.get(JsonConstants._ID).getAsString());
+                            CacheManager.getInstance(parentActivity).writeString(getString(R.string.cache_user_id), user.getId());
+                            CacheManager.getInstance(parentActivity).writeString(getString(R.string.cache_user_username), user.getUsername());
                             parentActivity.replaceFragment(FragmentConstants.FRAGMENT_LIBRARY, null);
                         }else{
 

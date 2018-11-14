@@ -8,6 +8,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.osiris.constants.JsonConstants;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,5 +97,12 @@ public class ModelParser {
         }
         playlist.setSongs(songs);
         return playlist;
+    }
+
+    public static UserModel parseUserModelJson(JsonObject userJson){
+        UserModel user = new UserModel();
+        user.setId(userJson.get(JsonConstants._ID).getAsString());
+        user.setUsername(userJson.get(JsonConstants.USERNAME).getAsString());
+        return user;
     }
 }
