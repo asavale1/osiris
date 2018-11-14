@@ -39,6 +39,7 @@ public class PlaylistRecyclerViewAdapter extends RecyclerView.Adapter<PlaylistVi
     @Override
     public void onBindViewHolder(@NonNull PlaylistViewHolder playlistViewHolder, int i) {
         playlistViewHolder.playlistTitle.setText(playlists.get(i).getTitle());
+        playlistViewHolder.username.setText(playlists.get(i).getUserUsername());
     }
 
     @Override

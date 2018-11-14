@@ -9,7 +9,7 @@ import com.osiris.R;
 
 class PlaylistViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
-    TextView playlistTitle;
+    TextView playlistTitle, username;
     private PlaylistRecyclerViewAdapter.ItemClickListener itemClickListener;
     private PlaylistRecyclerViewAdapter.ItemLongClickListener itemLongClickListener;
     //private static final String TAG = PlaylistViewHolder.class.getName();
@@ -19,6 +19,7 @@ class PlaylistViewHolder extends RecyclerView.ViewHolder implements View.OnClick
                        PlaylistRecyclerViewAdapter.ItemLongClickListener itemLongClickListener) {
         super(itemView);
         this.playlistTitle = itemView.findViewById(R.id.playlist_title);
+        this.username = itemView.findViewById(R.id.username);
         this.itemClickListener = itemClickListener;
         this.itemLongClickListener = itemLongClickListener;
         itemView.setOnClickListener(this);
