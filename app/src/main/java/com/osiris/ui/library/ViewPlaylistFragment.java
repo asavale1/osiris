@@ -25,6 +25,7 @@ import com.osiris.constants.JsonConstants;
 import com.osiris.model.ModelParser;
 import com.osiris.model.PlaylistDetailedModel;
 import com.osiris.ui.LibraryFragmentListener;
+import com.osiris.ui.PlayerControllerListener;
 import com.osiris.ui.common.SongRecyclerViewAdapter;
 
 import java.util.Objects;
@@ -37,6 +38,7 @@ public class ViewPlaylistFragment extends Fragment {
     private String playlistId;
     private PlaylistDetailedModel playlist;
     private LibraryFragmentListener libraryFragmentListener;
+    private PlayerControllerListener playerControllerListener;
 
 
     @Override
@@ -66,6 +68,13 @@ public class ViewPlaylistFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement LibraryFragmentListener");
         }
+
+        if (context instanceof PlayerControllerListener) {
+            playerControllerListener = (PlayerControllerListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement PlayerControllerListener");
+        }
     }
 
     private void buildUI(){
@@ -85,6 +94,8 @@ public class ViewPlaylistFragment extends Fragment {
                         libraryFragmentListener.addPlaylistToQueue(playlist);
                         assert getFragmentManager() != null;
                         getFragmentManager().popBackStack();
+                        //playerControllerListener.onPauseSong();
+                        playerControllerListener.onPlaySong();
                     }
                 });
             }else{
@@ -128,6 +139,13 @@ public class ViewPlaylistFragment extends Fragment {
     private SongRecyclerViewAdapter.ItemClickListener itemClickListener = new SongRecyclerViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, final int position) {
+            //playerControllerListener.
+        }
+    };
+
+    private SongRecyclerViewAdapter.ItemLongClickListener itemLongClickListener = new SongRecyclerViewAdapter.ItemLongClickListener() {
+        @Override
+        public void onItemLongClick(View view, final int position) {
             PopupMenu popup = new PopupMenu(Objects.requireNonNull(getActivity()), view);
             popup.inflate(R.menu.options_view_playlist_fragment);
 

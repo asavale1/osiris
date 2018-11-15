@@ -167,15 +167,10 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
             super.onChildrenLoaded(parentId, children);
 
             if(!children.isEmpty()){
-
                 for (final MediaBrowserCompat.MediaItem mediaItem : children) {
-
                     getOsirisMediaController().addQueueItem(mediaItem.getDescription());
                 }
-
                 getTransportControls().prepare();
-
-
             }
         }
     }
@@ -189,18 +184,11 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
             try {
 
                 MediaControllerCompat controller = new MediaControllerCompat(MainActivity.this, token);
-
                 MediaControllerCompat.setMediaController(MainActivity.this, controller);
-
                 MediaControllerCompat mediaController = MediaControllerCompat.getMediaController(MainActivity.this);
-
                 mediaController.registerCallback(controllerCallback);
-
                 controllerCallback.onMetadataChanged(mediaController.getMetadata());
-
                 mediaBrowser.subscribe(mediaBrowser.getRoot(), mediaBrowserSubscriptionCallback);
-
-
 
             } catch (RemoteException e) {
                 e.printStackTrace();
