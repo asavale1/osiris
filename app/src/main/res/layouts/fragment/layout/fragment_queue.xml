@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/primary_button"
                 android:textColor="@color/colorPrimaryLight"
-                android:text="Clear" />
+                android:text="@string/clear" />
         </LinearLayout>
 
 

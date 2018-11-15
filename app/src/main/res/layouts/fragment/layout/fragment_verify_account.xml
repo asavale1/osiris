@@ -27,7 +27,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:gravity="center"
-            android:text="Verify your account"
+            android:text="@string/verify_your_account"
             android:textColor="@color/colorPrimaryLight"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +70,7 @@
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/primary_button"
-                android:text="Submit"
+                android:text="@string/submit"
                 android:textColor="@color/colorPrimaryLight" />
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>

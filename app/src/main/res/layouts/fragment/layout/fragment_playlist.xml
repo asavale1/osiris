@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient">
@@ -14,6 +13,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginBottom="20dp"
         android:clickable="true"
+        android:focusable="true"
         android:scaleType="centerCrop"
         android:tint="@color/colorAccent"
         android:backgroundTint="@color/colorPrimary"
@@ -30,6 +30,7 @@
         android:layout_marginEnd="20dp"
         android:backgroundTint="@color/colorPrimary"
         android:clickable="true"
+        android:focusable="true"
         android:scaleType="centerCrop"
         android:tint="@color/colorAccent"
         app:borderWidth="0dp"

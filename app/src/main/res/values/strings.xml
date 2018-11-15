@@ -19,6 +19,12 @@
     <string name="search">Search</string>
     <string name="give_a_name">Give a name</string>
     <string name="previous">Previous</string>
+    <string name="specify_a_username">Specify a username</string>
+    <string name="clear">Clear</string>
+    <string name="username">Username</string>
+    <string name="settings">Settings</string>
+    <string name="verify_your_account">Verify your account</string>
+    <string name="submit">Submit</string>
 
 
 
