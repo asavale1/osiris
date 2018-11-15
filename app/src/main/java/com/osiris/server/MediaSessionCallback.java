@@ -11,6 +11,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.osiris.constants.BundleConstants;
 import com.osiris.constants.MediaConstants;
+import com.osiris.model.AlbumDetailedModel;
 import com.osiris.model.PlaylistDetailedModel;
 import com.osiris.model.SongModel;
 
@@ -174,9 +175,20 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
                     for(SongModel song : playlistModel.getSongs()){
                         onAddQueueItem(musicLibrary.getMediaItem(song.getId()).getDescription());
                     }
-
                 }
 
+                break;
+            case MediaConstants.COMMAND_ADD_ALBUM_TO_QUEUE:
+                String albumJson = extras.getString(BundleConstants.ALBUM_MODEL);
+                AlbumDetailedModel albumModel = new Gson().fromJson(albumJson, AlbumDetailedModel.class);
+                if(musicLibrary.addAlbumToMediaItems(albumModel)){
+                    onPause();
+                    playlist.clear();
+                    queueIndex = -1;
+                    for(SongModel song : albumModel.getSongs()){
+                        onAddQueueItem(musicLibrary.getMediaItem(song.getId()).getDescription());
+                    }
+                }
                 break;
             case MediaConstants.COMMAND_CLEAR_QUEUE:
                 onStop();
@@ -186,7 +198,9 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
                 musicLibrary.clearQueue();
                 playlist.clear();
                 mediaSession.setQueue(playlist);
-                cb.send(MediaConstants.RESULT_CODE_CLEAR_QUEUE, null);
+                if(cb != null)
+                    cb.send(MediaConstants.RESULT_CODE_CLEAR_QUEUE, null);
+
                 break;
         }
     }

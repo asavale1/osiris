@@ -4,6 +4,7 @@ import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 
 import com.osiris.constants.ApiConstants;
+import com.osiris.model.AlbumDetailedModel;
 import com.osiris.model.PlaylistDetailedModel;
 import com.osiris.model.SongModel;
 
@@ -48,6 +49,27 @@ class MusicLibrary {
                 }
             }
 
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    boolean addAlbumToMediaItems(AlbumDetailedModel album){
+        try{
+            mediaItems.clear();
+            for(SongModel songModel : album.getSongs()){
+                if(mediaItems.get(songModel.getId()) == null){
+                    MediaMetadataCompat song = new MediaMetadataCompat.Builder()
+                            .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, songModel.getId())
+                            .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songModel.getTitle())
+                            .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, songModel.getAlbumTitle())
+                            .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, ApiConstants.GET_SONG_URL(songModel.getFileUrl())).build();
+
+                    mediaItems.put(songModel.getId(), song);
+                }
+            }
             return true;
         }catch (Exception e){
             e.printStackTrace();

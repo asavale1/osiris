@@ -23,6 +23,7 @@ import com.osiris.api.RESTClient;
 import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.constants.BundleConstants;
 import com.osiris.constants.MediaConstants;
+import com.osiris.model.AlbumDetailedModel;
 import com.osiris.server.MediaPlaybackService;
 import com.osiris.constants.FragmentConstants;
 import com.osiris.ui.library.CreatePlaylistFragment;
@@ -281,6 +282,13 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         Bundle bundle = new Bundle();
         bundle.putString(BundleConstants.PLAYLIST_MODEL, new Gson().toJson(playlist));
         getOsirisMediaController().sendCommand(MediaConstants.COMMAND_ADD_PLAYLIST_TO_QUEUE, bundle, null);
+    }
+
+    @Override
+    public void addAlbumToQueue(AlbumDetailedModel album){
+        Bundle bundle = new Bundle();
+        bundle.putString(BundleConstants.ALBUM_MODEL, new Gson().toJson(album));
+        getOsirisMediaController().sendCommand(MediaConstants.COMMAND_ADD_ALBUM_TO_QUEUE, bundle, null);
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.os.ResultReceiver;
 
+import com.osiris.model.AlbumDetailedModel;
 import com.osiris.model.PlaylistDetailedModel;
 import com.osiris.model.SongModel;
 
@@ -13,6 +14,7 @@ public interface LibraryFragmentListener {
     void playSongAt(int queueIndex);
     void addSongToQueue(SongModel song);
     void addPlaylistToQueue(PlaylistDetailedModel playlist);
+    void addAlbumToQueue(AlbumDetailedModel album);
     void clearQueue(ResultReceiver callback);
     List<MediaSessionCompat.QueueItem> getQueue();
     MediaMetadataCompat getCurrentMediaMetadata();

@@ -3,6 +3,8 @@ package com.osiris.ui.library;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +25,7 @@ import com.osiris.api.RESTClient;
 import com.osiris.api.listeners.RESTCallbackListener;
 import com.osiris.constants.BundleConstants;
 import com.osiris.constants.FragmentConstants;
+import com.osiris.constants.MediaConstants;
 import com.osiris.model.AlbumDetailedModel;
 import com.osiris.model.ModelParser;
 import com.osiris.model.SongModel;
@@ -98,6 +101,10 @@ public class ViewAlbumFragment extends Fragment {
     private void buildUI(){
         if(album != null){
             ((TextView)view.findViewById(R.id.album_title)).setText(album.getTitle());
+
+            view.findViewById(R.id.queueAlbum).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.queueAlbum).setOnClickListener(queueAlbumListener);
+
             RecyclerView recyclerView = view.findViewById(R.id.songs_recycler_view);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), album.getSongs(), itemClickListener, itemLongClickListener);
@@ -105,12 +112,30 @@ public class ViewAlbumFragment extends Fragment {
         }
     }
 
+    private View.OnClickListener queueAlbumListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            libraryFragmentListener.addAlbumToQueue(album);
+            playerControllerListener.onPlaySong();
+            assert getFragmentManager() != null;
+            getFragmentManager().popBackStack();
+        }
+    };
+
     private SongRecyclerViewAdapter.ItemClickListener itemClickListener = new SongRecyclerViewAdapter.ItemClickListener() {
         @Override
-        public void onItemClick(View view, int position) {
-            libraryFragmentListener.addSongToQueue(album.getSongs().get(position));
-            playerControllerListener.onPlaySong();
-            Objects.requireNonNull(getActivity()).onBackPressed();
+        public void onItemClick(View view, final int position) {
+            libraryFragmentListener.clearQueue(new ResultReceiver(new Handler()) {
+                @Override
+                protected void onReceiveResult(int resultCode, Bundle resultData) {
+                    if(resultCode == MediaConstants.RESULT_CODE_CLEAR_QUEUE){
+                        libraryFragmentListener.addSongToQueue(album.getSongs().get(position));
+                        playerControllerListener.onPlaySong();
+                        assert getFragmentManager() != null;
+                        getFragmentManager().popBackStack();
+                    }
+                }
+            });
         }
     };
 
