@@ -82,7 +82,7 @@ public class ViewPlaylistFragment extends Fragment {
             ((TextView)view.findViewById(R.id.playlist_title)).setText(playlist.getTitle());
             RecyclerView recyclerView = view.findViewById(R.id.songs_recycler_view);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), playlist.getSongs(), itemClickListener, null);
+            SongRecyclerViewAdapter adapter = new SongRecyclerViewAdapter(getContext(), playlist.getSongs(), itemClickListener, itemLongClickListener);
             recyclerView.swapAdapter(adapter, false);
 
             if(playlist.getSongs().size() > 0){
@@ -139,7 +139,10 @@ public class ViewPlaylistFragment extends Fragment {
     private SongRecyclerViewAdapter.ItemClickListener itemClickListener = new SongRecyclerViewAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, final int position) {
-            //playerControllerListener.
+            libraryFragmentListener.addPlaylistToQueue(playlist);
+            libraryFragmentListener.playSongAt(position);
+            assert getFragmentManager() != null;
+            getFragmentManager().popBackStack();
         }
     };
 

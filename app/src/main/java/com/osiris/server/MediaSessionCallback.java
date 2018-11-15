@@ -49,8 +49,11 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
         }
 
         if(preparedMedia == null){
+            Log.i(TAG, "Prepared media is null");
             onPrepare();
         }
+
+        Log.i(TAG, "Play from media");
 
         mediaPlayerAdapter.playFromMedia(preparedMedia);
     }
@@ -157,7 +160,7 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
                     onAddQueueItem(musicLibrary.getMediaItem(songModel.getId()).getDescription());
                 break;
             case MediaConstants.COMMAND_ADD_PLAYLIST_TO_QUEUE:
-
+                Log.i(TAG, "Add playlist to queue");
                 String playlistJson = extras.getString(BundleConstants.PLAYLIST_MODEL);
                 PlaylistDetailedModel playlistModel = new Gson().fromJson(playlistJson, PlaylistDetailedModel.class);
 
@@ -172,8 +175,6 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
                         onAddQueueItem(musicLibrary.getMediaItem(song.getId()).getDescription());
                     }
 
-                    //onPrepare();
-                    //onPlay();
                 }
 
                 break;
