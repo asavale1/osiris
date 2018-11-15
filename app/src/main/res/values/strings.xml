@@ -12,6 +12,13 @@
     <string name="playlists">Playlists</string>
     <string name="specify_pin">Please specify a pin</string>
     <string name="start_adding_songs">Start adding songs</string>
+    <string name="create">Create</string>
+    <string name="update">Update</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_playlist">Select Playlist</string>
+    <string name="search">Search</string>
+    <string name="give_a_name">Give a name</string>
+    <string name="previous">Previous</string>
 
 
 

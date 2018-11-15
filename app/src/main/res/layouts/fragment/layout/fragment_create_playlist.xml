@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient">
@@ -29,7 +28,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:gravity="center"
-            android:text="Give a name"
+            android:text="@string/give_a_name"
             android:textColor="@color/colorPrimaryLight"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -65,23 +64,25 @@
             app:layout_constraintTop_toBottomOf="@+id/playlist_title">
 
             <Button
+                style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/cancel_action"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/primary_button"
-                android:text="Cancel"
+                android:text="@string/cancel"
                 android:textColor="@color/colorPrimaryLight" />
 
             <Button
+                style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/create_action"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/primary_button"
-                android:text="Create"
+                android:text="@string/create"
                 android:textColor="@color/colorPrimaryLight" />
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
