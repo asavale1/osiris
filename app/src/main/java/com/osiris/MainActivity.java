@@ -38,6 +38,7 @@ import com.osiris.ui.library.ViewAlbumFragment;
 import com.osiris.ui.library.ViewPlaylistFragment;
 import com.osiris.utility.CacheManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -191,6 +192,8 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
                 controllerCallback.onMetadataChanged(mediaController.getMetadata());
                 mediaBrowser.subscribe(mediaBrowser.getRoot(), mediaBrowserSubscriptionCallback);
 
+                Log.i(TAG, "Connection setup");
+
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -265,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
      */
     @Override
     public void playSongAt(int queueIndex){
+        Log.i(TAG, "playSongAt");
         Bundle bundle = new Bundle();
         bundle.putInt(BundleConstants.QUEUE_INDEX, queueIndex);
         getOsirisMediaController().sendCommand(MediaConstants.COMMAND_PLAY_SONG_AT, bundle, null);
@@ -272,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
     @Override
     public void addSongToQueue(SongModel songModel){
+        Log.i(TAG, "Add song to queue");
         Bundle bundle = new Bundle();
         bundle.putString(BundleConstants.SONG_MODEL, new Gson().toJson(songModel));
         getOsirisMediaController().sendCommand(MediaConstants.COMMAND_ADD_SONG_TO_QUEUE, bundle, null);
@@ -279,6 +284,7 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
     @Override
     public void addPlaylistToQueue(PlaylistDetailedModel playlist){
+        Log.i(TAG, "Add playlist to queue");
         Bundle bundle = new Bundle();
         bundle.putString(BundleConstants.PLAYLIST_MODEL, new Gson().toJson(playlist));
         getOsirisMediaController().sendCommand(MediaConstants.COMMAND_ADD_PLAYLIST_TO_QUEUE, bundle, null);
@@ -286,6 +292,7 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
     @Override
     public void addAlbumToQueue(AlbumDetailedModel album){
+        Log.i(TAG, "Add album to queue");
         Bundle bundle = new Bundle();
         bundle.putString(BundleConstants.ALBUM_MODEL, new Gson().toJson(album));
         getOsirisMediaController().sendCommand(MediaConstants.COMMAND_ADD_ALBUM_TO_QUEUE, bundle, null);
@@ -293,16 +300,23 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
 
     @Override
     public List<MediaSessionCompat.QueueItem> getQueue(){
-        return getOsirisMediaController().getQueue();
+        Log.i(TAG, "Get queue");
+        if(getOsirisMediaController() != null) {
+            return getOsirisMediaController().getQueue();
+        }else{
+            return new ArrayList<>();
+        }
     }
 
     @Override
     public MediaMetadataCompat getCurrentMediaMetadata(){
+        Log.i(TAG, "Get current media metadata");
         return getOsirisMediaController().getMetadata();
     }
 
     @Override
     public void clearQueue(ResultReceiver callback){
+        Log.i(TAG, "Clear queue");
         getOsirisMediaController().sendCommand(MediaConstants.COMMAND_CLEAR_QUEUE, null, callback);
     }
 

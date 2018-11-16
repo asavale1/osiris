@@ -154,7 +154,7 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
                 break;
             case MediaConstants.COMMAND_ADD_SONG_TO_QUEUE:
-
+                Log.i(TAG, "Add song to queue");
                 String songModelJson = extras.getString(BundleConstants.SONG_MODEL);
                 SongModel songModel = new Gson().fromJson(songModelJson, SongModel.class);
                 if(musicLibrary.addSongToMediaItems(songModel))
@@ -179,6 +179,7 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
                 break;
             case MediaConstants.COMMAND_ADD_ALBUM_TO_QUEUE:
+                Log.i(TAG, "Add album to queue");
                 String albumJson = extras.getString(BundleConstants.ALBUM_MODEL);
                 AlbumDetailedModel albumModel = new Gson().fromJson(albumJson, AlbumDetailedModel.class);
                 if(musicLibrary.addAlbumToMediaItems(albumModel)){
