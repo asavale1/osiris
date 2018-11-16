@@ -32,13 +32,16 @@ public class UserSettingsFragment extends Fragment {
     private UserModel user;
     private EditText username;
     private String userId;
+    private View view;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         userId = CacheManager.getInstance(getActivity()).readString(getString(R.string.cache_user_id), "");
-        return inflater.inflate(R.layout.fragment_user_settings,
+        view = inflater.inflate(R.layout.fragment_user_settings,
                 container, false);
+
+        return view;
     }
 
     @Override
@@ -78,9 +81,13 @@ public class UserSettingsFragment extends Fragment {
         JsonObject userJson = new JsonObject();
         userJson.addProperty(JsonConstants.USERNAME, username.getText().toString());
 
+        view.findViewById(R.id.loading_bar).setVisibility(View.VISIBLE);
+
         new UpdateUser(userId, userJson, new RESTCallbackListener() {
             @Override
             public void onComplete(RESTClient.RESTResponse response) {
+
+                view.findViewById(R.id.loading_bar).setVisibility(View.GONE);
 
                 if(response.getStatus() == HttpsURLConnection.HTTP_OK){
                     Toast.makeText(getContext(), "Info updated", Toast.LENGTH_SHORT).show();
