@@ -212,9 +212,16 @@ public class BrowseFragment extends Fragment {
     };
 
     private void searchLibrary(String searchQuery){
+        view.findViewById(R.id.content_layout).setVisibility(View.GONE);
+        view.findViewById(R.id.loading_bar).setVisibility(View.VISIBLE);
+
         new SearchSongsAsync(searchQuery, new RESTCallbackListener() {
             @Override
             public void onComplete(RESTClient.RESTResponse response) {
+
+
+                view.findViewById(R.id.content_layout).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.loading_bar).setVisibility(View.GONE);
 
                 if(response.getStatus() == HttpsURLConnection.HTTP_OK){
                     try{
