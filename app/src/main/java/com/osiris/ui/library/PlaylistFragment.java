@@ -52,7 +52,7 @@ public class PlaylistFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View v, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.newPlaylist).setOnClickListener(new View.OnClickListener() {
@@ -73,33 +73,41 @@ public class PlaylistFragment extends Fragment {
 
         if(playlists.size() == 0 || reloadPlaylists){
             playlists.clear();
-            new GetUserPlaylistsAsync(CacheManager.getInstance(getActivity()).readString(getString(R.string.cache_user_id), ""), new RESTCallbackListener() {
-                @Override
-                public void onComplete(RESTClient.RESTResponse response) {
-                    if(response.getStatus() == HttpsURLConnection.HTTP_OK){
-                        try{
-                            JsonParser parser = new JsonParser();
-                            JsonArray jsonArray = parser.parse(response.getData()).getAsJsonArray();
-
-                            for(JsonElement elem : jsonArray){
-                                playlists.add(ModelParser.parsePlaylistModelJson(elem.getAsJsonObject()));
-                            }
-
-                            CacheManager.getInstance(getActivity()).writeBool(getString(R.string.cache_reload_playlists), false);
-
-                            buildUI();
-
-                        }catch (IllegalStateException e){
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-            }).execute();
+            getUserPlaylists();
         }else{
+
             buildUI();
         }
 
+    }
+
+    private void getUserPlaylists(){
+        view.findViewById(R.id.loading_bar).setVisibility(View.VISIBLE);
+        new GetUserPlaylistsAsync(CacheManager.getInstance(getActivity()).readString(getString(R.string.cache_user_id), ""), new RESTCallbackListener() {
+            @Override
+            public void onComplete(RESTClient.RESTResponse response) {
+                view.findViewById(R.id.loading_bar).setVisibility(View.GONE);
+
+                if(response.getStatus() == HttpsURLConnection.HTTP_OK){
+                    try{
+                        JsonParser parser = new JsonParser();
+                        JsonArray jsonArray = parser.parse(response.getData()).getAsJsonArray();
+
+                        for(JsonElement elem : jsonArray){
+                            playlists.add(ModelParser.parsePlaylistModelJson(elem.getAsJsonObject()));
+                        }
+
+                        CacheManager.getInstance(getActivity()).writeBool(getString(R.string.cache_reload_playlists), false);
+
+                        buildUI();
+
+                    }catch (IllegalStateException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }).execute();
     }
 
     private void buildUI(){
@@ -109,6 +117,7 @@ public class PlaylistFragment extends Fragment {
         PlaylistRecyclerViewAdapter adapter = new PlaylistRecyclerViewAdapter(getContext(), playlists, itemClickListener, itemLongClickListener);
         recyclerView.swapAdapter(adapter, false);
 
+        view.findViewById(R.id.content_layout).setVisibility(View.VISIBLE);
     }
 
     private PlaylistRecyclerViewAdapter.ItemClickListener itemClickListener = new PlaylistRecyclerViewAdapter.ItemClickListener() {

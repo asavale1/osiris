@@ -62,6 +62,7 @@ public class VerifyAccountFragment extends Fragment {
                     @Override
                     public void onComplete(RESTClient.RESTResponse response) {
 
+                        Log.i(TAG, "Data: " + response.getData());
                         JsonParser parser = new JsonParser();
                         JsonObject jsonObject = parser.parse(response.getData()).getAsJsonObject();
 

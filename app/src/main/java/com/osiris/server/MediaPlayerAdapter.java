@@ -24,7 +24,9 @@ class MediaPlayerAdapter {
     }
 
     private void initMediaPlayer(){
+        Log.i(TAG, "In initMediaPlayer");
         if(mediaPlayer == null){
+            Log.i(TAG, "New media player");
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
@@ -37,6 +39,8 @@ class MediaPlayerAdapter {
     }
 
     void playFromMedia(MediaMetadataCompat mediaMetadata){
+
+        Log.i(TAG, "In play from media");
 
         String mediaId = mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
 
@@ -71,7 +75,9 @@ class MediaPlayerAdapter {
     }
 
     private void onPlay(){
+        Log.i(TAG, "In onPlay");
         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
+            Log.i(TAG, "In onPlay : start");
             mediaPlayer.start();
             setNewState(PlaybackStateCompat.STATE_PLAYING);
         }

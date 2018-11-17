@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -24,15 +25,17 @@ public class CreatePlaylistFragment extends Fragment {
 
     private EditText playlistTitle;
     private TextView errorMessage;
+    private View view;
 
     //private static final String TAG = CreatePlaylistFragment.class.getName();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_create_playlist,
+        view = inflater.inflate(R.layout.fragment_create_playlist,
                 container, false);
 
+        return view;
     }
 
     @Override
@@ -54,6 +57,9 @@ public class CreatePlaylistFragment extends Fragment {
     View.OnClickListener createClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
+            view.findViewById(R.id.loading_bar).setVisibility(View.VISIBLE);
+
             JsonObject playlistJson = new JsonObject();
             playlistJson.addProperty(JsonConstants.TITLE, playlistTitle.getText().toString());
             playlistJson.addProperty(JsonConstants.USER_ID,
@@ -62,6 +68,8 @@ public class CreatePlaylistFragment extends Fragment {
             new CreatePlaylistAsync(playlistJson, new RESTCallbackListener() {
                 @Override
                 public void onComplete(RESTClient.RESTResponse response) {
+
+                    view.findViewById(R.id.loading_bar).setVisibility(View.GONE);
 
                     if(response.getStatus() == HttpsURLConnection.HTTP_CREATED){
                         CacheManager.getInstance(getActivity()).writeBool(getString(R.string.cache_reload_playlists), true);

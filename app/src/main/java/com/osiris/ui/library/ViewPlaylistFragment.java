@@ -107,9 +107,15 @@ public class ViewPlaylistFragment extends Fragment {
     }
 
     private void getPlaylist(){
+        view.findViewById(R.id.content_layout).setVisibility(View.GONE);
+        view.findViewById(R.id.loading_bar).setVisibility(View.VISIBLE);
+
         new GetPlaylistAsync(playlistId, true, new RESTCallbackListener() {
             @Override
             public void onComplete(RESTClient.RESTResponse response) {
+                view.findViewById(R.id.content_layout).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.loading_bar).setVisibility(View.GONE);
+
                 if(response.getStatus() == HttpsURLConnection.HTTP_OK){
 
                     JsonParser parser = new JsonParser();
