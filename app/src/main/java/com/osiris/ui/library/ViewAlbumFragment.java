@@ -61,8 +61,11 @@ public class ViewAlbumFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View v, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        view.findViewById(R.id.loading_bar).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.content_layout).setVisibility(View.GONE);
+
         new GetAlbumAsync(albumId, true, new RESTCallbackListener() {
             @Override
             public void onComplete(RESTClient.RESTResponse response) {
@@ -73,6 +76,9 @@ public class ViewAlbumFragment extends Fragment {
 
                     album = ModelParser.parseAlbumDetailedModelJson(albumJson);
                 }
+
+                view.findViewById(R.id.loading_bar).setVisibility(View.GONE);
+                view.findViewById(R.id.content_layout).setVisibility(View.VISIBLE);
 
                 buildUI();
 
