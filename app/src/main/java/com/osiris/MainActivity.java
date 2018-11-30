@@ -16,6 +16,7 @@ import android.os.ResultReceiver;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.osiris.api.GetUser;
@@ -128,8 +129,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         }
 
     }
-
-
 
     @Override
     public void onStart(){
@@ -301,11 +300,10 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
     @Override
     public List<MediaSessionCompat.QueueItem> getQueue(){
         Log.i(TAG, "Get queue");
-        if(getOsirisMediaController() != null) {
+        if(getOsirisMediaController() != null)
             return getOsirisMediaController().getQueue();
-        }else{
-            return new ArrayList<>();
-        }
+
+        return null;
     }
 
     @Override
@@ -319,7 +317,6 @@ public class MainActivity extends AppCompatActivity implements PlayerControllerL
         Log.i(TAG, "Clear queue");
         getOsirisMediaController().sendCommand(MediaConstants.COMMAND_CLEAR_QUEUE, null, callback);
     }
-
 
     /**
      * PlayerFragment callbacks for handling the media player

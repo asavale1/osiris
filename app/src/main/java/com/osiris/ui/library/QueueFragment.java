@@ -24,6 +24,7 @@ import com.osiris.ui.LibraryFragmentListener;
 import com.osiris.ui.PlayerControllerListener;
 import com.osiris.ui.common.QueueRecyclerViewAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.support.constraint.Constraints.TAG;
@@ -32,7 +33,7 @@ public class QueueFragment extends Fragment {
     private View view;
     //private static final String TAG = QueueFragment.class.getName();
     private LibraryFragmentListener libraryFragmentListener;
-    private List<MediaSessionCompat.QueueItem> songs;
+    private List<MediaSessionCompat.QueueItem> songs = new ArrayList<>();
     private AppCompatImageButton playPauseButton;
     private Button clearQueueButton;
     private PlayerControllerListener playerControllerListener;
@@ -43,7 +44,8 @@ public class QueueFragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
 
         if(libraryFragmentListener != null){
-            songs = libraryFragmentListener.getQueue();
+            if(songs == null || songs.size() == 0)
+                songs = libraryFragmentListener.getQueue();
             buildUI();
         }
     }
@@ -61,7 +63,8 @@ public class QueueFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if(libraryFragmentListener != null){
-            songs = libraryFragmentListener.getQueue();
+            if(songs == null || songs.size() == 0)
+                songs = libraryFragmentListener.getQueue();
             buildUI();
         }
 

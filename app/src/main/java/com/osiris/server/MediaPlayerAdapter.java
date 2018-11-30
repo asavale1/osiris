@@ -26,7 +26,7 @@ class MediaPlayerAdapter {
     private void initMediaPlayer(){
         Log.i(TAG, "In initMediaPlayer");
         if(mediaPlayer == null){
-            Log.i(TAG, "New media player");
+            Log.i(TAG, "In initMediaPlayer : new media player");
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
@@ -40,19 +40,23 @@ class MediaPlayerAdapter {
 
     void playFromMedia(MediaMetadataCompat mediaMetadata){
 
-        Log.i(TAG, "In play from media");
+        Log.i(TAG, "In playFromMedia");
 
         String mediaId = mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
 
         boolean mediaChanged = (currentSongId == null || !currentSongId.equals(mediaId));
 
         if(!mediaChanged){
+            Log.i(TAG, "In playFromMedia : media not changed");
             if(!isPlaying()){
+                Log.i(TAG, "In playFromMedia : media is not playing");
                 onPlay();
                 return;
             }
         }else{
+            Log.i(TAG, "In playFromMedia : media changed");
             if(mediaPlayer != null){
+                Log.i(TAG, "In playFromMedia : meida player release");
                 mediaPlayer.release();
                 mediaPlayer = null;
             }
@@ -65,38 +69,47 @@ class MediaPlayerAdapter {
 
         try {
             mediaPlayer.setDataSource(mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI));
+            Log.i(TAG, "In playFromMedia : start loading media");
             mediaPlayer.prepare();
             onPlay();
         } catch (IOException e) {
+            e.printStackTrace();
+            Log.i(TAG, "In playFromMedia : release media player");
             mediaPlayer.release();
             mediaPlayer = null;
-            e.printStackTrace();
+
         }
     }
 
     private void onPlay(){
         Log.i(TAG, "In onPlay");
         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
-            Log.i(TAG, "In onPlay : start");
+            Log.i(TAG, "In onPlay : call start");
             mediaPlayer.start();
             setNewState(PlaybackStateCompat.STATE_PLAYING);
         }
     }
 
     void onPause(){
+        Log.i(TAG, "In onPause");
+
         if(mediaPlayer != null && mediaPlayer.isPlaying()){
+            Log.i(TAG, "In onPause : Call pause");
             mediaPlayer.pause();
             setNewState(PlaybackStateCompat.STATE_PAUSED);
         }
     }
 
     void onStop(){
+        Log.i(TAG, "In onStop");
         setNewState(PlaybackStateCompat.STATE_STOPPED);
         release();
     }
 
     private void release() {
+        Log.i(TAG, "In onRelease");
         if (mediaPlayer != null) {
+            Log.i(TAG, "In onRelease: release media player");
             mediaPlayer.release();
             mediaPlayer = null;
         }
@@ -107,6 +120,7 @@ class MediaPlayerAdapter {
     }
 
     private void setNewState(@PlaybackStateCompat.State int newPlayerState){
+        Log.i(TAG, "Set new state");
         currentState = newPlayerState;
 
         final long playbackPosition = mediaPlayer == null ? 0 : mediaPlayer.getCurrentPosition();
@@ -122,6 +136,7 @@ class MediaPlayerAdapter {
 
     @PlaybackStateCompat.Actions
     private long getAvailableActions() {
+        Log.i(TAG, "In getAvailableActions");
         long actions = PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID
                 | PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH
                 | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
